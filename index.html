@@ -1,105 +1,539 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Access Node</title>
+  <title>Wonderland</title>
   <meta charset="UTF-8">
 
   <style>
-    body {
+    html, body {
       margin: 0;
+      padding: 0;
+      min-height: 100%;
       background: #050505;
-      color: #cfcfcf;
+      color: #c9c9c9;
       font-family: Consolas, "Courier New", monospace;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background:
+        repeating-linear-gradient(
+          to bottom,
+          rgba(255,255,255,0.025),
+          rgba(255,255,255,0.025) 1px,
+          transparent 1px,
+          transparent 4px
+        );
+      z-index: 999;
+      mix-blend-mode: screen;
+    }
+
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background: radial-gradient(circle at center, transparent 45%, rgba(0,0,0,0.75) 100%);
+      z-index: 998;
+    }
+
+    .login-screen {
       height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
+      background:
+        radial-gradient(circle at center, rgba(40,40,40,0.5), #050505 70%),
+        linear-gradient(180deg, #080808, #000);
     }
 
-    .box {
-      width: 420px;
-      background: #0b0b0b;
-      border: 1px solid #333;
-      padding: 24px;
-      box-shadow: 0 0 25px rgba(255,255,255,0.05);
+    .login-box {
+      width: 430px;
+      background: #080808;
+      border: 1px solid #242424;
+      box-shadow: 0 0 35px rgba(255,255,255,0.04);
+      padding: 28px;
     }
 
-    h2 {
-      margin-top: 0;
-      font-size: 18px;
-      color: #eee;
+    .login-title {
+      font-size: 16px;
+      letter-spacing: 3px;
+      color: #eeeeee;
+      margin-bottom: 28px;
+      text-align: center;
       font-weight: normal;
+    }
+
+    label {
+      display: block;
+      color: #777;
+      font-size: 12px;
+      margin-bottom: 8px;
     }
 
     input {
       width: 100%;
       box-sizing: border-box;
       background: #000;
+      border: 1px solid #333;
       color: #ddd;
-      border: 1px solid #444;
-      padding: 8px;
+      padding: 9px;
       font-family: Consolas, "Courier New", monospace;
-      margin-top: 8px;
+      font-size: 13px;
+      outline: none;
+    }
+
+    input:focus {
+      border-color: #666;
     }
 
     button {
-      margin-top: 12px;
-      background: #111;
-      color: #ddd;
-      border: 1px solid #444;
+      margin-top: 14px;
+      background: #0e0e0e;
+      color: #cfcfcf;
+      border: 1px solid #333;
       padding: 8px 14px;
       cursor: pointer;
       font-family: Consolas, "Courier New", monospace;
-    }
-
-    button:hover {
-      background: #1a1a1a;
-    }
-
-    #error {
-      color: #8b0000;
-      margin-top: 12px;
       font-size: 12px;
     }
 
-    #content {
-      display: none;
-      max-width: 800px;
-      padding: 30px;
+    button:hover {
+      background: #181818;
     }
 
-    .log {
-      background: #000;
-      border: 1px solid #222;
+    .error {
+      color: #8b0000;
+      margin-top: 14px;
+      font-size: 12px;
+      min-height: 16px;
+    }
+
+    .small-note {
+      margin-top: 26px;
+      color: #444;
+      font-size: 11px;
+      text-align: center;
+    }
+
+    .site {
+      display: none;
+      min-height: 100vh;
+      background: #050505;
+    }
+
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      position: relative;
+    }
+
+    .symbol {
+      font-size: 58px;
+      letter-spacing: 18px;
+      color: #d8d8d8;
+      opacity: 0.85;
+      text-shadow: 0 0 18px rgba(255,255,255,0.12);
+    }
+
+    .symbol span:nth-child(2) {
+      opacity: 0.4;
+      transform: translateY(3px);
+      display: inline-block;
+    }
+
+    .symbol span:nth-child(5) {
+      opacity: 0.2;
+    }
+
+    .sub-symbol {
+      margin-top: 20px;
+      color: #575757;
+      font-size: 12px;
+      letter-spacing: 3px;
+    }
+
+    .scroll-note {
+      position: absolute;
+      bottom: 35px;
+      left: 0;
+      right: 0;
+      color: #333;
+      font-size: 11px;
+      letter-spacing: 2px;
+    }
+
+    .section {
+      width: 860px;
+      max-width: calc(100% - 40px);
+      margin: 0 auto;
+      padding: 80px 0;
+    }
+
+    .liminal-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 34px;
+    }
+
+    .image-card {
+      background: #090909;
+      border: 1px solid #202020;
       padding: 14px;
-      line-height: 1.5;
+      min-height: 220px;
+      box-shadow: 0 0 22px rgba(255,255,255,0.025);
+    }
+
+    .fake-image {
+      height: 210px;
+      background: #111;
+      border: 1px solid #222;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .fake-image::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at center, rgba(255,255,255,0.08), transparent 45%);
+      opacity: 0.7;
+    }
+
+    .fake-image::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(90deg, transparent, transparent 4px, rgba(255,255,255,0.015) 5px);
+    }
+
+    .door {
+      position: absolute;
+      width: 74px;
+      height: 150px;
+      left: 50%;
+      top: 35px;
+      transform: translateX(-50%);
+      border: 2px solid #666;
+      background: linear-gradient(90deg, #151515, #030303 55%, #000);
+      box-shadow: 0 0 35px rgba(255,255,255,0.04);
+    }
+
+    .door.open {
+      transform: translateX(-50%) perspective(300px) rotateY(-28deg);
+      transform-origin: left center;
+    }
+
+    .void {
+      position: absolute;
+      width: 55px;
+      height: 135px;
+      left: calc(50% + 8px);
+      top: 42px;
+      background: radial-gradient(circle, #232323, #000 70%);
+      box-shadow: inset 0 0 28px #000, 0 0 18px rgba(255,255,255,0.03);
+    }
+
+    .corridor-line {
+      position: absolute;
+      height: 1px;
+      background: #363636;
+      left: 20px;
+      right: 20px;
+    }
+
+    .corridor-line.l1 { top: 65px; }
+    .corridor-line.l2 { top: 105px; opacity: 0.7; }
+    .corridor-line.l3 { top: 145px; opacity: 0.45; }
+    .corridor-line.l4 { top: 185px; opacity: 0.25; }
+
+    .stairs-step {
+      position: absolute;
+      height: 10px;
+      border-top: 1px solid #444;
+      border-left: 1px solid #222;
+      border-right: 1px solid #222;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .s1 { width: 180px; top: 50px; }
+    .s2 { width: 160px; top: 70px; }
+    .s3 { width: 140px; top: 90px; }
+    .s4 { width: 120px; top: 110px; }
+    .s5 { width: 100px; top: 130px; }
+    .s6 { width: 80px; top: 150px; }
+    .s7 { width: 60px; top: 170px; }
+
+    .figure {
+      position: absolute;
+      width: 24px;
+      height: 80px;
+      left: 50%;
+      top: 75px;
+      transform: translateX(-50%);
+      background: linear-gradient(#222, #050505);
+      border-radius: 12px 12px 4px 4px;
+      filter: blur(1px);
+      opacity: 0.55;
+    }
+
+    .eye {
+      position: absolute;
+      width: 96px;
+      height: 44px;
+      border: 1px solid #777;
+      border-radius: 50%;
+      left: 50%;
+      top: 83px;
+      transform: translateX(-50%);
+      background: radial-gradient(circle, #cfcfcf 0%, #333 22%, #080808 55%);
+      opacity: 0.6;
+    }
+
+    .caption {
+      color: #676767;
+      font-size: 12px;
+      margin-top: 10px;
+      letter-spacing: 1px;
+    }
+
+    .caption::before {
+      content: "[ ";
+      color: #333;
+    }
+
+    .caption::after {
+      content: " ]";
+      color: #333;
+    }
+
+    .wide-log {
+      margin-top: 50px;
+      background: #070707;
+      border: 1px solid #222;
+      color: #9f9f9f;
+      padding: 18px;
+      line-height: 1.7;
+      font-size: 13px;
+    }
+
+    .broken-title {
+      font-size: 24px;
+      letter-spacing: 9px;
+      color: #d0d0d0;
+      margin-bottom: 20px;
+    }
+
+    .broken-title .fade {
+      opacity: 0.22;
+    }
+
+    .single-image {
+      margin: 80px auto;
+      width: 620px;
+      max-width: 100%;
+      background: #090909;
+      border: 1px solid #202020;
+      padding: 16px;
+      text-align: center;
+    }
+
+    .large-void {
+      height: 360px;
+      background:
+        radial-gradient(circle at 50% 48%, #202020 0%, #050505 45%, #000 80%),
+        linear-gradient(#111, #000);
+      border: 1px solid #222;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .large-void::before {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 220px;
+      height: 220px;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.08);
+      box-shadow: 0 0 80px rgba(255,255,255,0.03);
+    }
+
+    .large-void::after {
+      content: "DES-44721";
+      position: absolute;
+      right: 18px;
+      bottom: 14px;
+      color: rgba(255,255,255,0.08);
+      font-size: 12px;
+      letter-spacing: 2px;
+    }
+
+    .hidden-line {
+      color: #111;
+      font-size: 11px;
+      user-select: text;
+    }
+
+    .footer {
+      text-align: center;
+      padding: 70px 0 50px 0;
+      color: #262626;
+      font-size: 11px;
+      letter-spacing: 2px;
+    }
+
+    .glitch {
+      animation: flicker 4s infinite;
+    }
+
+    @keyframes flicker {
+      0%, 95%, 100% { opacity: 1; }
+      96% { opacity: 0.35; }
+      97% { opacity: 0.9; }
+      98% { opacity: 0.2; }
+      99% { opacity: 1; }
+    }
+
+    @media (max-width: 700px) {
+      .liminal-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .symbol {
+        font-size: 38px;
+        letter-spacing: 8px;
+      }
     }
   </style>
 </head>
 
 <body>
 
-<div id="login" class="box">
-  <h2>USER IDENTIFICATION REQUIRED</h2>
+<div id="login" class="login-screen">
+  <div class="login-box">
+    <div class="login-title">WONDERLAND ACCESS</div>
 
-  <label>Nom d'utilisateur :</label>
-  <input id="username" type="text" autocomplete="off">
+    <label>Nom d'utilisateur :</label>
+    <input id="username" type="text" autocomplete="off">
 
-  <button onclick="checkUser()">Enter</button>
+    <button onclick="checkUser()">Enter</button>
 
-  <div id="error"></div>
+    <div id="error" class="error"></div>
+
+    <div class="small-note">no password required. only recognition.</div>
+  </div>
 </div>
 
-<div id="content">
-  <h2>DES-44721</h2>
+<div id="site" class="site">
 
-  <div class="log">
-    USER RECORD FOUND<br><br>
-    STATUS: ACTIVE<br>
-    LOCATION: NOT FOUND<br>
-    LAST KNOWN ASSIGNMENT: STORAGE B<br><br>
-    welcome back, hart
+  <div class="hero">
+    <div>
+      <div class="symbol glitch">
+        <span>W</span><span>O</span><span>N</span><span>D</span><span>E</span><span>R</span>
+      </div>
+      <div class="sub-symbol">not a dream / not a place / still open</div>
+    </div>
+    <div class="scroll-note">continue downward</div>
   </div>
+
+  <div class="section">
+    <div class="broken-title">REC<span class="fade">O</span>VERED IMAGES</div>
+
+    <div class="liminal-grid">
+      <div class="image-card">
+        <div class="fake-image">
+          <div class="void"></div>
+          <div class="door open"></div>
+        </div>
+        <div class="caption">door left open</div>
+      </div>
+
+      <div class="image-card">
+        <div class="fake-image">
+          <div class="corridor-line l1"></div>
+          <div class="corridor-line l2"></div>
+          <div class="corridor-line l3"></div>
+          <div class="corridor-line l4"></div>
+          <div class="figure"></div>
+        </div>
+        <div class="caption">hallway remembers the walker</div>
+      </div>
+
+      <div class="image-card">
+        <div class="fake-image">
+          <div class="stairs-step s1"></div>
+          <div class="stairs-step s2"></div>
+          <div class="stairs-step s3"></div>
+          <div class="stairs-step s4"></div>
+          <div class="stairs-step s5"></div>
+          <div class="stairs-step s6"></div>
+          <div class="stairs-step s7"></div>
+        </div>
+        <div class="caption">steps continue after waking</div>
+      </div>
+
+      <div class="image-card">
+        <div class="fake-image">
+          <div class="eye"></div>
+        </div>
+        <div class="caption">it was already looking</div>
+      </div>
+    </div>
+
+    <div class="wide-log">
+      USER: DES-44721<br>
+      STATE: RECOGNIZED<br>
+      POSITION: BETWEEN HALLWAYS<br>
+      LAST ROOM: B-12<br>
+      NEXT ROOM: NOT NUMBERED<br><br>
+
+      The name was accepted because the name was remembered.<br>
+      The body was not accepted because the body was elsewhere.<br><br>
+
+      Please remain asleep until the room finishes loading.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="single-image">
+      <div class="large-void"></div>
+      <div class="caption">the outside of the room</div>
+    </div>
+
+    <div class="wide-log">
+      FRAGMENT 04<br><br>
+      There are no walls here.<br>
+      Only the idea of walls.<br><br>
+
+      There are no doors here.<br>
+      Only the part where you decide to open one.<br><br>
+
+      Return instruction missing.<br>
+      Wake command missing.<br>
+      User still valid.
+    </div>
+
+    <p class="hidden-line">
+      next: look for the room that does not close
+    </p>
+  </div>
+
+  <div class="footer">
+    W-04 / B-12 / DES-44721<br>
+    the path is not hidden. it is misplaced.
+  </div>
+
 </div>
 
 <script>
@@ -109,11 +543,30 @@ function checkUser() {
 
   if (username === "DES-44721") {
     document.getElementById("login").style.display = "none";
-    document.getElementById("content").style.display = "block";
+    document.getElementById("site").style.display = "block";
+    window.scrollTo(0, 0);
   } else {
-    error.innerHTML = "USER NOT FOUND";
+    error.innerHTML = "USER NOT RECOGNIZED";
   }
 }
+
+const strangeCaptions = [
+  "door left open",
+  "door still opening",
+  "door opened before the room existed",
+  "not a room",
+  "do not close it"
+];
+
+setInterval(function() {
+  const captions = document.querySelectorAll(".caption");
+  if (captions.length > 0 && document.getElementById("site").style.display === "block") {
+    const randomCaption = captions[Math.floor(Math.random() * captions.length)];
+    if (Math.random() > 0.65) {
+      randomCaption.innerText = strangeCaptions[Math.floor(Math.random() * strangeCaptions.length)];
+    }
+  }
+}, 5000);
 </script>
 
 </body>
