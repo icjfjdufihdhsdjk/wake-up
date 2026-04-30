@@ -1,43 +1,37 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
-  <title>index — W-04</title>
+  <title>index</title>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <style>
     :root {
-      --void: #070807;
-      --night: #0e100f;
-      --concrete: #181a18;
-      --concrete2: #20231f;
-      --mist: #c9c9bd;
-      --weak: #8d9188;
-      --faint: #575d55;
-      --line: #363b35;
-      --warning: #a86a58;
-      --sick: #aeb89f;
-      --wet: #272b25;
+      --paper: #d8d5c7;
+      --paper2: #c9c5b6;
+      --ink: #151515;
+      --soft: #5f5c54;
+      --line: #9c9788;
+      --dark: #0b0b0a;
+      --red: #7e2f25;
     }
 
     * { box-sizing: border-box; }
 
     html, body {
       margin: 0;
-      padding: 0;
       min-height: 100%;
-      background: var(--void);
-      color: var(--mist);
+      background: var(--paper);
+      color: var(--ink);
       font-family: Consolas, "Courier New", monospace;
       font-size: 13px;
     }
 
     body {
-      overflow-x: hidden;
       background:
-        radial-gradient(circle at 48% 44%, rgba(170,170,145,0.07), transparent 220px),
-        radial-gradient(circle at 50% 80%, rgba(160,130,100,0.035), transparent 420px),
-        linear-gradient(to bottom, #070807 0%, #0b0d0c 45%, #121411 100%);
+        radial-gradient(circle at 50% 45%, rgba(255,255,255,0.45), transparent 260px),
+        linear-gradient(to bottom, #ddd9c9 0%, #c7c3b3 100%);
+      overflow-x: hidden;
     }
 
     body::before {
@@ -45,11 +39,12 @@
       position: fixed;
       inset: 0;
       pointer-events: none;
-      background:
-        repeating-linear-gradient(to bottom, rgba(255,255,235,0.022), rgba(255,255,235,0.022) 1px, transparent 1px, transparent 5px),
-        radial-gradient(circle at center, transparent 45%, rgba(0,0,0,0.58) 100%);
-      z-index: 500;
-      mix-blend-mode: screen;
+      opacity: .18;
+      background-image:
+        linear-gradient(rgba(0,0,0,.12) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,0,0,.09) 1px, transparent 1px);
+      background-size: 72px 72px;
+      z-index: 10;
     }
 
     body::after {
@@ -57,20 +52,11 @@
       position: fixed;
       inset: 0;
       pointer-events: none;
-      opacity: 0.12;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='170' height='170'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='170' height='170' filter='url(%23n)' opacity='.55'/%3E%3C/svg%3E");
-      z-index: 501;
-    }
-
-    ::selection { background: #d0d0bd; color: #111; }
-
-    .blink { animation: blink 1.1s steps(2, start) infinite; }
-    @keyframes blink { 0%, 45% { opacity: 1; } 46%, 100% { opacity: 0; } }
-
-    .drift { animation: drift 9s ease-in-out infinite; }
-    @keyframes drift {
-      0%,100% { transform: translateY(0); opacity: .95; }
-      50% { transform: translateY(-3px); opacity: .78; }
+      background:
+        radial-gradient(circle at center, transparent 48%, rgba(0,0,0,.22) 100%),
+        repeating-linear-gradient(to bottom, rgba(255,255,255,.13), rgba(255,255,255,.13) 1px, transparent 1px, transparent 5px);
+      mix-blend-mode: multiply;
+      z-index: 11;
     }
 
     .login-screen {
@@ -78,575 +64,445 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 24px;
-      background:
-        linear-gradient(to bottom, rgba(0,0,0,.2), rgba(0,0,0,.65)),
-        radial-gradient(circle at 50% 55%, rgba(195,195,160,.06), transparent 260px),
-        #070807;
+      padding: 20px;
     }
 
     .login-box {
-      width: 520px;
-      background: rgba(18,20,18,.88);
-      border: 1px solid #3d433b;
-      padding: 28px;
-      box-shadow: 0 35px 80px rgba(0,0,0,.65);
+      width: 430px;
+      background: rgba(231,227,211,.74);
+      border: 1px solid rgba(20,20,20,.38);
+      padding: 24px;
+      box-shadow: 0 26px 80px rgba(0,0,0,.20);
       position: relative;
+      backdrop-filter: blur(2px);
     }
 
     .login-box::before {
-      content: "ceci n'est pas une archive interne";
+      content: "outside copy / no rooms loaded";
       position: absolute;
-      top: -26px;
+      top: -24px;
       left: 0;
-      color: #62675f;
+      color: rgba(0,0,0,.42);
       font-size: 11px;
-      letter-spacing: 1px;
     }
 
-    .login-title {
-      font-size: 18px;
-      letter-spacing: 4px;
-      color: #e4e4d5;
-      margin-bottom: 12px;
+    .dot-head {
+      white-space: pre;
+      font-size: 10px;
+      line-height: 10px;
+      letter-spacing: 1px;
+      color: rgba(0,0,0,.72);
+      text-align: center;
+      margin: 0 auto 18px;
+      user-select: none;
+    }
+
+    .awake {
+      text-align: center;
+      font-size: 16px;
+      letter-spacing: 3px;
+      margin-bottom: 22px;
+      color: #111;
       text-transform: uppercase;
     }
 
-    .login-subtitle {
-      color: #858b80;
-      font-size: 12px;
-      margin-bottom: 24px;
-      line-height: 1.7;
+    .small {
+      color: rgba(0,0,0,.50);
+      font-size: 11px;
+      line-height: 1.65;
+      margin-bottom: 18px;
+      text-align: center;
     }
 
     label {
       display: block;
-      color: #b5b8aa;
-      margin-bottom: 7px;
+      color: rgba(0,0,0,.62);
+      margin-bottom: 6px;
+      font-size: 12px;
     }
 
     input {
       width: 100%;
-      background: #080908;
-      color: #d8d8c8;
-      border: 1px solid #4b5248;
-      padding: 10px;
+      background: rgba(255,255,255,.22);
+      border: 1px solid rgba(0,0,0,.38);
+      color: #111;
+      padding: 9px;
       font-family: Consolas, "Courier New", monospace;
       outline: none;
     }
 
     input:focus {
-      border-color: #9b9f8f;
-      box-shadow: 0 0 20px rgba(190,190,160,.08);
+      background: rgba(255,255,255,.36);
+      border-color: #111;
     }
 
     button {
-      margin-top: 14px;
-      background: #1d211c;
-      color: #dddcca;
-      border: 1px solid #54594e;
-      padding: 9px 15px;
+      width: 100%;
+      margin-top: 10px;
+      padding: 9px;
+      background: rgba(0,0,0,.08);
+      border: 1px solid rgba(0,0,0,.42);
+      color: #111;
       cursor: pointer;
       font-family: Consolas, "Courier New", monospace;
     }
 
-    button:hover { background: #282e26; }
+    button:hover { background: rgba(0,0,0,.14); }
 
     .error {
-      color: var(--warning);
-      margin-top: 14px;
       min-height: 18px;
+      margin-top: 12px;
+      color: var(--red);
+      font-size: 12px;
+      text-align: center;
     }
 
-    .login-note {
-      margin-top: 20px;
-      border-top: 1px solid #2f352f;
-      padding-top: 14px;
-      color: #666d63;
+    .login-foot {
+      margin-top: 18px;
+      padding-top: 13px;
+      border-top: 1px solid rgba(0,0,0,.22);
+      color: rgba(0,0,0,.38);
       font-size: 11px;
       line-height: 1.7;
+      text-align: center;
     }
 
     .site { display: none; }
 
-    .skyline {
-      height: 145px;
-      position: relative;
-      overflow: hidden;
-      background:
-        linear-gradient(to bottom, #090a09 0%, #10130f 70%, #181a16 100%);
-      border-bottom: 1px solid #343a33;
+    .world {
+      width: min(1120px, calc(100% - 28px));
+      margin: 32px auto;
     }
 
-    .skyline::before {
-      content: "";
-      position: absolute;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      height: 62px;
-      background:
-        linear-gradient(to right, transparent 0 7%, #191c18 7% 16%, transparent 16% 19%, #151814 19% 33%, transparent 33% 36%, #20231d 36% 52%, transparent 52% 57%, #161914 57% 75%, transparent 75% 79%, #1c201a 79% 100%);
-      clip-path: polygon(0 45%, 7% 45%, 7% 10%, 16% 10%, 16% 50%, 19% 50%, 19% 22%, 33% 22%, 33% 55%, 36% 55%, 36% 0, 52% 0, 52% 48%, 57% 48%, 57% 18%, 75% 18%, 75% 58%, 79% 58%, 79% 30%, 100% 30%, 100% 100%, 0 100%);
-      opacity: .85;
+    .top {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 20px;
+      align-items: start;
+      border-bottom: 1px solid rgba(0,0,0,.28);
+      padding-bottom: 18px;
+      margin-bottom: 18px;
     }
 
-    .skyline::after {
-      content: "extérieur seulement / intérieur non confirmé";
-      position: absolute;
-      right: 22px;
-      bottom: 12px;
-      font-size: 11px;
-      color: #6d7369;
-      letter-spacing: 1px;
-    }
-
-    .topbar {
-      background: #090a09;
-      color: #8a8e82;
-      border-bottom: 1px solid #2f352e;
-      padding: 8px 14px;
-      font-size: 11px;
-      text-align: right;
-    }
-
-    .container {
-      width: 1180px;
-      margin: 18px auto 30px;
-      background: rgba(20,23,20,.94);
-      border: 1px solid #384037;
-      box-shadow: 0 0 50px rgba(0,0,0,.55);
-    }
-
-    .header {
-      min-height: 112px;
-      padding: 20px;
-      position: relative;
-      background:
-        linear-gradient(90deg, rgba(205,205,175,.045), transparent 70%),
-        #171a17;
-      border-bottom: 1px solid #3a4238;
-    }
-
-    .header h1 {
+    h1 {
       margin: 0;
-      font-size: 24px;
       font-weight: normal;
-      letter-spacing: 4px;
-      color: #e6e4d4;
+      font-size: 18px;
+      letter-spacing: 5px;
       text-transform: uppercase;
     }
 
-    .header .sub {
+    .top-note {
+      color: rgba(0,0,0,.52);
       margin-top: 8px;
-      max-width: 760px;
-      color: #8e9489;
-      line-height: 1.6;
-    }
-
-    .classification {
-      position: absolute;
-      right: 18px;
-      top: 18px;
-      width: 235px;
-      color: #9ca194;
-      border: 1px solid #596052;
-      padding: 10px;
-      font-size: 11px;
-      text-align: right;
-      background: #111410;
-      line-height: 1.55;
-    }
-
-    .notice {
-      background: #0f110f;
-      color: #b0b2a4;
-      border-bottom: 1px solid #343a33;
-      padding: 10px 14px;
-      font-size: 12px;
-      line-height: 1.55;
-    }
-
-    .main {
-      display: flex;
-      min-height: 720px;
-    }
-
-    .sidebar {
-      width: 260px;
-      flex-shrink: 0;
-      background: #111410;
-      border-right: 1px solid #343a33;
-      padding: 13px;
-    }
-
-    .side-title {
-      color: #d7d6c6;
-      font-size: 12px;
-      border-bottom: 1px solid #333a32;
-      padding-bottom: 6px;
-      margin: 8px 0 10px;
-      letter-spacing: 1px;
-    }
-
-    .side-box {
-      color: #7e867a;
-      font-size: 12px;
+      max-width: 620px;
       line-height: 1.7;
-      margin-bottom: 20px;
     }
 
-    .nav-item {
+    .stamp {
+      border: 1px solid rgba(0,0,0,.38);
+      padding: 10px;
+      width: 230px;
+      font-size: 11px;
+      line-height: 1.6;
+      color: rgba(0,0,0,.55);
+      text-align: right;
+      background: rgba(255,255,255,.13);
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 210px 1fr;
+      gap: 18px;
+    }
+
+    .nav {
+      border-right: 1px solid rgba(0,0,0,.25);
+      padding-right: 14px;
+    }
+
+    .nav button {
       display: block;
-      border: 1px solid #30382f;
-      background: #171b16;
-      padding: 9px;
-      margin-bottom: 7px;
-      color: #bebfac;
-      cursor: pointer;
-      font-size: 12px;
-      user-select: none;
+      width: 100%;
+      text-align: left;
+      margin: 0 0 8px;
+      background: transparent;
+      border: 1px solid transparent;
+      color: rgba(0,0,0,.62);
+      padding: 7px;
     }
 
-    .nav-item:hover, .nav-item.active {
-      background: #22281f;
-      border-color: #6c7266;
-      color: #f0efdd;
+    .nav button:hover, .nav button.active {
+      border-color: rgba(0,0,0,.28);
+      background: rgba(255,255,255,.14);
+      color: #111;
+    }
+
+    .nav-note {
+      margin-top: 20px;
+      color: rgba(0,0,0,.38);
+      font-size: 11px;
+      line-height: 1.8;
     }
 
     .content {
-      flex: 1;
-      padding: 20px;
-      background: #141714;
+      min-height: 670px;
+      padding: 0 0 40px;
     }
 
     h2 {
+      margin: 0 0 16px;
       font-weight: normal;
-      margin-top: 0;
-      color: #e8e7d7;
-      border-bottom: 1px solid #384037;
-      padding-bottom: 9px;
-      font-size: 20px;
-      letter-spacing: 2px;
+      font-size: 15px;
+      letter-spacing: 3px;
       text-transform: uppercase;
     }
 
-    .status, .report, .terminal, .field-photo {
-      background: #0f110f;
-      border: 1px solid #333a32;
-      padding: 14px;
-      margin: 14px 0;
-      line-height: 1.75;
-      color: #c8c8b8;
+    .piece {
+      max-width: 760px;
+      border: 1px solid rgba(0,0,0,.26);
+      background: rgba(255,255,255,.13);
+      padding: 16px;
+      margin: 0 0 14px;
+      line-height: 1.9;
+      color: rgba(0,0,0,.76);
     }
 
-    .status {
-      color: #cdd0c1;
-      background:
-        linear-gradient(90deg, rgba(200,200,170,.035), transparent),
-        #090a09;
-    }
-
-    .report-title {
-      color: #ebe9d9;
-      margin-bottom: 10px;
-      letter-spacing: 1px;
-      border-bottom: 1px solid #333a32;
-      padding-bottom: 7px;
-    }
-
-    .dim { color: #7e867a; }
-    .warn { color: var(--warning); }
-    .sick { color: var(--sick); }
-
-    table {
-      border-collapse: collapse;
-      width: 100%;
-      font-size: 12px;
-      margin: 12px 0;
-    }
-
-    td, th {
-      border: 1px solid #343b33;
-      padding: 8px;
-      vertical-align: top;
-    }
-
-    th {
-      background: #20251f;
-      color: #e2e1cf;
-      font-weight: normal;
-      text-align: left;
-    }
-
-    td {
-      background: #111410;
-      color: #c0c1b1;
-    }
-
-    .exterior-wrap {
-      margin: 16px 0;
-      padding: 14px;
-      background: #0a0b0a;
-      border: 1px solid #30372f;
-    }
-
-    .exterior-map {
-      height: 560px;
-      position: relative;
-      overflow: hidden;
-      background:
-        radial-gradient(circle at 50% 50%, rgba(200,200,170,.065), transparent 165px),
-        linear-gradient(to bottom, #080908 0%, #0e100d 58%, #151812 58%, #10120f 100%);
-      border: 1px solid #252c24;
-    }
-
-    .exterior-map::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background:
-        linear-gradient(90deg, rgba(255,255,230,.018) 1px, transparent 1px),
-        linear-gradient(rgba(255,255,230,.018) 1px, transparent 1px);
-      background-size: 34px 34px;
-      opacity: .7;
-    }
-
-    .horizon {
-      position: absolute;
-      left: 0;
-      right: 0;
-      top: 315px;
-      height: 1px;
-      background: rgba(205,205,180,.16);
-    }
-
-    .fog {
-      position: absolute;
-      left: -10%;
-      right: -10%;
-      top: 255px;
-      height: 120px;
-      background: linear-gradient(to bottom, transparent, rgba(195,195,170,.05), transparent);
-      filter: blur(6px);
-    }
-
-    .outer-wall {
-      position: absolute;
-      left: 145px;
-      top: 118px;
-      width: 710px;
-      height: 285px;
-      border: 1px solid rgba(160,164,148,.38);
-      background:
-        linear-gradient(to bottom, rgba(255,255,230,.035), transparent 45%),
-        linear-gradient(90deg, rgba(255,255,230,.022) 1px, transparent 1px),
-        #171a16;
-      background-size: auto, 83px 100%;
-      box-shadow: inset 0 0 55px rgba(0,0,0,.55), 0 22px 65px rgba(0,0,0,.45);
-    }
-
-    .outer-wall::before {
-      content: "";
-      position: absolute;
-      left: -55px;
-      right: -55px;
-      top: -36px;
-      height: 36px;
-      background: #11140f;
-      border: 1px solid rgba(160,164,148,.28);
-      border-bottom: none;
-      transform: perspective(240px) rotateX(28deg);
-      transform-origin: bottom;
-    }
-
-    .outer-wall::after {
-      content: "";
-      position: absolute;
-      left: -1px;
-      right: -1px;
-      bottom: -80px;
-      height: 80px;
-      background: linear-gradient(to bottom, rgba(180,180,150,.05), transparent);
-    }
-
-    .no-entry {
-      position: absolute;
-      left: 407px;
-      top: 186px;
-      width: 185px;
-      height: 155px;
-      background: #050605;
-      border: 1px solid #55594e;
-      box-shadow: inset 0 0 36px #000, 0 0 28px rgba(0,0,0,.8);
-    }
-
-    .no-entry::before {
-      content: "NO INTERIOR DATA";
-      position: absolute;
-      left: 0;
-      right: 0;
-      top: 70px;
-      text-align: center;
-      color: #555b52;
-      font-size: 11px;
-      letter-spacing: 1px;
-    }
-
-    .no-entry::after {
-      content: "";
-      position: absolute;
-      left: 49%;
-      top: 0;
-      width: 1px;
-      height: 100%;
-      background: rgba(255,255,230,.08);
-    }
-
-    .outside-node {
-      position: absolute;
-      background: rgba(15,18,14,.9);
-      border: 1px solid #596052;
-      color: #c7c8b8;
-      padding: 8px;
-      width: 135px;
-      min-height: 60px;
-      font-size: 11px;
-      line-height: 1.45;
-      box-shadow: 0 12px 28px rgba(0,0,0,.35);
-    }
-
-    .outside-node.rejected {
-      border-color: #724338;
-      color: #c99483;
-      background: rgba(35,18,14,.86);
-    }
-
-    .outside-node.uncertain {
+    .piece.thin {
+      background: transparent;
       border-style: dashed;
-      color: #8d9489;
-      background: rgba(10,12,10,.78);
+      color: rgba(0,0,0,.52);
     }
 
-    .outside-line {
+    .big-empty {
+      height: 170px;
+      max-width: 760px;
+      border: 1px dashed rgba(0,0,0,.25);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: rgba(0,0,0,.32);
+      margin: 15px 0;
+      letter-spacing: 2px;
+      font-size: 11px;
+      background: rgba(255,255,255,.08);
+    }
+
+    .map-shell {
+      position: relative;
+      height: 610px;
+      border: 1px solid rgba(0,0,0,.30);
+      background:
+        radial-gradient(circle at 50% 52%, rgba(255,255,255,.32), transparent 190px),
+        linear-gradient(to bottom, rgba(220,216,199,.60), rgba(176,172,157,.34));
+      overflow: hidden;
+      margin-bottom: 16px;
+    }
+
+    .map-shell::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 310px;
+      height: 1px;
+      background: rgba(0,0,0,.18);
+    }
+
+    .map-shell::after {
+      content: "EXTERIOR ONLY";
+      position: absolute;
+      right: 16px;
+      bottom: 14px;
+      color: rgba(0,0,0,.30);
+      font-size: 11px;
+      letter-spacing: 2px;
+    }
+
+    .liminal-building {
+      position: absolute;
+      left: 16%;
+      top: 120px;
+      width: 68%;
+      height: 245px;
+      border: 1px solid rgba(0,0,0,.38);
+      background:
+        linear-gradient(90deg, rgba(0,0,0,.06) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255,255,255,.10), rgba(0,0,0,.04)),
+        rgba(196,192,176,.55);
+      background-size: 92px 100%, auto, auto;
+      box-shadow: 0 40px 80px rgba(0,0,0,.14);
+    }
+
+    .liminal-building::before {
+      content: "";
+      position: absolute;
+      left: -38px;
+      right: -38px;
+      top: -34px;
+      height: 34px;
+      background: rgba(170,166,150,.38);
+      border: 1px solid rgba(0,0,0,.24);
+      border-bottom: 0;
+      transform: skewX(-18deg);
+    }
+
+    .door-black {
+      position: absolute;
+      left: 50%;
+      top: 175px;
+      transform: translateX(-50%);
+      width: 118px;
+      height: 160px;
+      background: #050505;
+      border: 1px solid rgba(0,0,0,.58);
+      box-shadow: inset 0 0 26px #000;
+    }
+
+    .door-black::after {
+      content: "NOT INSIDE";
+      position: absolute;
+      width: 160px;
+      left: -21px;
+      top: 72px;
+      text-align: center;
+      color: rgba(255,255,255,.22);
+      font-size: 10px;
+      letter-spacing: 2px;
+    }
+
+    .window {
+      position: absolute;
+      width: 48px;
+      height: 38px;
+      border: 1px solid rgba(0,0,0,.34);
+      background: rgba(255,255,235,.20);
+    }
+
+    .window.dark { background: rgba(0,0,0,.35); }
+
+    .road {
+      position: absolute;
+      left: 18%;
+      right: 18%;
+      bottom: -10px;
+      height: 230px;
+      background: rgba(0,0,0,.08);
+      clip-path: polygon(43% 0, 57% 0, 100% 100%, 0 100%);
+      border-left: 1px solid rgba(0,0,0,.10);
+      border-right: 1px solid rgba(0,0,0,.10);
+    }
+
+    .map-label {
+      position: absolute;
+      padding: 7px;
+      border: 1px solid rgba(0,0,0,.24);
+      background: rgba(232,228,210,.62);
+      color: rgba(0,0,0,.58);
+      font-size: 11px;
+      line-height: 1.5;
+      max-width: 150px;
+    }
+
+    .map-label.red {
+      color: var(--red);
+      border-color: rgba(126,47,37,.45);
+    }
+
+    .map-line {
       position: absolute;
       height: 1px;
-      background: rgba(180,185,165,.35);
+      background: rgba(0,0,0,.22);
       transform-origin: left center;
     }
 
-    .outside-line.rejected { background: rgba(175,90,70,.35); }
-    .outside-line.uncertain { background: rgba(125,135,120,.22); }
+    .map-line.red { background: rgba(126,47,37,.35); }
 
-    .field-label {
+    .void-text {
       position: absolute;
-      color: #6d746a;
+      color: rgba(0,0,0,.23);
       font-size: 10px;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-    }
-
-    .ground-mark {
-      position: absolute;
-      border: 1px dashed rgba(170,170,150,.18);
-      border-radius: 50%;
-      transform: rotate(-8deg);
+      letter-spacing: 2px;
     }
 
     .photo-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 18px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
     }
 
     .photo {
       height: 230px;
+      border: 1px solid rgba(0,0,0,.28);
+      background:
+        radial-gradient(circle at 50% 40%, rgba(255,255,255,.24), transparent 95px),
+        rgba(190,186,170,.38);
       position: relative;
       overflow: hidden;
-      background: #080908;
-      border: 1px solid #2b322a;
     }
 
     .photo::after {
       content: "";
       position: absolute;
       inset: 0;
-      background: repeating-linear-gradient(to bottom, rgba(255,255,230,.026), rgba(255,255,230,.026) 1px, transparent 1px, transparent 4px);
-    }
-
-    .photo-wall {
-      position: absolute;
-      left: 15%;
-      top: 34px;
-      width: 70%;
-      height: 155px;
-      background: #171a16;
-      border: 1px solid #454b42;
-      box-shadow: inset 0 0 35px rgba(0,0,0,.65);
-    }
-
-    .photo-door {
-      position: absolute;
-      left: 50%;
-      top: 62px;
-      width: 68px;
-      height: 128px;
-      transform: translateX(-50%);
-      background: #020302;
-      border: 1px solid #62685e;
-    }
-
-    .photo-road {
-      position: absolute;
-      left: 0;
-      right: 0;
-      bottom: -15px;
-      height: 115px;
-      background: linear-gradient(to bottom, #181b16, #080908);
-      clip-path: polygon(35% 0, 65% 0, 100% 100%, 0 100%);
-    }
-
-    .photo-window {
-      position: absolute;
-      width: 58px;
-      height: 42px;
-      background: #070807;
-      border: 1px solid #50564c;
+      background: repeating-linear-gradient(to bottom, rgba(255,255,255,.14), rgba(255,255,255,.14) 1px, transparent 1px, transparent 4px);
     }
 
     .caption {
-      margin-top: 9px;
-      color: #7d8479;
-      font-size: 12px;
-      line-height: 1.55;
+      font-size: 11px;
+      color: rgba(0,0,0,.47);
+      line-height: 1.7;
+      margin: 8px 0 18px;
+    }
+
+    .p-wall {
+      position: absolute;
+      left: 18%;
+      top: 40px;
+      width: 64%;
+      height: 145px;
+      border: 1px solid rgba(0,0,0,.32);
+      background: rgba(210,206,188,.45);
+    }
+
+    .p-door {
+      position: absolute;
+      left: 50%;
+      top: 78px;
+      transform: translateX(-50%);
+      width: 56px;
+      height: 108px;
+      background: #050505;
+      border: 1px solid rgba(0,0,0,.50);
+    }
+
+    .p-road {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 75px;
+      background: rgba(0,0,0,.08);
+      clip-path: polygon(39% 0, 61% 0, 100% 100%, 0 100%);
     }
 
     .terminal {
-      color: #9da695;
-      background: #080908;
+      max-width: 760px;
+      border: 1px solid rgba(0,0,0,.26);
+      background: rgba(0,0,0,.08);
+      padding: 14px;
+      line-height: 1.8;
+      color: rgba(0,0,0,.58);
       font-size: 12px;
     }
 
-    .footer {
-      border-top: 1px solid #30372f;
-      padding: 13px;
-      color: #636b60;
-      font-size: 11px;
-      text-align: center;
-      background: #0f110f;
-    }
-
-    @media (max-width: 1220px) {
-      .container { width: calc(100% - 20px); }
-    }
-
-    @media (max-width: 900px) {
-      .main { flex-direction: column; }
-      .sidebar { width: auto; }
-      .classification { position: static; margin-top: 16px; text-align: left; width: auto; }
+    @media (max-width: 850px) {
+      .top, .layout { grid-template-columns: 1fr; }
+      .nav { border-right: 0; border-bottom: 1px solid rgba(0,0,0,.25); padding: 0 0 14px; }
+      .stamp { width: 100%; text-align: left; }
       .photo-grid { grid-template-columns: 1fr; }
-      .exterior-map { height: 640px; }
-      .outer-wall { left: 8%; width: 84%; }
+      .map-shell { height: 720px; }
+      .liminal-building { left: 8%; width: 84%; }
     }
   </style>
 </head>
@@ -655,91 +511,74 @@
 
 <div id="login" class="login-screen">
   <div class="login-box">
-    <div class="login-title drift">W-04 / OUTSIDE COPY</div>
-    <div class="login-subtitle">
-      Restored field page. Not a corporate archive. Not a building plan.<br>
-      This copy contains only observations made from outside the threshold.
+    <pre class="dot-head">
+        .........
+      .............
+     ....  ...  ....
+    ....   ...   ....
+    ....  .....  ....
+     .............
+       .........
+        ... ...
+        ... ...
+        .......
+    </pre>
+
+    <div class="awake">ARE YOU AWAKE?</div>
+
+    <div class="small">
+      this page was found outside the building<br>
+      no interior files are attached
     </div>
 
-    <label>Nom d'utilisateur :</label>
+    <label>recognized name</label>
     <input id="username" type="text" autocomplete="off" onkeydown="loginKey(event)">
-    <button onclick="checkUser()">Enter</button>
+    <button onclick="checkUser()">continue</button>
 
     <div id="error" class="error"></div>
 
-    <div class="login-note">
-      Dernier identifiant reconnu : DES-44721<br>
-      Dernier marqueur extérieur : R-17<br>
-      Dernière note : do not call it inside<span class="blink">_</span>
+    <div class="login-foot">
+      last recognized name: DES-44721<br>
+      last outside marker: R-17<br>
+      do not enter a room number
     </div>
   </div>
 </div>
 
 <div id="site" class="site">
-  <div class="skyline"></div>
-
-  <div class="topbar">
-    W-04 / LIMINAL EXTERIOR / FIELD COPY / THE INTERIOR HAS NOT BEEN VERIFIED
-  </div>
-
-  <div class="container">
-    <div class="header">
-      <h1>W-04 Observation Archive</h1>
-      <div class="sub">
-        Notes sur une zone liminale observée depuis son extérieur apparent. Les données internes ont été retirées, perdues, ou n’ont jamais existé.
+  <div class="world">
+    <div class="top">
+      <div>
+        <h1>WONDERLAND OUTSIDE</h1>
+        <div class="top-note">
+          Nothing here proves there is an inside. The doors are visible. The windows are lit. The building has not been entered.
+        </div>
       </div>
-      <div class="classification">
-        COPY TYPE: OUTSIDE ONLY<br>
-        USER: DES-44721<br>
-        INTERIOR: UNCONFIRMED<br>
-        MAP: FAÇADE / PERIMETER<br>
-        RETURN: NOT PROVEN
+      <div class="stamp">
+        COPY: OUTSIDE ONLY<br>
+        NAME: DES-44721<br>
+        ROOMS: NOT LOADED<br>
+        MAP: FAILED<br>
+        STATUS: STILL THERE
       </div>
     </div>
 
-    <div class="notice">
-      “Wonderland” n’est pas un lieu nommé. C’est le mot utilisé par les observateurs quand ils ont compris que l’extérieur ne menait pas forcément à un intérieur.
-    </div>
+    <div class="layout">
+      <div class="nav">
+        <button onclick="showPage('start')">before</button>
+        <button onclick="showPage('outside')">outside</button>
+        <button onclick="showPage('map')">not a map</button>
+        <button onclick="showPage('images')">still frames</button>
+        <button onclick="showPage('name')">the name</button>
+        <button onclick="showPage('marker')">R-17</button>
 
-    <div class="main">
-      <div class="sidebar">
-        <div class="side-title">SECTIONS</div>
-        <span class="nav-item" onclick="showPage('summary')">00 — Résumé</span>
-        <span class="nav-item" onclick="showPage('notebook')">01 — Carnet extérieur</span>
-        <span class="nav-item" onclick="showPage('measurements')">02 — Mesures</span>
-        <span class="nav-item" onclick="showPage('cartography')">03 — Façade / Cartographie</span>
-        <span class="nav-item" onclick="showPage('images')">04 — Images</span>
-        <span class="nav-item" onclick="showPage('continuity')">05 — Continuité</span>
-        <span class="nav-item" onclick="showPage('marker')">06 — Marqueur</span>
-
-        <div class="side-title">TERMES RETENUS</div>
-        <div class="side-box">
-          extérieur liminal<br>
-          façade sans bâtiment<br>
-          seuil observé<br>
-          dedans non prouvé<br>
-          retour périphérique<br>
-          lumière occupée<br>
-          plan refusé
-        </div>
-
-        <div class="side-title">ROUTE ACTUELLE</div>
-        <div class="side-box">
-          B-12 → façade nord → W-04 → R-17<br><br>
-          Aucun passage intérieur confirmé.
-        </div>
-
-        <div class="side-title">NOTE</div>
-        <div class="side-box">
-          Quand une porte est ouverte, la caméra continue de filmer l’extérieur.
+        <div class="nav-note">
+          you are not navigating the site<br>
+          the site is checking which parts you ask for
         </div>
       </div>
 
       <div id="content" class="content"></div>
-    </div>
-
-    <div class="footer">
-      Dream Entry Systems / recovered exterior page / if this page shows a floor plan, close it
     </div>
   </div>
 </div>
@@ -756,366 +595,209 @@ function checkUser() {
   if (username === "DES-44721") {
     document.getElementById("login").style.display = "none";
     document.getElementById("site").style.display = "block";
-    showPage("summary");
+    showPage("start");
+  } else if (username.toUpperCase() === "YES") {
+    error.innerHTML = "then why are you still outside?";
   } else if (username === "R-17") {
-    error.innerHTML = "MARKER RECOGNIZED / PERSON NOT PRESENT";
+    error.innerHTML = "that is where you stopped, not who you are";
   } else if (username === "W-04") {
-    error.innerHTML = "W-04 IS A SIDE OF THE BUILDING, NOT A USER";
-  } else if (username === "B-12") {
-    error.innerHTML = "B-12 OPENS OUTWARD ONLY";
+    error.innerHTML = "W-04 is not inside";
   } else {
-    error.innerHTML = "NO MATCH IN OUTSIDE COPY";
+    error.innerHTML = "not recognized by the outside";
   }
 }
 
-function activateNav(page) {
-  const items = document.querySelectorAll('.nav-item');
-  items.forEach(item => item.classList.remove('active'));
-
-  const names = {
-    summary: '00',
-    notebook: '01',
-    measurements: '02',
-    cartography: '03',
-    images: '04',
-    continuity: '05',
-    marker: '06'
+function active(page) {
+  document.querySelectorAll('.nav button').forEach(b => b.classList.remove('active'));
+  const labels = {
+    start: 'before',
+    outside: 'outside',
+    map: 'not a map',
+    images: 'still frames',
+    name: 'the name',
+    marker: 'R-17'
   };
-
-  items.forEach(item => {
-    if (item.textContent.trim().startsWith(names[page])) item.classList.add('active');
+  document.querySelectorAll('.nav button').forEach(b => {
+    if (b.textContent.trim() === labels[page]) b.classList.add('active');
   });
 }
 
 function showPage(page) {
   const content = document.getElementById("content");
-  activateNav(page);
+  active(page);
 
-  if (page === "summary") {
+  if (page === "start") {
     content.innerHTML = `
-      <h2>00 — Résumé</h2>
+      <h2>before</h2>
 
-      <div class="status">
-        ARCHIVE: W-04 OUTSIDE COPY<br>
-        SUJET ASSOCIÉ: DES-44721 / M. HART<br>
-        NOM INFORMEL: WONDERLAND<br>
-        TYPE: ESPACE LIMINAL OBSERVÉ DEPUIS L’EXTÉRIEUR<br>
-        INTÉRIEUR: NON CONFIRMÉ<br>
-        CARTOGRAPHIE: FAÇADE, PÉRIMÈTRE, SEUILS<br>
-        PROCÉDURE DE RETOUR: ABSENTE
+      <div class="piece">
+        you did not find Wonderland.<br>
+        you found the outside of it.
       </div>
 
-      <div class="report">
-        <div class="report-title">NOTE DE SYNTHÈSE</div>
-        Les premiers rapports parlaient d’un bâtiment. Cette hypothèse a été abandonnée.
-        W-04 possède des murs, des fenêtres, des portes, une distance de marche et une ombre portée,
-        mais aucun relevé ne prouve qu’il existe un intérieur derrière la façade.
-        <br><br>
-        Les sujets ne décrivent pas ce qu’ils ont vu dedans. Ils décrivent ce que l’extérieur leur a laissé croire.
+      <div class="piece thin">
+        the first mistake was calling it a place.<br>
+        the second mistake was looking for rooms.
       </div>
 
-      <div class="report">
-        <div class="report-title">HYPOTHÈSE ACTUELLE</div>
-        Wonderland n’est ni dehors ni dedans. C’est une bordure qui imite un lieu.
-        Pour l’instant, l’équipe n’a découvert que l’extérieur : façade nord, seuils latéraux,
-        couloir périphérique ouvert, vitrines opaques, et marqueur R-17.
-        <br><br>
-        Toute carte qui prétend montrer des pièces internes est considérée comme contaminée.
-      </div>
+      <div class="big-empty">NO INTERIOR INDEX</div>
 
       <div class="terminal">
-        > outside copy loaded<br>
-        > interior table: not found<br>
-        > doors observed: 7<br>
-        > doors entered: 0 confirmed<br>
-        > note: the building casts a shadow in both directions<span class="blink">_</span>
+        > page recovered<br>
+        > floor data missing<br>
+        > outside still visible<br>
+        > subject name still accepted<span class="blink">_</span>
       </div>
     `;
   }
 
-  if (page === "notebook") {
+  if (page === "outside") {
     content.innerHTML = `
-      <h2>01 — Carnet extérieur</h2>
+      <h2>outside</h2>
 
-      <div class="report">
-        <div class="report-title">ENTRY 01 / 02:17</div>
-        On a arrêté de dire “pièce”. Le mot crée des erreurs.
-        Les sujets atteignent une façade. Ils ne franchissent pas nécessairement quelque chose.
-        La porte est peut-être seulement une manière pour l’extérieur de répondre à une attente humaine.
+      <div class="piece">
+        The exterior repeats in photographs taken from different towns.
+        The road changes. The sky changes. The building does not.
       </div>
 
-      <div class="report">
-        <div class="report-title">ENTRY 02 / 02:42</div>
-        W-04 n’est pas un local. C’est un côté.
-        Un côté de quoi reste indéterminé.
-        Les vitres reflètent le parking de DES même lorsque le sujet se trouve à plusieurs kilomètres du site réel.
+      <div class="piece">
+        Seven doors are visible from the outside.<br>
+        None have produced a confirmed interior image.<br>
+        Every attempt to film through a doorway returns another angle of the outside.
       </div>
 
-      <div class="report">
-        <div class="report-title">ENTRY 03 / 03:03</div>
-        La façade conserve les traces des visites précédentes : poignée tiède, poussière déplacée,
-        condensation à hauteur de visage côté extérieur.
-        Rien n’indique que quelqu’un se tenait de l’autre côté.
-      </div>
-
-      <div class="report">
-        <div class="report-title">ENTRY 04 / 03:22</div>
-        Hart a ouvert B-12. La caméra placée derrière lui montre la porte ouverte.
-        La caméra placée devant la porte montre seulement un mur fermé.
-        Les deux angles sont synchronisés.
-      </div>
-
-      <div class="report">
-        <div class="report-title">ENTRY 05 / TIME REJECTED</div>
-        Le plus inquiétant n’est pas que l’intérieur manque.
-        Le plus inquiétant est que personne ne l’a remarqué avant la troisième nuit.
+      <div class="piece thin">
+        It may not be hiding the inside.<br>
+        It may be teaching observers to invent one.
       </div>
     `;
   }
 
-  if (page === "measurements") {
+  if (page === "map") {
     content.innerHTML = `
-      <h2>02 — Mesures</h2>
+      <h2>not a map</h2>
 
-      <table>
-        <tr><th>Record</th><th>Observation</th><th>Résultat</th><th>Statut</th></tr>
-        <tr><td>M-01</td><td>Longueur de la façade nord.</td><td>41 m depuis le parking.</td><td>Valide</td></tr>
-        <tr><td>M-02</td><td>Même façade mesurée depuis la route.</td><td>58 m.</td><td>Valide</td></tr>
-        <tr><td>M-03</td><td>Ouverture de B-12 filmée côté sujet.</td><td>Porte ouverte.</td><td>Valide</td></tr>
-        <tr><td>M-04</td><td>Ouverture de B-12 filmée côté façade.</td><td>Mur intact.</td><td>Valide</td></tr>
-        <tr><td>M-05</td><td>Fenêtre W-04 éclairée à 03:10.</td><td>Aucune source électrique détectée.</td><td>Non résolu</td></tr>
-        <tr><td>M-06</td><td>Tour complet du périmètre.</td><td>Retour au point de départ sans virage à gauche.</td><td>Valide</td></tr>
-        <tr><td>M-07</td><td>Photographie de l’entrée centrale.</td><td>Image surexposée uniquement dans l’encadrement.</td><td>Quarantaine</td></tr>
-        <tr><td>M-08</td><td>Test sonore à travers porte.</td><td>Écho reçu avant émission.</td><td>Valide</td></tr>
-      </table>
-
-      <div class="report">
-        <div class="report-title">NOTE DE MESURE</div>
-        Les mesures contradictoires ne sont pas annulées.
-        Dans cette zone, une contradiction stable signifie souvent que l’observateur n’est pas placé
-        devant le même extérieur, même s’il regarde la même façade.
-      </div>
-    `;
-  }
-
-  if (page === "cartography") {
-    content.innerHTML = `
-      <h2>03 — Façade / Cartographie</h2>
-
-      <div class="status">
-        CARTE ACTUELLE: EXTÉRIEUR SEULEMENT<br>
-        ZONE DÉCOUVERTE: FAÇADE NORD + PÉRIMÈTRE IMMÉDIAT<br>
-        INTÉRIEUR: NON CARTOGRAPHIÉ / NON PROUVÉ<br>
-        PLAN DES PIÈCES: INTERDIT DANS CETTE COPIE<br>
-        NOTE: LES PORTES NE MÈNENT PAS FORCÉMENT DEDANS
+      <div class="piece thin">
+        this is not a floor plan<br>
+        this is the furthest outside data could go before becoming useless
       </div>
 
-      <div class="report">
-        <div class="report-title">AVERTISSEMENT CARTOGRAPHIQUE</div>
-        Cette carte ne représente pas Wonderland. Elle représente la partie extérieure que l’équipe a réussi à observer
-        sans produire de données contradictoires immédiates.
+      <div class="map-shell">
+        <div class="road"></div>
+        <div class="liminal-building"></div>
+        <div class="door-black"></div>
+
+        <div class="window" style="left:24%;top:165px;"></div>
+        <div class="window dark" style="left:34%;top:165px;"></div>
+        <div class="window" style="left:62%;top:165px;"></div>
+        <div class="window dark" style="left:72%;top:165px;"></div>
+
+        <div class="map-label" style="left:5%;top:90px;">B-12<br>opens outward only</div>
+        <div class="map-label red" style="left:78%;top:88px;">W-04<br>lit window<br>no room behind it</div>
+        <div class="map-label" style="left:8%;top:405px;">wet road<br>no rain recorded</div>
+        <div class="map-label red" style="left:68%;top:435px;">R-17<br>return marker<br>not an exit</div>
+        <div class="map-label" style="left:42%;top:34px;">roofline repeats<br>from every angle</div>
+
+        <div class="map-line" style="left:17%;top:125px;width:120px;transform:rotate(14deg);"></div>
+        <div class="map-line red" style="left:69%;top:126px;width:104px;transform:rotate(-12deg);"></div>
+        <div class="map-line" style="left:18%;top:433px;width:230px;transform:rotate(-12deg);"></div>
+        <div class="map-line red" style="left:58%;top:455px;width:110px;transform:rotate(-9deg);"></div>
+
+        <div class="void-text" style="left:45%;top:252px;">NO INSIDE RETURNED</div>
+        <div class="void-text" style="left:12%;top:520px;">distance failed here</div>
+        <div class="void-text" style="left:73%;top:360px;">do not draw rooms</div>
+      </div>
+
+      <div class="piece">
+        The known part of Wonderland is not a hallway, not a room, not a level.<br>
+        It is an exterior surface. A liminal outside.
         <br><br>
-        Le bâtiment dessiné ci-dessous n’est pas considéré comme un bâtiment complet.
-        C’est une façade active. Les ouvertures sont des comportements, pas des accès confirmés.
-      </div>
-
-      <div class="exterior-wrap">
-        <div class="exterior-map">
-          <div class="fog"></div>
-          <div class="horizon"></div>
-
-          <div class="ground-mark" style="left:90px;top:380px;width:220px;height:58px;"></div>
-          <div class="ground-mark" style="left:650px;top:374px;width:260px;height:70px;"></div>
-          <div class="ground-mark" style="left:390px;top:425px;width:190px;height:48px;"></div>
-
-          <div class="outer-wall"></div>
-          <div class="no-entry"></div>
-
-          <div class="field-label" style="left:168px;top:90px;">façade nord observée</div>
-          <div class="field-label" style="left:413px;top:354px;">intérieur non confirmé</div>
-          <div class="field-label" style="left:720px;top:407px;">ombre portée vers l'observateur</div>
-
-          <div class="outside-node" style="left:50px;top:66px;">
-            B-12<br>
-            porte latérale<br>
-            <span class="dim">s’ouvre vers dehors</span>
-          </div>
-
-          <div class="outside-node uncertain" style="left:265px;top:36px;">
-            vitres hautes<br>
-            reflet du parking<br>
-            <span class="dim">même hors site</span>
-          </div>
-
-          <div class="outside-node rejected" style="left:790px;top:74px;">
-            W-04<br>
-            fenêtre éclairée<br>
-            <span class="dim">aucune pièce derrière</span>
-          </div>
-
-          <div class="outside-node uncertain" style="left:875px;top:285px;">
-            angle est<br>
-            tourne trop tard<br>
-            <span class="dim">distance instable</span>
-          </div>
-
-          <div class="outside-node rejected" style="left:596px;top:456px;">
-            R-17<br>
-            marqueur retour<br>
-            <span class="dim">pas une sortie</span>
-          </div>
-
-          <div class="outside-node" style="left:185px;top:442px;">
-            route mouillée<br>
-            pas de pluie<br>
-            <span class="dim">traces vers façade</span>
-          </div>
-
-          <div class="outside-node uncertain" style="left:38px;top:286px;">
-            ouest / clôture<br>
-            revient au nord<br>
-            <span class="dim">sans demi-tour</span>
-          </div>
-
-          <div class="outside-line" style="left:185px;top:103px;width:86px;transform:rotate(-15deg);"></div>
-          <div class="outside-line uncertain" style="left:405px;top:72px;width:390px;transform:rotate(7deg);"></div>
-          <div class="outside-line rejected" style="left:842px;top:145px;width:84px;transform:rotate(78deg);"></div>
-          <div class="outside-line uncertain" style="left:878px;top:346px;width:150px;transform:rotate(147deg);"></div>
-          <div class="outside-line rejected" style="left:732px;top:456px;width:82px;transform:rotate(-18deg);"></div>
-          <div class="outside-line" style="left:322px;top:455px;width:275px;transform:rotate(4deg);"></div>
-          <div class="outside-line uncertain" style="left:105px;top:346px;width:95px;transform:rotate(75deg);"></div>
-        </div>
-
-        <div class="caption">
-          Relevé extérieur uniquement. Les zones noires ne sont pas des salles inconnues : ce sont des endroits où la notion d’intérieur n’a pas pu être prouvée.
-        </div>
-      </div>
-
-      <div class="report">
-        <div class="report-title">NOTE TERRAIN / CARTOGRAPHE NON IDENTIFIÉ</div>
-        On croyait avoir trouvé l’entrée. En réalité, on a seulement trouvé l’endroit où l’extérieur accepte d’être regardé.
-        <br><br>
-        Le bâtiment ne nous refuse pas l’accès. C’est pire : il nous laisse supposer qu’il y a quelque chose à franchir.
-        Pour l’instant, tout ce que nous avons est une façade, des ombres, des reflets, et des portes qui n’ont jamais prouvé qu’elles menaient dedans.
-      </div>
-
-      <div class="terminal">
-        > floorplan request rejected<br>
-        > exterior geometry retained<br>
-        > interior geometry: null<br>
-        > warning: drawing rooms may create rooms<br>
-        > last observer note: "stop looking for inside"<span class="blink">_</span>
+        The map ends at the façade because the façade is all that has ever been verified.
       </div>
     `;
   }
 
   if (page === "images") {
     content.innerHTML = `
-      <h2>04 — Images</h2>
+      <h2>still frames</h2>
 
       <div class="photo-grid">
-        <div class="field-photo">
+        <div>
           <div class="photo">
-            <div class="photo-wall"></div>
-            <div class="photo-door"></div>
-            <div class="photo-road"></div>
+            <div class="p-wall"></div>
+            <div class="p-door"></div>
+            <div class="p-road"></div>
           </div>
-          <div class="caption">Frame B-12 / porte ouverte côté sujet / mur fermé côté façade</div>
+          <div class="caption">B-12 / open from subject angle / closed from fixed angle</div>
         </div>
 
-        <div class="field-photo">
+        <div>
           <div class="photo">
-            <div class="photo-wall"></div>
-            <div class="photo-window" style="left:92px;top:58px;"></div>
-            <div class="photo-window" style="right:92px;top:58px;"></div>
-            <div class="photo-road"></div>
+            <div class="p-wall"></div>
+            <div class="window" style="left:30%;top:75px;"></div>
+            <div class="window dark" style="right:30%;top:75px;"></div>
+            <div class="p-road"></div>
           </div>
-          <div class="caption">Frame W-04 / fenêtre éclairée / aucune pièce détectée derrière la lumière</div>
+          <div class="caption">W-04 / light visible / room not detected</div>
         </div>
 
-        <div class="field-photo">
+        <div>
           <div class="photo">
-            <div class="photo-road"></div>
-            <div class="photo-wall" style="left:26%;width:48%;top:24px;height:170px;"></div>
+            <div class="p-road"></div>
+            <div class="p-wall" style="left:28%;width:44%;top:28px;height:160px;"></div>
           </div>
-          <div class="caption">Frame N-02 / façade visible depuis route extérieure / distance incompatible avec GPS</div>
+          <div class="caption">north side / same wall photographed 11 km away</div>
         </div>
 
-        <div class="field-photo">
+        <div>
           <div class="photo">
-            <div class="photo-wall" style="left:32%;width:36%;top:20px;height:180px;background:#070807;"></div>
+            <div class="p-wall" style="left:37%;width:26%;top:22px;height:180px;background:#050505;"></div>
           </div>
-          <div class="caption">Frame C-00 / tentative d’exposition vers l’intérieur / image conserve seulement l’extérieur</div>
+          <div class="caption">interior exposure / returned black exterior surface</div>
         </div>
-      </div>
-
-      <div class="report">
-        <div class="report-title">NOTE IMAGE</div>
-        Aucune image fiable ne montre l’intérieur de W-04.
-        Les clichés pris à travers les ouvertures retournent soit un mur extérieur, soit la route, soit une surexposition locale.
-        <br><br>
-        Le phénomène le plus constant est simple : l’extérieur survit à toutes les tentatives de le dépasser.
       </div>
     `;
   }
 
-  if (page === "continuity") {
+  if (page === "name") {
     content.innerHTML = `
-      <h2>05 — Continuité</h2>
+      <h2>the name</h2>
 
-      <div class="report">
-        <div class="report-title">SUBJECT REPORT — DES-44721</div>
-        Le sujet déclare être entré par B-12 à 06:14.<br>
-        Les caméras extérieures montrent le sujet debout devant B-12 à 06:17.<br>
-        La porte est ouverte sur l’angle subjectif.<br>
-        Elle est fermée sur l’angle fixe.
+      <div class="piece">
+        DES-44721 is not a username.<br>
+        It is the name the outside still accepts.
       </div>
 
-      <div class="report">
-        <div class="report-title">ÉCHEC DE CONTINUITÉ</div>
-        DES-44721 reste reconnu après disparition physique.
-        L’identifiant ne sert pas à ouvrir une session : il sert à confirmer que la façade a déjà répondu à ce sujet.
+      <div class="piece thin">
+        Hart was not confirmed inside.<br>
+        Hart was not confirmed outside.<br>
+        Hart was confirmed by the façade.
       </div>
 
-      <div class="report">
-        <div class="report-title">RÉSULTAT PRATIQUE</div>
-        Le sujet n’est peut-être pas bloqué à l’intérieur.
-        Il est peut-être resté dans l’extérieur après que le reste du monde a cessé de le voir.
-      </div>
+      <div class="big-empty">SUBJECT LOCATION UNAVAILABLE</div>
     `;
   }
 
   if (page === "marker") {
     content.innerHTML = `
-      <h2>06 — Marqueur</h2>
+      <h2>R-17</h2>
 
-      <div class="status">
-        ROUTE RETENUE:<br><br>
-        B-12 s’ouvre vers l’extérieur.<br>
-        W-04 s’allume sans pièce confirmée.<br>
-        DES-44721 reste reconnu.<br>
-        R-17 apparaît sur la route mouillée.<br><br>
-        MARQUEUR ACTUEL: R-17
+      <div class="piece">
+        R-17 appeared on the road after the third exterior loop.
+        It was not painted there.<br>
+        It was dry while the road around it was wet.
       </div>
 
-      <div class="report">
-        <div class="report-title">CONDITION SUIVANTE</div>
-        Le prochain nœud ne devrait pas demander un mot de passe.
-        Il devrait demander le marqueur extérieur.
-        <br><br>
-        Marqueur retenu : <span class="warn">R-17</span>
-      </div>
-
-      <div class="report">
-        <div class="report-title">NOTE</div>
-        R-17 n’est pas une sortie. C’est le premier point où l’équipe a compris qu’elle n’avait jamais été dedans.
+      <div class="piece">
+        R-17 is not the exit.<br>
+        R-17 is the point where the team understood they had never gone in.
       </div>
 
       <div class="terminal">
-        > return marker stored<br>
-        > inside route unavailable<br>
-        > outside route still open<br>
-        > do not enter what has not proven it exists<span class="blink">_</span>
+        > marker retained<br>
+        > outside route open<br>
+        > inside route not found<br>
+        > are you awake?<span class="blink">_</span>
       </div>
     `;
   }
