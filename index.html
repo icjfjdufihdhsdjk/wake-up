@@ -1,1 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Access Node</title>
+  <meta charset="UTF-8">
 
+  <style>
+    body {
+      margin: 0;
+      background: #050505;
+      color: #cfcfcf;
+      font-family: Consolas, "Courier New", monospace;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .box {
+      width: 420px;
+      background: #0b0b0b;
+      border: 1px solid #333;
+      padding: 24px;
+      box-shadow: 0 0 25px rgba(255,255,255,0.05);
+    }
+
+    h2 {
+      margin-top: 0;
+      font-size: 18px;
+      color: #eee;
+      font-weight: normal;
+    }
+
+    input {
+      width: 100%;
+      box-sizing: border-box;
+      background: #000;
+      color: #ddd;
+      border: 1px solid #444;
+      padding: 8px;
+      font-family: Consolas, "Courier New", monospace;
+      margin-top: 8px;
+    }
+
+    button {
+      margin-top: 12px;
+      background: #111;
+      color: #ddd;
+      border: 1px solid #444;
+      padding: 8px 14px;
+      cursor: pointer;
+      font-family: Consolas, "Courier New", monospace;
+    }
+
+    button:hover {
+      background: #1a1a1a;
+    }
+
+    #error {
+      color: #8b0000;
+      margin-top: 12px;
+      font-size: 12px;
+    }
+
+    #content {
+      display: none;
+      max-width: 800px;
+      padding: 30px;
+    }
+
+    .log {
+      background: #000;
+      border: 1px solid #222;
+      padding: 14px;
+      line-height: 1.5;
+    }
+  </style>
+</head>
+
+<body>
+
+<div id="login" class="box">
+  <h2>USER IDENTIFICATION REQUIRED</h2>
+
+  <label>Nom d'utilisateur :</label>
+  <input id="username" type="text" autocomplete="off">
+
+  <button onclick="checkUser()">Enter</button>
+
+  <div id="error"></div>
+</div>
+
+<div id="content">
+  <h2>DES-44721</h2>
+
+  <div class="log">
+    USER RECORD FOUND<br><br>
+    STATUS: ACTIVE<br>
+    LOCATION: NOT FOUND<br>
+    LAST KNOWN ASSIGNMENT: STORAGE B<br><br>
+    welcome back, hart
+  </div>
+</div>
+
+<script>
+function checkUser() {
+  const username = document.getElementById("username").value.trim();
+  const error = document.getElementById("error");
+
+  if (username === "DES-44721") {
+    document.getElementById("login").style.display = "none";
+    document.getElementById("content").style.display = "block";
+  } else {
+    error.innerHTML = "USER NOT FOUND";
+  }
+}
+</script>
+
+</body>
+</html>
