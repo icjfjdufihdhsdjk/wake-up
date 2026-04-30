@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>W-04 Field Archive</title>
+  <title>W-04 Observation Archive</title>
   <meta charset="UTF-8">
 
   <style>
@@ -9,528 +9,431 @@
       margin: 0;
       padding: 0;
       min-height: 100%;
-      background: #020202;
-      color: #b9b9b9;
+      background: #101214;
+      color: #d2d2d2;
       font-family: Consolas, "Courier New", monospace;
-      overflow-x: hidden;
+      font-size: 13px;
     }
 
-    body::before {
-      content: "";
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
+    body {
       background:
-        repeating-linear-gradient(
-          to bottom,
-          rgba(255,255,255,0.028),
-          rgba(255,255,255,0.028) 1px,
-          transparent 1px,
-          transparent 5px
-        );
-      z-index: 998;
-      mix-blend-mode: screen;
-    }
-
-    body::after {
-      content: "";
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      background: radial-gradient(circle at center, transparent 38%, rgba(0,0,0,0.84) 100%);
-      z-index: 997;
+        linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px),
+        linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+        #101214;
+      background-size: 42px 42px;
     }
 
     .login-screen {
       height: 100vh;
       display: flex;
-      justify-content: center;
       align-items: center;
-      background:
-        radial-gradient(circle at center, rgba(25,25,25,0.7), #020202 70%),
-        linear-gradient(180deg, #050505, #000);
+      justify-content: center;
+      background: #0c0d0e;
     }
 
     .login-box {
-      width: 450px;
-      background: #060606;
-      border: 1px solid #242424;
-      box-shadow: 0 0 42px rgba(255,255,255,0.045);
-      padding: 28px;
+      width: 440px;
+      background: #151719;
+      border: 1px solid #3a3d40;
+      padding: 26px;
+      box-shadow: 0 0 18px rgba(0,0,0,0.6);
     }
 
     .login-title {
       font-size: 15px;
-      letter-spacing: 3px;
-      color: #eeeeee;
-      margin-bottom: 12px;
-      text-align: center;
-      font-weight: normal;
+      letter-spacing: 2px;
+      color: #f0f0f0;
+      margin-bottom: 8px;
     }
 
     .login-subtitle {
-      color: #555;
+      color: #7c8288;
       font-size: 11px;
-      text-align: center;
-      margin-bottom: 28px;
+      margin-bottom: 24px;
     }
 
     label {
       display: block;
-      color: #777;
-      font-size: 12px;
-      margin-bottom: 8px;
+      color: #aaa;
+      margin-bottom: 6px;
     }
 
     input {
       width: 100%;
       box-sizing: border-box;
-      background: #000;
-      border: 1px solid #333;
-      color: #ddd;
-      padding: 9px;
+      background: #0a0b0c;
+      color: #e0e0e0;
+      border: 1px solid #4b4f53;
+      padding: 8px;
       font-family: Consolas, "Courier New", monospace;
-      font-size: 13px;
-      outline: none;
-    }
-
-    input:focus {
-      border-color: #666;
     }
 
     button {
-      margin-top: 14px;
-      background: #0e0e0e;
-      color: #cfcfcf;
-      border: 1px solid #333;
-      padding: 8px 14px;
+      margin-top: 12px;
+      background: #202326;
+      color: #ddd;
+      border: 1px solid #4b4f53;
+      padding: 7px 13px;
       cursor: pointer;
       font-family: Consolas, "Courier New", monospace;
-      font-size: 12px;
     }
 
     button:hover {
-      background: #181818;
+      background: #2b2f33;
     }
 
     .error {
-      color: #8b0000;
-      margin-top: 14px;
-      font-size: 12px;
+      color: #a03b3b;
+      margin-top: 12px;
       min-height: 16px;
-    }
-
-    .small-note {
-      margin-top: 26px;
-      color: #3d3d3d;
-      font-size: 11px;
-      text-align: center;
     }
 
     .site {
       display: none;
-      min-height: 100vh;
-      background: #020202;
     }
 
-    .top-warning {
-      background: #080808;
-      border-bottom: 1px solid #1f1f1f;
-      color: #777;
-      padding: 8px 12px;
+    .topbar {
+      background: #08090a;
+      color: #999;
+      border-bottom: 1px solid #2b2e31;
+      padding: 7px 12px;
       font-size: 11px;
-      text-align: center;
-      letter-spacing: 1px;
+      text-align: right;
     }
 
-    .hero {
-      min-height: 88vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
+    .container {
+      width: 1040px;
+      margin: 18px auto;
+      background: #17191b;
+      border: 1px solid #34383c;
+      box-shadow: 0 0 18px rgba(0,0,0,0.55);
+    }
+
+    .header {
+      background: #202326;
+      border-bottom: 1px solid #3a3d40;
+      padding: 18px;
       position: relative;
     }
 
-    .symbol {
-      font-size: 54px;
-      letter-spacing: 15px;
-      color: #d0d0d0;
-      opacity: 0.82;
-      text-shadow: 0 0 18px rgba(255,255,255,0.12);
-    }
-
-    .symbol span:nth-child(2) { opacity: 0.35; transform: translateY(3px); display: inline-block; }
-    .symbol span:nth-child(5) { opacity: 0.18; }
-    .symbol span:nth-child(8) { opacity: 0.3; }
-
-    .sub-symbol {
-      margin-top: 20px;
-      color: #575757;
-      font-size: 12px;
-      letter-spacing: 3px;
-    }
-
-    .scroll-note {
-      position: absolute;
-      bottom: 35px;
-      left: 0;
-      right: 0;
-      color: #333;
-      font-size: 11px;
+    .header h1 {
+      margin: 0;
+      font-size: 21px;
+      font-weight: normal;
       letter-spacing: 2px;
+      color: #efefef;
     }
 
-    .nav {
-      position: sticky;
-      top: 0;
-      z-index: 30;
-      background: rgba(5,5,5,0.94);
-      border-top: 1px solid #181818;
-      border-bottom: 1px solid #181818;
-      padding: 10px;
-      text-align: center;
-      backdrop-filter: blur(3px);
+    .header .sub {
+      margin-top: 6px;
+      color: #8c9298;
+      font-size: 12px;
     }
 
-    .nav span {
-      display: inline-block;
-      margin: 3px;
-      padding: 6px 10px;
-      border: 1px solid #242424;
-      color: #888;
+    .classification {
+      position: absolute;
+      right: 18px;
+      top: 18px;
+      color: #9b9b9b;
+      border: 1px solid #555;
+      padding: 7px 10px;
+      font-size: 11px;
+      text-align: right;
+      background: #161819;
+    }
+
+    .notice {
+      background: #111315;
+      color: #aaa;
+      border-bottom: 1px solid #333;
+      padding: 9px 12px;
+      font-size: 12px;
+    }
+
+    .main {
+      display: flex;
+      min-height: 650px;
+    }
+
+    .sidebar {
+      width: 230px;
+      background: #121416;
+      border-right: 1px solid #34383c;
+      padding: 12px;
+    }
+
+    .side-title {
+      color: #d6d6d6;
+      font-size: 12px;
+      border-bottom: 1px solid #333;
+      padding-bottom: 5px;
+      margin: 8px 0 9px 0;
+      letter-spacing: 1px;
+    }
+
+    .side-box {
+      color: #8d9399;
+      font-size: 12px;
+      line-height: 1.55;
+      margin-bottom: 18px;
+    }
+
+    .nav-item {
+      display: block;
+      border: 1px solid #303438;
+      background: #181b1e;
+      padding: 7px;
+      margin-bottom: 6px;
+      color: #c0c0c0;
       cursor: pointer;
       font-size: 12px;
     }
 
-    .nav span:hover {
-      color: #ddd;
-      border-color: #555;
+    .nav-item:hover {
+      background: #22262a;
     }
 
-    .section {
-      width: 920px;
-      max-width: calc(100% - 40px);
-      margin: 0 auto;
-      padding: 80px 0;
-    }
-
-    .section-title {
-      font-size: 24px;
-      letter-spacing: 7px;
-      color: #cfcfcf;
-      margin-bottom: 24px;
-      border-bottom: 1px solid #1b1b1b;
-      padding-bottom: 12px;
-    }
-
-    .section-title .fade {
-      opacity: 0.22;
-    }
-
-    .log {
-      background: #070707;
-      border: 1px solid #222;
-      color: #b8b8b8;
+    .content {
+      flex: 1;
       padding: 18px;
-      line-height: 1.65;
-      font-size: 13px;
-      margin: 14px 0;
+      background: #17191b;
     }
 
-    .red {
-      color: #8f2020;
+    h2 {
+      font-weight: normal;
+      margin-top: 0;
+      color: #f0f0f0;
+      border-bottom: 1px solid #34383c;
+      padding-bottom: 8px;
+      font-size: 19px;
+      letter-spacing: 1px;
+    }
+
+    .status {
+      background: #08090a;
+      border: 1px solid #33373b;
+      color: #bfc6c8;
+      padding: 12px;
+      line-height: 1.55;
+      margin: 12px 0;
+    }
+
+    .report {
+      background: #111315;
+      border: 1px solid #303438;
+      padding: 14px;
+      margin: 13px 0;
+      line-height: 1.65;
+      color: #c7c7c7;
+    }
+
+    .report-title {
+      color: #f0f0f0;
+      margin-bottom: 10px;
+      letter-spacing: 1px;
+      border-bottom: 1px solid #333;
+      padding-bottom: 6px;
     }
 
     .dim {
-      color: #555;
+      color: #7b8288;
     }
 
-    .note-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 18px;
+    .warn {
+      color: #b07a7a;
     }
 
-    .note-card {
-      background: #080808;
-      border: 1px solid #202020;
-      padding: 16px;
-      min-height: 170px;
-      box-shadow: 0 0 22px rgba(255,255,255,0.02);
-    }
-
-    .note-title {
-      color: #d0d0d0;
-      font-size: 14px;
-      margin-bottom: 12px;
-      letter-spacing: 2px;
-    }
-
-    .note-body {
-      color: #8c8c8c;
-      line-height: 1.6;
+    table {
+      border-collapse: collapse;
+      width: 100%;
       font-size: 12px;
+      margin: 12px 0;
+    }
+
+    td, th {
+      border: 1px solid #34383c;
+      padding: 7px;
+      vertical-align: top;
+    }
+
+    th {
+      background: #22262a;
+      color: #e1e1e1;
+      font-weight: normal;
+      text-align: left;
+    }
+
+    td {
+      background: #121416;
+      color: #c0c0c0;
     }
 
     .map-wrap {
-      background: #050505;
-      border: 1px solid #222;
-      padding: 18px;
-      margin: 20px 0;
+      background: #0d0f10;
+      border: 1px solid #303438;
+      padding: 14px;
+      margin: 14px 0;
     }
 
     .map {
       height: 430px;
       position: relative;
       background:
-        linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px),
-        linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px),
-        radial-gradient(circle at 55% 45%, rgba(255,255,255,0.055), transparent 30%),
-        #030303;
-      background-size: 40px 40px, 40px 40px, auto, auto;
+        linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px),
+        linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+        #08090a;
+      background-size: 40px 40px;
+      border: 1px solid #25292d;
       overflow: hidden;
-      border: 1px solid #151515;
     }
 
     .room {
       position: absolute;
-      border: 1px solid #555;
+      border: 1px solid #666;
+      color: #c0c0c0;
       background: rgba(255,255,255,0.035);
-      color: #888;
       font-size: 11px;
       padding: 5px;
       box-sizing: border-box;
     }
 
-    .room.dark {
-      border-color: #222;
-      color: #333;
-      background: rgba(0,0,0,0.5);
+    .room.unstable {
+      border-style: dashed;
+      color: #aaa;
+      background: rgba(255,255,255,0.015);
     }
 
-    .room.red-room {
-      border-color: #5a1515;
-      color: #8b3333;
-      background: rgba(80,0,0,0.12);
+    .room.rejected {
+      border-color: #4b2626;
+      color: #b07a7a;
+      background: rgba(80,0,0,0.08);
     }
 
     .line {
       position: absolute;
       height: 1px;
-      background: #333;
+      background: #484c50;
       transform-origin: left center;
     }
 
-    .map-label {
-      color: #555;
-      font-size: 11px;
-      margin-top: 10px;
-      line-height: 1.6;
-    }
-
-    .liminal-grid {
+    .image-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 34px;
+      gap: 18px;
     }
 
     .image-card {
-      background: #070707;
-      border: 1px solid #202020;
-      padding: 14px;
-      min-height: 220px;
-      box-shadow: 0 0 22px rgba(255,255,255,0.025);
+      background: #111315;
+      border: 1px solid #303438;
+      padding: 12px;
     }
 
     .fake-image {
       height: 220px;
-      background: #111;
-      border: 1px solid #222;
+      background: #0a0b0c;
+      border: 1px solid #2b2e31;
       position: relative;
       overflow: hidden;
-    }
-
-    .fake-image::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(circle at center, rgba(255,255,255,0.08), transparent 45%);
-      opacity: 0.7;
     }
 
     .fake-image::after {
       content: "";
       position: absolute;
       inset: 0;
-      background: repeating-linear-gradient(90deg, transparent, transparent 4px, rgba(255,255,255,0.015) 5px);
+      background: repeating-linear-gradient(to bottom, rgba(255,255,255,0.025), rgba(255,255,255,0.025) 1px, transparent 1px, transparent 4px);
     }
 
-    .door {
+    .corridor-wall-left {
       position: absolute;
-      width: 74px;
-      height: 150px;
+      left: 0;
+      top: 0;
+      width: 48%;
+      height: 100%;
+      clip-path: polygon(0 0, 100% 35%, 100% 65%, 0 100%);
+      background: #151719;
+      border-right: 1px solid #333;
+    }
+
+    .corridor-wall-right {
+      position: absolute;
+      right: 0;
+      top: 0;
+      width: 48%;
+      height: 100%;
+      clip-path: polygon(0 35%, 100% 0, 100% 100%, 0 65%);
+      background: #121416;
+      border-left: 1px solid #333;
+    }
+
+    .door-shape {
+      position: absolute;
       left: 50%;
-      top: 35px;
+      top: 44px;
       transform: translateX(-50%);
-      border: 2px solid #666;
-      background: linear-gradient(90deg, #151515, #030303 55%, #000);
-      box-shadow: 0 0 35px rgba(255,255,255,0.04);
-    }
-
-    .door.open {
-      transform: translateX(-50%) perspective(300px) rotateY(-28deg);
-      transform-origin: left center;
-    }
-
-    .void {
-      position: absolute;
-      width: 55px;
-      height: 135px;
-      left: calc(50% + 8px);
-      top: 42px;
-      background: radial-gradient(circle, #232323, #000 70%);
-      box-shadow: inset 0 0 28px #000, 0 0 18px rgba(255,255,255,0.03);
-    }
-
-    .corridor-line {
-      position: absolute;
-      height: 1px;
-      background: #363636;
-      left: 20px;
-      right: 20px;
-    }
-
-    .corridor-line.l1 { top: 65px; }
-    .corridor-line.l2 { top: 105px; opacity: 0.7; }
-    .corridor-line.l3 { top: 145px; opacity: 0.45; }
-    .corridor-line.l4 { top: 185px; opacity: 0.25; }
-
-    .stairs-step {
-      position: absolute;
-      height: 10px;
-      border-top: 1px solid #444;
-      border-left: 1px solid #222;
-      border-right: 1px solid #222;
-      left: 50%;
-      transform: translateX(-50%);
-    }
-
-    .s1 { width: 180px; top: 50px; }
-    .s2 { width: 160px; top: 70px; }
-    .s3 { width: 140px; top: 90px; }
-    .s4 { width: 120px; top: 110px; }
-    .s5 { width: 100px; top: 130px; }
-    .s6 { width: 80px; top: 150px; }
-    .s7 { width: 60px; top: 170px; }
-
-    .figure {
-      position: absolute;
-      width: 24px;
-      height: 80px;
-      left: 50%;
-      top: 75px;
-      transform: translateX(-50%);
-      background: linear-gradient(#222, #050505);
-      border-radius: 12px 12px 4px 4px;
-      filter: blur(1px);
-      opacity: 0.55;
-    }
-
-    .eye {
-      position: absolute;
-      width: 96px;
-      height: 44px;
+      width: 70px;
+      height: 140px;
       border: 1px solid #777;
-      border-radius: 50%;
-      left: 50%;
-      top: 83px;
-      transform: translateX(-50%);
-      background: radial-gradient(circle, #cfcfcf 0%, #333 22%, #080808 55%);
-      opacity: 0.6;
+      background: #050505;
     }
+
+    .square-room {
+      position: absolute;
+      left: 74px;
+      top: 42px;
+      width: 190px;
+      height: 125px;
+      border: 1px solid #555;
+      background: rgba(255,255,255,0.025);
+    }
+
+    .table-shape {
+      position: absolute;
+      left: 130px;
+      top: 95px;
+      width: 75px;
+      height: 32px;
+      border: 1px solid #444;
+      background: #111;
+    }
+
+    .stair-step {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      height: 9px;
+      border-top: 1px solid #555;
+      border-left: 1px solid #333;
+      border-right: 1px solid #333;
+    }
+
+    .s1 { top: 45px; width: 185px; }
+    .s2 { top: 65px; width: 165px; }
+    .s3 { top: 85px; width: 145px; }
+    .s4 { top: 105px; width: 125px; }
+    .s5 { top: 125px; width: 105px; }
+    .s6 { top: 145px; width: 85px; }
+    .s7 { top: 165px; width: 65px; }
 
     .caption {
-      color: #676767;
+      margin-top: 9px;
+      color: #7f858a;
       font-size: 12px;
-      margin-top: 10px;
-      letter-spacing: 1px;
-    }
-
-    .caption::before { content: "[ "; color: #333; }
-    .caption::after { content: " ]"; color: #333; }
-
-    .final-box {
-      width: 620px;
-      max-width: 100%;
-      margin: 80px auto;
-      background: #050505;
-      border: 1px solid #1d1d1d;
-      padding: 18px;
-      text-align: center;
-    }
-
-    .large-void {
-      height: 360px;
-      background:
-        radial-gradient(circle at 50% 48%, #202020 0%, #050505 45%, #000 80%),
-        linear-gradient(#111, #000);
-      border: 1px solid #222;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .large-void::before {
-      content: "";
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      width: 220px;
-      height: 220px;
-      transform: translate(-50%, -50%);
-      border-radius: 50%;
-      border: 1px solid rgba(255,255,255,0.08);
-      box-shadow: 0 0 80px rgba(255,255,255,0.03);
-    }
-
-    .large-void::after {
-      content: "R-17";
-      position: absolute;
-      right: 18px;
-      bottom: 14px;
-      color: rgba(255,255,255,0.08);
-      font-size: 12px;
-      letter-spacing: 2px;
-    }
-
-    .hidden-line {
-      color: #101010;
-      font-size: 11px;
-      user-select: text;
     }
 
     .footer {
-      text-align: center;
-      padding: 70px 0 50px 0;
-      color: #262626;
+      border-top: 1px solid #303438;
+      padding: 12px;
+      color: #60666c;
       font-size: 11px;
-      letter-spacing: 2px;
+      text-align: center;
+      background: #111315;
     }
 
-    .glitch { animation: flicker 4s infinite; }
-
-    @keyframes flicker {
-      0%, 95%, 100% { opacity: 1; }
-      96% { opacity: 0.35; }
-      97% { opacity: 0.9; }
-      98% { opacity: 0.2; }
-      99% { opacity: 1; }
-    }
-
-    @media (max-width: 760px) {
-      .note-grid, .liminal-grid { grid-template-columns: 1fr; }
-      .symbol { font-size: 36px; letter-spacing: 7px; }
-      .nav { position: static; }
+    @media (max-width: 900px) {
+      .container { width: calc(100% - 20px); }
+      .main { flex-direction: column; }
+      .sidebar { width: auto; }
+      .image-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -539,232 +442,71 @@
 
 <div id="login" class="login-screen">
   <div class="login-box">
-    <div class="login-title">W-04 FIELD ARCHIVE</div>
-    <div class="login-subtitle">recovered scientific notebook / unauthorized mirror</div>
+    <div class="login-title">W-04 OBSERVATION ARCHIVE</div>
+    <div class="login-subtitle">Dream Entry Systems / field notebook mirror / restored copy</div>
 
     <label>Nom d'utilisateur :</label>
     <input id="username" type="text" autocomplete="off">
-
     <button onclick="checkUser()">Enter</button>
 
     <div id="error" class="error"></div>
-
-    <div class="small-note">no password required. only recognition.</div>
   </div>
 </div>
 
 <div id="site" class="site">
-  <div class="top-warning">
-    DREAM ENTRY SYSTEMS — FIELD TEAM ARCHIVE / W-04 OBSERVATION MIRROR / DO NOT RESTORE TO PUBLIC NODE
+  <div class="topbar">
+    DES FIELD ARCHIVE / W-04 / restored from local observation media / not indexed by corporate portal
   </div>
 
-  <div class="hero">
-    <div>
-      <div class="symbol glitch">
-        <span>W</span><span>O</span><span>N</span><span>D</span><span>E</span><span>R</span><span>L</span><span>A</span><span>N</span><span>D</span>
+  <div class="container">
+    <div class="header">
+      <h1>W-04 Observation Archive</h1>
+      <div class="sub">Scientific notes, measurement attempts, and provisional cartography of the non-sleep environment.</div>
+      <div class="classification">
+        INTERNAL FIELD COPY<br>
+        STATUS: INCOMPLETE<br>
+        USER: DES-44721
       </div>
-      <div class="sub-symbol">not dream-generated / not internal / not safe to map</div>
-    </div>
-    <div class="scroll-note">continue downward</div>
-  </div>
-
-  <div class="nav">
-    <span onclick="jumpTo('notes')">scientific notes</span>
-    <span onclick="jumpTo('map')">cartography</span>
-    <span onclick="jumpTo('images')">image fragments</span>
-    <span onclick="jumpTo('rules')">field rules</span>
-    <span onclick="jumpTo('next')">next marker</span>
-  </div>
-
-  <div id="notes" class="section">
-    <div class="section-title">SCIENTIFIC N<span class="fade">O</span>TEBOOK</div>
-
-    <div class="log">
-      USER: DES-44721<br>
-      FIELD NAME: M. HART<br>
-      DEPARTMENT: NIGHT OPERATIONS / OBSERVATION SUPPORT<br>
-      STATUS: ACTIVE IN SYSTEM / PHYSICAL PRESENCE NOT FOUND<br><br>
-
-      This mirror was recovered from a local field backup. It appears to belong to the observation team,
-      not to the corporate portal. Several entries were written after the official shutdown.
     </div>
 
-    <div class="note-grid">
-      <div class="note-card">
-        <div class="note-title">ENTRY 01 / 02:17</div>
-        <div class="note-body">
-          The therapeutic explanation is no longer useful. Subjects are not constructing the environment.
-          They are arriving somewhere that remains stable when no subject is present.
-          The word "dream" is a public-facing simplification.
+    <div class="notice">
+      Note: terminology in this archive is provisional. “Wonderland” is an informal field label and not an accepted classification.
+    </div>
+
+    <div class="main">
+      <div class="sidebar">
+        <div class="side-title">ARCHIVE SECTIONS</div>
+        <span class="nav-item" onclick="showPage('summary')">00 — Summary</span>
+        <span class="nav-item" onclick="showPage('notebook')">01 — Field Notebook</span>
+        <span class="nav-item" onclick="showPage('measurements')">02 — Measurements</span>
+        <span class="nav-item" onclick="showPage('cartography')">03 — Cartography</span>
+        <span class="nav-item" onclick="showPage('images')">04 — Image Records</span>
+        <span class="nav-item" onclick="showPage('continuity')">05 — Subject Continuity</span>
+        <span class="nav-item" onclick="showPage('marker')">06 — Route Marker</span>
+
+        <div class="side-title">FIELD TERMS</div>
+        <div class="side-box">
+          non-sleep environment<br>
+          room memory<br>
+          return failure<br>
+          recognition event<br>
+          false hallway<br>
+          stable inconsistency
+        </div>
+
+        <div class="side-title">CURRENT ROUTE</div>
+        <div class="side-box">
+          B-12 → W-04 → R-17<br><br>
+          Route remains valid only if entered in order.
         </div>
       </div>
 
-      <div class="note-card">
-        <div class="note-title">ENTRY 02 / 02:42</div>
-        <div class="note-body">
-          W-04 is not a room designation. It is an access condition. The room is only the shape our equipment
-          gives to the threshold. Staff keep asking where it is in the building. Wrong question.
-        </div>
-      </div>
-
-      <div class="note-card">
-        <div class="note-title">ENTRY 03 / 03:03</div>
-        <div class="note-body">
-          Repeated hallway geometry observed. Lights behave as if maintained. Dust does not settle.
-          Doors remember being opened. Doors also remember people.
-        </div>
-      </div>
-
-      <div class="note-card">
-        <div class="note-title">ENTRY 04 / 03:22</div>
-        <div class="note-body">
-          Hart entered the wrong side of Storage B. Badge remained valid. Body did not return.
-          The system still recognizes the user ID because Wonderland does.
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div id="map" class="section">
-    <div class="section-title">WONDERLAND CART<span class="fade">O</span>GRAPHY</div>
-
-    <div class="log">
-      MAP STATUS: UNSTABLE<br>
-      SCALE: REJECTED<br>
-      ORIENTATION: CHANGES WHEN OBSERVED<br>
-      MOST CONSISTENT ROUTE: B-12 → NORTH HALL → W-04 → R-17
+      <div id="content" class="content"></div>
     </div>
 
-    <div class="map-wrap">
-      <div class="map">
-        <div class="room" style="left:40px;top:60px;width:130px;height:80px;">B-12<br>storage threshold</div>
-        <div class="room" style="left:235px;top:70px;width:170px;height:60px;">north hall<br>length variable</div>
-        <div class="room dark" style="left:470px;top:55px;width:120px;height:110px;">unlit copy</div>
-        <div class="room red-room" style="left:675px;top:70px;width:130px;height:85px;">W-04<br>not a room</div>
-
-        <div class="room" style="left:95px;top:245px;width:155px;height:90px;">stairwell<br>steps continue</div>
-        <div class="room dark" style="left:330px;top:245px;width:155px;height:90px;">blank office<br>occupied by echo</div>
-        <div class="room red-room" style="left:570px;top:250px;width:170px;height:95px;">R-17<br>return marker?</div>
-
-        <div class="line" style="left:170px;top:98px;width:65px;"></div>
-        <div class="line" style="left:405px;top:100px;width:65px;"></div>
-        <div class="line" style="left:590px;top:112px;width:85px;"></div>
-        <div class="line" style="left:250px;top:292px;width:80px;"></div>
-        <div class="line" style="left:485px;top:292px;width:85px;"></div>
-        <div class="line" style="left:738px;top:160px;width:105px;transform:rotate(100deg);"></div>
-      </div>
-      <div class="map-label">
-        Field cartography reconstructed from camera frames, subject recall, and broken room-index records.<br>
-        Rooms do not connect by distance. Rooms connect by recognition. The map is a list pretending to be a place.
-      </div>
+    <div class="footer">
+      Dream Entry Systems — field archive recovered after corporate shutdown / return procedure not attached
     </div>
-  </div>
-
-  <div id="images" class="section">
-    <div class="section-title">IMAGE FR<span class="fade">A</span>GMENTS</div>
-
-    <div class="liminal-grid">
-      <div class="image-card">
-        <div class="fake-image">
-          <div class="void"></div>
-          <div class="door open"></div>
-        </div>
-        <div class="caption">door left open / B-12</div>
-      </div>
-
-      <div class="image-card">
-        <div class="fake-image">
-          <div class="corridor-line l1"></div>
-          <div class="corridor-line l2"></div>
-          <div class="corridor-line l3"></div>
-          <div class="corridor-line l4"></div>
-          <div class="figure"></div>
-        </div>
-        <div class="caption">hallway remembers the walker</div>
-      </div>
-
-      <div class="image-card">
-        <div class="fake-image">
-          <div class="stairs-step s1"></div>
-          <div class="stairs-step s2"></div>
-          <div class="stairs-step s3"></div>
-          <div class="stairs-step s4"></div>
-          <div class="stairs-step s5"></div>
-          <div class="stairs-step s6"></div>
-          <div class="stairs-step s7"></div>
-        </div>
-        <div class="caption">steps continue after waking</div>
-      </div>
-
-      <div class="image-card">
-        <div class="fake-image">
-          <div class="eye"></div>
-        </div>
-        <div class="caption">it was already looking</div>
-      </div>
-    </div>
-  </div>
-
-  <div id="rules" class="section">
-    <div class="section-title">FIELD R<span class="fade">U</span>LES</div>
-
-    <div class="log">
-      RULE 01: Do not close a threshold you did not open.<br>
-      RULE 02: Do not follow a hallway that corrects itself while observed.<br>
-      RULE 03: If a room contains an office desk, check whether the desk has your handwriting.<br>
-      RULE 04: If a door has no number, do not assign one aloud.<br>
-      RULE 05: If you hear the building breathe, stop mapping.<br>
-      RULE 06: If you find R-17, do not enter immediately. Confirm whether it is remembering you or calling you.
-    </div>
-
-    <div class="note-grid">
-      <div class="note-card">
-        <div class="note-title">FIELD COMMENT</div>
-        <div class="note-body">
-          The safest rooms look administrative. Chairs, clocks, pale carpet, fluorescent light. The danger is not in the appearance.
-          The danger is in how familiar the room wants to be.
-        </div>
-      </div>
-      <div class="note-card">
-        <div class="note-title">UNRESOLVED</div>
-        <div class="note-body">
-          R-17 appears in the map only after Hart's recovered record is opened. It may be a return point.
-          It may also be where the system stores what is left of a user.
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div id="next" class="section">
-    <div class="section-title">NEXT MARK<span class="fade">E</span>R</div>
-
-    <div class="final-box">
-      <div class="large-void"></div>
-      <div class="caption">R-17 / return marker</div>
-    </div>
-
-    <div class="log">
-      RECOVERED ROUTE:<br><br>
-      B-12 opened first.<br>
-      W-04 recognized the user.<br>
-      DES-44721 remained valid.<br>
-      R-17 appeared after the record was read.<br><br>
-
-      The next access point is not corporate.<br>
-      The next access point is not a camera.<br>
-      The next access point is a room number pretending to be a way out.<br><br>
-
-      MARKER: <span class="red">R-17</span>
-    </div>
-
-    <p class="hidden-line">
-      next node should ask for return marker
-    </p>
-  </div>
-
-  <div class="footer">
-    B-12 / W-04 / DES-44721 / R-17<br>
-    the path is not hidden. it is misplaced.
   </div>
 </div>
 
@@ -776,35 +518,247 @@ function checkUser() {
   if (username === "DES-44721") {
     document.getElementById("login").style.display = "none";
     document.getElementById("site").style.display = "block";
-    window.scrollTo(0, 0);
+    showPage("summary");
   } else {
     error.innerHTML = "USER NOT RECOGNIZED";
   }
 }
 
-function jumpTo(id) {
-  document.getElementById(id).scrollIntoView({ behavior: "smooth" });
-}
+function showPage(page) {
+  const content = document.getElementById("content");
 
-const strangeCaptions = [
-  "door left open",
-  "door still opening",
-  "door opened before the room existed",
-  "not a room",
-  "do not close it",
-  "recognition event active",
-  "R-17 waits after W-04"
-];
+  if (page === "summary") {
+    content.innerHTML = `
+      <h2>00 — Summary</h2>
 
-setInterval(function() {
-  const captions = document.querySelectorAll(".caption");
-  if (captions.length > 0 && document.getElementById("site").style.display === "block") {
-    const randomCaption = captions[Math.floor(Math.random() * captions.length)];
-    if (Math.random() > 0.64) {
-      randomCaption.innerText = strangeCaptions[Math.floor(Math.random() * strangeCaptions.length)];
-    }
+      <div class="status">
+        ARCHIVE OWNER: FIELD OBSERVATION TEAM<br>
+        ASSOCIATED USER: DES-44721 / M. HART<br>
+        ASSOCIATED ACCESS CONDITION: W-04<br>
+        INFORMAL LABEL: WONDERLAND<br>
+        CLASSIFICATION: NON-SLEEP ENVIRONMENT<br>
+        RETURN PROCEDURE: NOT PRESENT IN THIS COPY
+      </div>
+
+      <div class="report">
+        <div class="report-title">SUMMARY NOTE</div>
+        The environment described in these files was initially treated as a repeatable dream state.
+        This classification was withdrawn after camera, badge, and timing records continued to return data
+        when no subject was connected to the DED-01 device.
+        <br><br>
+        No entity model is used in this archive. No agency is assigned to the environment.
+        Recorded anomalies are treated as spatial, procedural, or memory-related until proven otherwise.
+      </div>
+
+      <div class="report">
+        <div class="report-title">WORKING ASSUMPTION</div>
+        Wonderland is not created by the subject. The subject appears to enter or intersect with it.
+        The environment resembles remembered architecture, but does not obey the building plan,
+        the subject report, or a consistent scale.
+      </div>
+    `;
   }
-}, 5200);
+
+  if (page === "notebook") {
+    content.innerHTML = `
+      <h2>01 — Field Notebook</h2>
+
+      <div class="report">
+        <div class="report-title">ENTRY 01 / 02:17</div>
+        The therapeutic explanation is no longer useful. Subjects are not constructing the environment.
+        They are arriving somewhere that remains stable when no subject is present.
+        The word “dream” is retained only because it is the closest public description.
+      </div>
+
+      <div class="report">
+        <div class="report-title">ENTRY 02 / 02:42</div>
+        W-04 is not a room designation. It is an access condition.
+        The room is the shape our equipment gives to the threshold.
+        Staff continue asking where W-04 is inside the building. This question has produced no useful results.
+      </div>
+
+      <div class="report">
+        <div class="report-title">ENTRY 03 / 03:03</div>
+        Repeated hallway geometry observed. Lights behave as if maintained.
+        Dust does not settle. Doors retain previous open states across unrelated sessions.
+        This has been provisionally logged as room memory.
+      </div>
+
+      <div class="report">
+        <div class="report-title">ENTRY 04 / 03:22</div>
+        Hart entered the wrong side of Storage B. Badge remained valid. Body did not return.
+        The system still recognizes the user ID because the access condition recognizes it.
+      </div>
+    `;
+  }
+
+  if (page === "measurements") {
+    content.innerHTML = `
+      <h2>02 — Measurements</h2>
+
+      <table>
+        <tr><th>Record</th><th>Observation</th><th>Result</th><th>Status</th></tr>
+        <tr><td>M-01</td><td>North Hall length measured at 18m.</td><td>18m retained.</td><td>Valid</td></tr>
+        <tr><td>M-02</td><td>Same hallway measured three minutes later.</td><td>26m retained.</td><td>Valid</td></tr>
+        <tr><td>M-03</td><td>Subject report: exited through B-12.</td><td>Report accepted.</td><td>Valid</td></tr>
+        <tr><td>M-04</td><td>Camera record: subject did not exit through B-12.</td><td>Record accepted.</td><td>Valid</td></tr>
+        <tr><td>M-05</td><td>Sleep cycle terminated at 07:02.</td><td>Environment accessible until 07:02:11.</td><td>Unresolved</td></tr>
+        <tr><td>M-06</td><td>Clock in observed office ran backward for 4 seconds.</td><td>Local effect only.</td><td>Valid</td></tr>
+      </table>
+
+      <div class="report">
+        <div class="report-title">MEASUREMENT NOTE</div>
+        Contradictory measurements are not discarded automatically.
+        In W-04-linked observations, contradiction may indicate overlap rather than error.
+        When two records conflict and both repeat under controlled conditions, both are retained.
+      </div>
+    `;
+  }
+
+  if (page === "cartography") {
+    content.innerHTML = `
+      <h2>03 — Cartography</h2>
+
+      <div class="status">
+        MAP STATUS: PROVISIONAL<br>
+        SCALE: REJECTED<br>
+        ORIENTATION: UNSTABLE<br>
+        MOST CONSISTENT ROUTE: B-12 → NORTH HALL → W-04 → R-17
+      </div>
+
+      <div class="map-wrap">
+        <div class="map">
+          <div class="room" style="left:45px;top:62px;width:135px;height:82px;">B-12<br>storage threshold</div>
+          <div class="room unstable" style="left:245px;top:74px;width:170px;height:58px;">north hall<br>length variable</div>
+          <div class="room" style="left:470px;top:58px;width:128px;height:105px;">office copy<br>unassigned</div>
+          <div class="room rejected" style="left:700px;top:70px;width:138px;height:88px;">W-04<br>access condition</div>
+
+          <div class="room unstable" style="left:100px;top:255px;width:155px;height:90px;">stairwell<br>step count unstable</div>
+          <div class="room" style="left:345px;top:250px;width:155px;height:92px;">empty office<br>desk present</div>
+          <div class="room rejected" style="left:610px;top:255px;width:170px;height:96px;">R-17<br>return marker?</div>
+
+          <div class="line" style="left:180px;top:103px;width:65px;"></div>
+          <div class="line" style="left:415px;top:103px;width:55px;"></div>
+          <div class="line" style="left:598px;top:112px;width:102px;"></div>
+          <div class="line" style="left:255px;top:300px;width:90px;"></div>
+          <div class="line" style="left:500px;top:300px;width:110px;"></div>
+          <div class="line" style="left:776px;top:160px;width:105px;transform:rotate(100deg);"></div>
+        </div>
+      </div>
+
+      <div class="report">
+        <div class="report-title">CARTOGRAPHY NOTE</div>
+        Rooms do not connect by distance. Rooms connect by repeated recognition.
+        The map is therefore not a physical plan. It is a sequence of conditions pretending to be a plan.
+      </div>
+    `;
+  }
+
+  if (page === "images") {
+    content.innerHTML = `
+      <h2>04 — Image Records</h2>
+
+      <div class="image-grid">
+        <div class="image-card">
+          <div class="fake-image">
+            <div class="corridor-wall-left"></div>
+            <div class="corridor-wall-right"></div>
+            <div class="door-shape"></div>
+          </div>
+          <div class="caption">Frame B-12 / door open / interior visible</div>
+        </div>
+
+        <div class="image-card">
+          <div class="fake-image">
+            <div class="square-room"></div>
+            <div class="table-shape"></div>
+          </div>
+          <div class="caption">Frame O-03 / office not listed on building plan</div>
+        </div>
+
+        <div class="image-card">
+          <div class="fake-image">
+            <div class="stair-step s1"></div>
+            <div class="stair-step s2"></div>
+            <div class="stair-step s3"></div>
+            <div class="stair-step s4"></div>
+            <div class="stair-step s5"></div>
+            <div class="stair-step s6"></div>
+            <div class="stair-step s7"></div>
+          </div>
+          <div class="caption">Frame S-11 / step count failed</div>
+        </div>
+
+        <div class="image-card">
+          <div class="fake-image"></div>
+          <div class="caption">Frame R-17 / image rejected / marker retained</div>
+        </div>
+      </div>
+
+      <div class="report">
+        <div class="report-title">IMAGE NOTE</div>
+        Images contain no visible subject in most recovered frames.
+        This does not correlate with absence of subject continuity.
+        In several cases, subject memory describes rooms only after images are shown.
+      </div>
+    `;
+  }
+
+  if (page === "continuity") {
+    content.innerHTML = `
+      <h2>05 — Subject Continuity</h2>
+
+      <div class="report">
+        <div class="report-title">SUBJECT REPORT — DES-44721</div>
+        Subject reports waking at 06:14.<br>
+        Camera record shows subject standing in North Hall at 06:17.<br>
+        Subject denies movement.<br>
+        Both records are retained as valid.
+      </div>
+
+      <div class="report">
+        <div class="report-title">CONTINUITY FAILURE</div>
+        The user ID remained active after physical absence was confirmed.
+        This is not treated as a system error. Similar records appear in W-01 and W-03 test sessions,
+        but DES-44721 is the first record where the ID remains usable after shutdown.
+      </div>
+
+      <div class="report">
+        <div class="report-title">PRACTICAL RESULT</div>
+        DES-44721 functions as a recognition key. It is not a password.
+        It is accepted because it belongs to a subject whose route was not closed.
+      </div>
+    `;
+  }
+
+  if (page === "marker") {
+    content.innerHTML = `
+      <h2>06 — Route Marker</h2>
+
+      <div class="status">
+        RECOVERED ROUTE:<br><br>
+        B-12 opened first.<br>
+        W-04 recognized the user.<br>
+        DES-44721 remained valid.<br>
+        R-17 appeared after the record was read.
+      </div>
+
+      <div class="report">
+        <div class="report-title">NEXT ACCESS CONDITION</div>
+        The next node should not request a corporate password or an employee ID.
+        The next node should request the return marker.
+        <br><br>
+        Marker retained: <span class="warn">R-17</span>
+      </div>
+
+      <div class="report">
+        <div class="report-title">NOTE</div>
+        The phrase “return marker” does not appear before the DES-44721 record is opened.
+        This suggests the map updates after recognition, not before.
+      </div>
+    `;
+  }
+}
 </script>
 
 </body>
