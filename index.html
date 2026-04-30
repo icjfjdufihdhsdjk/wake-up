@@ -1,26 +1,98 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 <head>
   <title>W-04 Observation Archive</title>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <style>
+    :root {
+      --bg: #090a0b;
+      --bg2: #101214;
+      --panel: #151719;
+      --panel2: #111315;
+      --line: #303438;
+      --line2: #45494d;
+      --text: #d2d2d2;
+      --muted: #777f86;
+      --faint: #555b61;
+      --red: #a94b4b;
+      --red2: #6b2525;
+      --cold: #b7c1c8;
+      --green: #8fa48f;
+    }
+
+    * { box-sizing: border-box; }
+
     html, body {
       margin: 0;
       padding: 0;
       min-height: 100%;
-      background: #101214;
-      color: #d2d2d2;
+      background: var(--bg);
+      color: var(--text);
       font-family: Consolas, "Courier New", monospace;
       font-size: 13px;
     }
 
     body {
       background:
+        radial-gradient(circle at 50% 30%, rgba(120,120,120,0.05), transparent 330px),
         linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px),
         linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
         #101214;
-      background-size: 42px 42px;
+      background-size: auto, 42px 42px, 42px 42px;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background: repeating-linear-gradient(
+        to bottom,
+        rgba(255,255,255,0.025),
+        rgba(255,255,255,0.025) 1px,
+        transparent 1px,
+        transparent 4px
+      );
+      opacity: 0.35;
+      mix-blend-mode: screen;
+      z-index: 100;
+    }
+
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background: radial-gradient(circle at center, transparent 50%, rgba(0,0,0,0.45) 100%);
+      z-index: 101;
+    }
+
+    .blink {
+      animation: blink 1.25s steps(2, start) infinite;
+    }
+
+    @keyframes blink {
+      0%, 45% { opacity: 1; }
+      46%, 100% { opacity: 0; }
+    }
+
+    .glitch {
+      position: relative;
+      display: inline-block;
+    }
+
+    .glitch::after {
+      content: attr(data-text);
+      position: absolute;
+      left: 1px;
+      top: 0;
+      color: rgba(170,70,70,0.55);
+      clip-path: inset(0 0 55% 0);
+      transform: translateX(1px);
+      opacity: 0.45;
     }
 
     .login-screen {
@@ -28,28 +100,43 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      background: #0c0d0e;
+      background:
+        radial-gradient(circle at center, rgba(80,80,80,0.08), transparent 430px),
+        #08090a;
+      padding: 18px;
     }
 
     .login-box {
-      width: 440px;
-      background: #151719;
-      border: 1px solid #3a3d40;
+      width: 470px;
+      background: #121416;
+      border: 1px solid #393d41;
       padding: 26px;
-      box-shadow: 0 0 18px rgba(0,0,0,0.6);
+      box-shadow: 0 0 22px rgba(0,0,0,0.75);
+      position: relative;
+    }
+
+    .login-box::before {
+      content: "LOCAL MIRROR / RETURN TABLE MISSING";
+      position: absolute;
+      top: -22px;
+      left: 0;
+      color: #52585e;
+      font-size: 10px;
+      letter-spacing: 1px;
     }
 
     .login-title {
-      font-size: 15px;
+      font-size: 16px;
       letter-spacing: 2px;
       color: #f0f0f0;
       margin-bottom: 8px;
     }
 
     .login-subtitle {
-      color: #7c8288;
+      color: #747b82;
       font-size: 11px;
-      margin-bottom: 24px;
+      margin-bottom: 22px;
+      line-height: 1.6;
     }
 
     label {
@@ -60,12 +147,17 @@
 
     input {
       width: 100%;
-      box-sizing: border-box;
-      background: #0a0b0c;
+      background: #070809;
       color: #e0e0e0;
       border: 1px solid #4b4f53;
-      padding: 8px;
+      padding: 9px;
       font-family: Consolas, "Courier New", monospace;
+      outline: none;
+    }
+
+    input:focus {
+      border-color: #777;
+      box-shadow: 0 0 8px rgba(255,255,255,0.08);
     }
 
     button {
@@ -73,14 +165,12 @@
       background: #202326;
       color: #ddd;
       border: 1px solid #4b4f53;
-      padding: 7px 13px;
+      padding: 8px 14px;
       cursor: pointer;
       font-family: Consolas, "Courier New", monospace;
     }
 
-    button:hover {
-      background: #2b2f33;
-    }
+    button:hover { background: #2b2f33; }
 
     .error {
       color: #a03b3b;
@@ -88,46 +178,58 @@
       min-height: 16px;
     }
 
-    .site {
-      display: none;
+    .hint {
+      color: #4d5359;
+      margin-top: 18px;
+      font-size: 11px;
+      line-height: 1.6;
+      border-top: 1px solid #24282c;
+      padding-top: 12px;
     }
 
+    .site { display: none; }
+
     .topbar {
-      background: #08090a;
-      color: #999;
-      border-bottom: 1px solid #2b2e31;
+      background: #070809;
+      color: #858b91;
+      border-bottom: 1px solid #282c30;
       padding: 7px 12px;
       font-size: 11px;
       text-align: right;
     }
 
     .container {
-      width: 1040px;
+      width: 1120px;
       margin: 18px auto;
       background: #17191b;
       border: 1px solid #34383c;
-      box-shadow: 0 0 18px rgba(0,0,0,0.55);
+      box-shadow: 0 0 24px rgba(0,0,0,0.7);
     }
 
     .header {
-      background: #202326;
+      background:
+        linear-gradient(90deg, rgba(255,255,255,0.035), transparent),
+        #202326;
       border-bottom: 1px solid #3a3d40;
       padding: 18px;
       position: relative;
+      min-height: 92px;
     }
 
     .header h1 {
       margin: 0;
-      font-size: 21px;
+      font-size: 22px;
       font-weight: normal;
       letter-spacing: 2px;
       color: #efefef;
     }
 
     .header .sub {
-      margin-top: 6px;
+      margin-top: 7px;
       color: #8c9298;
       font-size: 12px;
+      max-width: 650px;
+      line-height: 1.55;
     }
 
     .classification {
@@ -139,11 +241,12 @@
       padding: 7px 10px;
       font-size: 11px;
       text-align: right;
-      background: #161819;
+      background: #141617;
+      line-height: 1.45;
     }
 
     .notice {
-      background: #111315;
+      background: #101214;
       color: #aaa;
       border-bottom: 1px solid #333;
       padding: 9px 12px;
@@ -152,12 +255,12 @@
 
     .main {
       display: flex;
-      min-height: 650px;
+      min-height: 680px;
     }
 
     .sidebar {
-      width: 230px;
-      background: #121416;
+      width: 248px;
+      background: #111315;
       border-right: 1px solid #34383c;
       padding: 12px;
     }
@@ -172,9 +275,9 @@
     }
 
     .side-box {
-      color: #8d9399;
+      color: #858c93;
       font-size: 12px;
-      line-height: 1.55;
+      line-height: 1.65;
       margin-bottom: 18px;
     }
 
@@ -182,15 +285,18 @@
       display: block;
       border: 1px solid #303438;
       background: #181b1e;
-      padding: 7px;
+      padding: 8px;
       margin-bottom: 6px;
       color: #c0c0c0;
       cursor: pointer;
       font-size: 12px;
+      user-select: none;
     }
 
-    .nav-item:hover {
+    .nav-item:hover, .nav-item.active {
       background: #22262a;
+      border-color: #565b60;
+      color: #f0f0f0;
     }
 
     .content {
@@ -214,7 +320,7 @@
       border: 1px solid #33373b;
       color: #bfc6c8;
       padding: 12px;
-      line-height: 1.55;
+      line-height: 1.6;
       margin: 12px 0;
     }
 
@@ -223,7 +329,7 @@
       border: 1px solid #303438;
       padding: 14px;
       margin: 13px 0;
-      line-height: 1.65;
+      line-height: 1.75;
       color: #c7c7c7;
     }
 
@@ -235,13 +341,9 @@
       padding-bottom: 6px;
     }
 
-    .dim {
-      color: #7b8288;
-    }
-
-    .warn {
-      color: #b07a7a;
-    }
+    .dim { color: #7b8288; }
+    .warn { color: #b07a7a; }
+    .green { color: var(--green); }
 
     table {
       border-collapse: collapse;
@@ -275,45 +377,101 @@
       margin: 14px 0;
     }
 
-    .map {
-      height: 430px;
+    .hub-map {
+      height: 500px;
       position: relative;
       background:
-        linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px),
-        linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
-        #08090a;
-      background-size: 40px 40px;
+        radial-gradient(circle at center, rgba(130,130,130,0.09) 0, rgba(40,40,40,0.05) 105px, transparent 190px),
+        linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px),
+        linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px),
+        #070809;
+      background-size: auto, 38px 38px, 38px 38px;
       border: 1px solid #25292d;
       overflow: hidden;
     }
 
-    .room {
+    .hub-map::after {
+      content: "PERIMETER ACCEPTED / CENTER REFUSED";
       position: absolute;
-      border: 1px solid #666;
-      color: #c0c0c0;
-      background: rgba(255,255,255,0.035);
+      right: 12px;
+      bottom: 10px;
+      color: rgba(255,255,255,0.16);
+      font-size: 10px;
+      letter-spacing: 1px;
+    }
+
+    .unknown-core {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 176px;
+      height: 176px;
+      transform: translate(-50%, -50%);
+      border: 1px dashed #5b5b5b;
+      border-radius: 50%;
+      color: #676d72;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
       font-size: 11px;
-      padding: 5px;
+      letter-spacing: 1px;
+      background: rgba(0,0,0,0.38);
+      box-shadow: inset 0 0 30px rgba(0,0,0,0.8), 0 0 24px rgba(0,0,0,0.65);
+    }
+
+    .unknown-core::before {
+      content: "";
+      position: absolute;
+      inset: -32px;
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 50%;
+    }
+
+    .hub-node {
+      position: absolute;
+      border: 1px solid #555;
+      background: rgba(255,255,255,0.026);
+      color: #b9b9b9;
+      padding: 7px;
+      font-size: 11px;
       box-sizing: border-box;
+      line-height: 1.45;
     }
 
-    .room.unstable {
-      border-style: dashed;
-      color: #aaa;
-      background: rgba(255,255,255,0.015);
-    }
-
-    .room.rejected {
+    .hub-node.bad {
       border-color: #4b2626;
       color: #b07a7a;
       background: rgba(80,0,0,0.08);
     }
 
-    .line {
+    .hub-node.dimmed {
+      border-style: dashed;
+      color: #7d858c;
+      background: rgba(255,255,255,0.015);
+    }
+
+    .hub-node.new {
+      border-color: #687078;
+      color: #d1d1d1;
+      box-shadow: 0 0 14px rgba(255,255,255,0.05);
+    }
+
+    .hub-line {
       position: absolute;
       height: 1px;
-      background: #484c50;
+      background: #43484d;
       transform-origin: left center;
+    }
+
+    .hub-line.bad { background: #542626; }
+    .hub-line.dimmed { background: #2d3236; }
+
+    .hub-label {
+      color: #777;
+      font-size: 11px;
+      margin-top: 8px;
+      line-height: 1.6;
     }
 
     .image-grid {
@@ -345,10 +503,8 @@
 
     .corridor-wall-left {
       position: absolute;
-      left: 0;
-      top: 0;
-      width: 48%;
-      height: 100%;
+      left: 0; top: 0;
+      width: 48%; height: 100%;
       clip-path: polygon(0 0, 100% 35%, 100% 65%, 0 100%);
       background: #151719;
       border-right: 1px solid #333;
@@ -356,10 +512,8 @@
 
     .corridor-wall-right {
       position: absolute;
-      right: 0;
-      top: 0;
-      width: 48%;
-      height: 100%;
+      right: 0; top: 0;
+      width: 48%; height: 100%;
       clip-path: polygon(0 35%, 100% 0, 100% 100%, 0 65%);
       background: #121416;
       border-left: 1px solid #333;
@@ -367,33 +521,38 @@
 
     .door-shape {
       position: absolute;
-      left: 50%;
-      top: 44px;
+      left: 50%; top: 44px;
       transform: translateX(-50%);
-      width: 70px;
-      height: 140px;
+      width: 70px; height: 140px;
       border: 1px solid #777;
       background: #050505;
     }
 
     .square-room {
       position: absolute;
-      left: 74px;
-      top: 42px;
-      width: 190px;
-      height: 125px;
+      left: 74px; top: 42px;
+      width: 190px; height: 125px;
       border: 1px solid #555;
       background: rgba(255,255,255,0.025);
     }
 
     .table-shape {
       position: absolute;
-      left: 130px;
-      top: 95px;
-      width: 75px;
-      height: 32px;
+      left: 130px; top: 95px;
+      width: 75px; height: 32px;
       border: 1px solid #444;
       background: #111;
+    }
+
+    .dark-center {
+      position: absolute;
+      left: 50%; top: 50%;
+      width: 95px; height: 95px;
+      transform: translate(-50%, -50%);
+      border: 1px dashed #555;
+      border-radius: 50%;
+      background: #030303;
+      box-shadow: 0 0 42px rgba(0,0,0,1);
     }
 
     .stair-step {
@@ -418,6 +577,17 @@
       margin-top: 9px;
       color: #7f858a;
       font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .terminal {
+      background: #070809;
+      border: 1px solid #303438;
+      padding: 12px;
+      margin-top: 14px;
+      color: #9ca7ad;
+      line-height: 1.7;
+      font-size: 12px;
     }
 
     .footer {
@@ -429,11 +599,19 @@
       background: #111315;
     }
 
-    @media (max-width: 900px) {
+    @media (max-width: 1150px) {
       .container { width: calc(100% - 20px); }
+    }
+
+    @media (max-width: 900px) {
       .main { flex-direction: column; }
       .sidebar { width: auto; }
       .image-grid { grid-template-columns: 1fr; }
+      .classification {
+        position: static;
+        margin-top: 14px;
+        text-align: left;
+      }
     }
   </style>
 </head>
@@ -442,14 +620,23 @@
 
 <div id="login" class="login-screen">
   <div class="login-box">
-    <div class="login-title">W-04 OBSERVATION ARCHIVE</div>
-    <div class="login-subtitle">Dream Entry Systems / field notebook mirror / restored copy</div>
+    <div class="login-title glitch" data-text="W-04 OBSERVATION ARCHIVE">W-04 OBSERVATION ARCHIVE</div>
+    <div class="login-subtitle">
+      Dream Entry Systems / field notebook mirror / restored copy<br>
+      Archive reads local identity before accepting credentials.
+    </div>
 
     <label>Nom d'utilisateur :</label>
-    <input id="username" type="text" autocomplete="off">
+    <input id="username" type="text" autocomplete="off" onkeydown="loginKey(event)">
     <button onclick="checkUser()">Enter</button>
 
     <div id="error" class="error"></div>
+
+    <div class="hint">
+      Dernier utilisateur reconnu : DES-44721<br>
+      Dernière route incomplète : B-12 → W-04 → R-17<br>
+      Dernière erreur : return procedure not attached<span class="blink">_</span>
+    </div>
   </div>
 </div>
 
@@ -460,17 +647,20 @@
 
   <div class="container">
     <div class="header">
-      <h1>W-04 Observation Archive</h1>
-      <div class="sub">Scientific notes, measurement attempts, and provisional cartography of the non-sleep environment.</div>
+      <h1><span class="glitch" data-text="W-04 Observation Archive">W-04 Observation Archive</span></h1>
+      <div class="sub">
+        Scientific notes, measurement attempts, and perimeter cartography of an environment that remained accessible after the system was shut down.
+      </div>
       <div class="classification">
         INTERNAL FIELD COPY<br>
         STATUS: INCOMPLETE<br>
-        USER: DES-44721
+        USER: DES-44721<br>
+        CENTER: NOT MAPPED
       </div>
     </div>
 
     <div class="notice">
-      Note: terminology in this archive is provisional. “Wonderland” is an informal field label and not an accepted classification.
+      Note: “Wonderland” is a discarded label. It continues to appear in recovered notes.
     </div>
 
     <div class="main">
@@ -491,13 +681,20 @@
           return failure<br>
           recognition event<br>
           false hallway<br>
-          stable inconsistency
+          stable inconsistency<br>
+          perimeter hub<br>
+          center refusal
         </div>
 
         <div class="side-title">CURRENT ROUTE</div>
         <div class="side-box">
           B-12 → W-04 → R-17<br><br>
-          Route remains valid only if entered in order.
+          Route remains valid only if remembered in order.
+        </div>
+
+        <div class="side-title">SYSTEM NOTE</div>
+        <div class="side-box">
+          The archive does not know whether the user is outside the route.
         </div>
       </div>
 
@@ -511,6 +708,10 @@
 </div>
 
 <script>
+function loginKey(event) {
+  if (event.key === "Enter") checkUser();
+}
+
 function checkUser() {
   const username = document.getElementById("username").value.trim();
   const error = document.getElementById("error");
@@ -519,13 +720,39 @@ function checkUser() {
     document.getElementById("login").style.display = "none";
     document.getElementById("site").style.display = "block";
     showPage("summary");
+  } else if (username === "R-17") {
+    error.innerHTML = "MARKER ACCEPTED / USER STILL REQUIRED";
+  } else if (username === "W-04") {
+    error.innerHTML = "W-04 IS NOT A USER";
+  } else if (username === "B-12") {
+    error.innerHTML = "FIRST DOOR CONFIRMED / IDENTITY MISSING";
   } else {
     error.innerHTML = "USER NOT RECOGNIZED";
   }
 }
 
+function activateNav(page) {
+  const items = document.querySelectorAll('.nav-item');
+  items.forEach(item => item.classList.remove('active'));
+
+  const names = {
+    summary: '00',
+    notebook: '01',
+    measurements: '02',
+    cartography: '03',
+    images: '04',
+    continuity: '05',
+    marker: '06'
+  };
+
+  items.forEach(item => {
+    if (item.textContent.trim().startsWith(names[page])) item.classList.add('active');
+  });
+}
+
 function showPage(page) {
   const content = document.getElementById("content");
+  activateNav(page);
 
   if (page === "summary") {
     content.innerHTML = `
@@ -535,26 +762,38 @@ function showPage(page) {
         ARCHIVE OWNER: FIELD OBSERVATION TEAM<br>
         ASSOCIATED USER: DES-44721 / M. HART<br>
         ASSOCIATED ACCESS CONDITION: W-04<br>
-        INFORMAL LABEL: WONDERLAND<br>
+        INFORMAL LABEL: WONDERLAND / REJECTED<br>
         CLASSIFICATION: NON-SLEEP ENVIRONMENT<br>
-        RETURN PROCEDURE: NOT PRESENT IN THIS COPY
+        RETURN PROCEDURE: NOT PRESENT IN THIS COPY<br>
+        CENTRAL AREA: NOT DISCOVERED
       </div>
 
       <div class="report">
         <div class="report-title">SUMMARY NOTE</div>
         The environment described in these files was initially treated as a repeatable dream state.
-        This classification was withdrawn after camera, badge, and timing records continued to return data
-        when no subject was connected to the DED-01 device.
+        That classification failed when cameras, badges, and timing records continued to produce data
+        while no subject was connected to the DED-01 device.
         <br><br>
-        No entity model is used in this archive. No agency is assigned to the environment.
-        Recorded anomalies are treated as spatial, procedural, or memory-related until proven otherwise.
+        No entity model is approved. This does not mean the environment is empty.
+        It means the archive cannot prove what noticed the observers first.
       </div>
 
       <div class="report">
         <div class="report-title">WORKING ASSUMPTION</div>
-        Wonderland is not created by the subject. The subject appears to enter or intersect with it.
-        The environment resembles remembered architecture, but does not obey the building plan,
-        the subject report, or a consistent scale.
+        The subject does not create the environment. The subject intersects it.
+        The environment borrows remembered architecture, but does not obey the building plan,
+        subject testimony, or a consistent scale.
+        <br><br>
+        The latest maps suggest that only the surrounding hub has been reached.
+        The center has not been entered. The center may not have been there before it was drawn.
+      </div>
+
+      <div class="terminal">
+        > loading local copy...<br>
+        > return table: missing<br>
+        > route state: open<br>
+        > user DES-44721: recognized<br>
+        > warning: recognition is not authentication<span class="blink">_</span>
       </div>
     `;
   }
@@ -566,15 +805,16 @@ function showPage(page) {
       <div class="report">
         <div class="report-title">ENTRY 01 / 02:17</div>
         The therapeutic explanation is no longer useful. Subjects are not constructing the environment.
-        They are arriving somewhere that remains stable when no subject is present.
-        The word “dream” is retained only because it is the closest public description.
+        They arrive somewhere that remains stable when no subject is present.
+        The word “dream” is retained only for people who need a safe word for impossible rooms.
       </div>
 
       <div class="report">
         <div class="report-title">ENTRY 02 / 02:42</div>
         W-04 is not a room designation. It is an access condition.
         The room is the shape our equipment gives to the threshold.
-        Staff continue asking where W-04 is inside the building. This question has produced no useful results.
+        Staff continue asking where W-04 is inside the building.
+        The building has not answered in a useful way.
       </div>
 
       <div class="report">
@@ -587,7 +827,16 @@ function showPage(page) {
       <div class="report">
         <div class="report-title">ENTRY 04 / 03:22</div>
         Hart entered the wrong side of Storage B. Badge remained valid. Body did not return.
-        The system still recognizes the user ID because the access condition recognizes it.
+        The system still recognizes the user ID because the route recognizes it.
+        <br><br>
+        Do not confuse recognition with safety.
+      </div>
+
+      <div class="report">
+        <div class="report-title">ENTRY 05 / TIME REJECTED</div>
+        The central hub is not visible from the perimeter, but every perimeter door is angled toward it.
+        We have walked around something for three nights.
+        Nobody wrote the word “middle” until the map printed it by itself.
       </div>
     `;
   }
@@ -604,6 +853,9 @@ function showPage(page) {
         <tr><td>M-04</td><td>Camera record: subject did not exit through B-12.</td><td>Record accepted.</td><td>Valid</td></tr>
         <tr><td>M-05</td><td>Sleep cycle terminated at 07:02.</td><td>Environment accessible until 07:02:11.</td><td>Unresolved</td></tr>
         <tr><td>M-06</td><td>Clock in observed office ran backward for 4 seconds.</td><td>Local effect only.</td><td>Valid</td></tr>
+        <tr><td>M-07</td><td>Perimeter route completed clockwise.</td><td>Returned to B-12.</td><td>Valid</td></tr>
+        <tr><td>M-08</td><td>Perimeter route completed counter-clockwise.</td><td>Returned to R-17.</td><td>Valid</td></tr>
+        <tr><td>M-09</td><td>Center marked as blank on printed diagram.</td><td>Ink darkened after removal.</td><td>Quarantined</td></tr>
       </table>
 
       <div class="report">
@@ -611,6 +863,12 @@ function showPage(page) {
         Contradictory measurements are not discarded automatically.
         In W-04-linked observations, contradiction may indicate overlap rather than error.
         When two records conflict and both repeat under controlled conditions, both are retained.
+      </div>
+
+      <div class="report">
+        <div class="report-title">PERIMETER NOTE</div>
+        The hub does not behave like a circle, but it punishes attempts to cross through the center.
+        All successful movement has occurred around the unknown area, never through it.
       </div>
     `;
   }
@@ -620,36 +878,111 @@ function showPage(page) {
       <h2>03 — Cartography</h2>
 
       <div class="status">
-        MAP STATUS: PROVISIONAL<br>
-        SCALE: REJECTED<br>
-        ORIENTATION: UNSTABLE<br>
-        MOST CONSISTENT ROUTE: B-12 → NORTH HALL → W-04 → R-17
+        MAP STATUS: PARTIAL<br>
+        AREA CONFIRMED: OUTER HUB ONLY<br>
+        CENTER: NOT ENTERED / NOT OBSERVED / NOT REQUESTED<br>
+        SCALE: WITHHELD BY ENVIRONMENT<br>
+        ROUTE STABILITY: DEPENDS ON RECOGNITION, NOT DIRECTION<br>
+        WARNING: DO NOT COMPLETE THE CENTER BY GUESSING
+      </div>
+
+      <div class="report">
+        <div class="report-title">CARTOGRAPHY WARNING</div>
+        Earlier maps were discarded after they began showing rooms no observer had reported.
+        The current diagram includes only the perimeter hub.
+        Anything beyond the inner boundary is not blank space.
+        It is an absence that behaves like a room.
       </div>
 
       <div class="map-wrap">
-        <div class="map">
-          <div class="room" style="left:45px;top:62px;width:135px;height:82px;">B-12<br>storage threshold</div>
-          <div class="room unstable" style="left:245px;top:74px;width:170px;height:58px;">north hall<br>length variable</div>
-          <div class="room" style="left:470px;top:58px;width:128px;height:105px;">office copy<br>unassigned</div>
-          <div class="room rejected" style="left:700px;top:70px;width:138px;height:88px;">W-04<br>access condition</div>
+        <div class="hub-map">
 
-          <div class="room unstable" style="left:100px;top:255px;width:155px;height:90px;">stairwell<br>step count unstable</div>
-          <div class="room" style="left:345px;top:250px;width:155px;height:92px;">empty office<br>desk present</div>
-          <div class="room rejected" style="left:610px;top:255px;width:170px;height:96px;">R-17<br>return marker?</div>
+          <div class="unknown-core">
+            CENTRAL AREA<br>
+            NOT DISCOVERED<br>
+            DO NOT LABEL
+          </div>
 
-          <div class="line" style="left:180px;top:103px;width:65px;"></div>
-          <div class="line" style="left:415px;top:103px;width:55px;"></div>
-          <div class="line" style="left:598px;top:112px;width:102px;"></div>
-          <div class="line" style="left:255px;top:300px;width:90px;"></div>
-          <div class="line" style="left:500px;top:300px;width:110px;"></div>
-          <div class="line" style="left:776px;top:160px;width:105px;transform:rotate(100deg);"></div>
+          <div class="hub-node new" style="left:55px;top:72px;width:140px;height:78px;">
+            B-12<br>
+            first opening<br>
+            <span class="dim">door remembered</span>
+          </div>
+
+          <div class="hub-node dimmed" style="left:305px;top:42px;width:155px;height:70px;">
+            north hall<br>
+            repeats when measured<br>
+            <span class="dim">length variable</span>
+          </div>
+
+          <div class="hub-node" style="left:625px;top:76px;width:145px;height:82px;">
+            office copy<br>
+            furniture unchanged<br>
+            owner unknown
+          </div>
+
+          <div class="hub-node bad" style="left:792px;top:222px;width:148px;height:88px;">
+            W-04<br>
+            not a room<br>
+            accepts DES-44721
+          </div>
+
+          <div class="hub-node dimmed" style="left:615px;top:390px;width:165px;height:76px;">
+            stairwell<br>
+            descends sideways<br>
+            <span class="dim">step count refused</span>
+          </div>
+
+          <div class="hub-node bad" style="left:335px;top:400px;width:150px;height:74px;">
+            R-17<br>
+            return marker<br>
+            not exit
+          </div>
+
+          <div class="hub-node" style="left:65px;top:318px;width:165px;height:82px;">
+            service corridor<br>
+            lights maintained<br>
+            no maintenance log
+          </div>
+
+          <div class="hub-node dimmed" style="left:28px;top:205px;width:128px;height:60px;">
+            cold corner<br>
+            audio drops
+          </div>
+
+          <div class="hub-line" style="left:195px;top:110px;width:112px;transform:rotate(-8deg);"></div>
+          <div class="hub-line" style="left:460px;top:82px;width:168px;transform:rotate(10deg);"></div>
+          <div class="hub-line bad" style="left:768px;top:145px;width:112px;transform:rotate(58deg);"></div>
+          <div class="hub-line dimmed" style="left:715px;top:310px;width:96px;transform:rotate(106deg);"></div>
+          <div class="hub-line" style="left:485px;top:438px;width:132px;transform:rotate(-3deg);"></div>
+          <div class="hub-line" style="left:230px;top:356px;width:112px;transform:rotate(31deg);"></div>
+          <div class="hub-line dimmed" style="left:118px;top:150px;width:70px;transform:rotate(98deg);"></div>
+          <div class="hub-line dimmed" style="left:78px;top:265px;width:70px;transform:rotate(72deg);"></div>
+        </div>
+
+        <div class="hub-label">
+          Perimeter hub confirmed. The diagram appears complete only if the viewer accepts that the center is missing.<br>
+          Do not draw doors into the center. Previous attempts changed the route.
         </div>
       </div>
 
       <div class="report">
-        <div class="report-title">CARTOGRAPHY NOTE</div>
-        Rooms do not connect by distance. Rooms connect by repeated recognition.
-        The map is therefore not a physical plan. It is a sequence of conditions pretending to be a plan.
+        <div class="report-title">FIELD NOTE / UNSIGNED</div>
+        We have not mapped Wonderland.
+        We have mapped the places that let us walk around something.
+        No one has entered the middle.
+        No one has agreed on where the middle begins.
+        <br><br>
+        When asked to describe the central area, Hart wrote only:
+        <span class="warn">“It noticed the diagram.”</span>
+      </div>
+
+      <div class="terminal">
+        > perimeter route loaded<br>
+        > center query blocked<br>
+        > estimated rooms beyond hub: null<br>
+        > estimated rooms observing hub: 1<br>
+        > print request denied by W-04<span class="blink">_</span>
       </div>
     `;
   }
@@ -665,7 +998,7 @@ function showPage(page) {
             <div class="corridor-wall-right"></div>
             <div class="door-shape"></div>
           </div>
-          <div class="caption">Frame B-12 / door open / interior visible</div>
+          <div class="caption">Frame B-12 / door open / interior visible / operator denied seeing light</div>
         </div>
 
         <div class="image-card">
@@ -673,7 +1006,7 @@ function showPage(page) {
             <div class="square-room"></div>
             <div class="table-shape"></div>
           </div>
-          <div class="caption">Frame O-03 / office not listed on building plan</div>
+          <div class="caption">Frame O-03 / office not listed on building plan / chair position changed after review</div>
         </div>
 
         <div class="image-card">
@@ -686,12 +1019,14 @@ function showPage(page) {
             <div class="stair-step s6"></div>
             <div class="stair-step s7"></div>
           </div>
-          <div class="caption">Frame S-11 / step count failed</div>
+          <div class="caption">Frame S-11 / step count failed / descent recorded without vertical movement</div>
         </div>
 
         <div class="image-card">
-          <div class="fake-image"></div>
-          <div class="caption">Frame R-17 / image rejected / marker retained</div>
+          <div class="fake-image">
+            <div class="dark-center"></div>
+          </div>
+          <div class="caption">Frame C-00 / center exposure / image accepted, content refused</div>
         </div>
       </div>
 
@@ -700,6 +1035,8 @@ function showPage(page) {
         Images contain no visible subject in most recovered frames.
         This does not correlate with absence of subject continuity.
         In several cases, subject memory describes rooms only after images are shown.
+        <br><br>
+        The center has never appeared in a photograph twice in the same way.
       </div>
     `;
   }
@@ -728,6 +1065,12 @@ function showPage(page) {
         DES-44721 functions as a recognition key. It is not a password.
         It is accepted because it belongs to a subject whose route was not closed.
       </div>
+
+      <div class="report">
+        <div class="report-title">UNRESOLVED</div>
+        Hart’s name appears in two handwritten notebooks recovered from rooms Hart never entered.
+        The handwriting matches Hart after the disappearance, not before.
+      </div>
     `;
   }
 
@@ -740,7 +1083,8 @@ function showPage(page) {
         B-12 opened first.<br>
         W-04 recognized the user.<br>
         DES-44721 remained valid.<br>
-        R-17 appeared after the record was read.
+        R-17 appeared after the record was read.<br><br>
+        CURRENT MARKER: R-17
       </div>
 
       <div class="report">
@@ -755,6 +1099,13 @@ function showPage(page) {
         <div class="report-title">NOTE</div>
         The phrase “return marker” does not appear before the DES-44721 record is opened.
         This suggests the map updates after recognition, not before.
+      </div>
+
+      <div class="terminal">
+        > route marker copied<br>
+        > marker is not exit<br>
+        > marker is not safety<br>
+        > marker is what remains when the route remembers you<span class="blink">_</span>
       </div>
     `;
   }
