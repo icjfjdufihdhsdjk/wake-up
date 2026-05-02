@@ -1,417 +1,166 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="robots" content="noindex,nofollow">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>403 Forbidden</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Index of /archive/</title>
 
-  <!-- DES archive mirror // partial recovery only -->
-  <!-- asset mismatch: key_token.gif retained in /img/tmp/ -->
+<!--
+  mirror node // partial
+  missing: /final/
+  do not reconstruct
+-->
 
-  <style>
-    html, body {
-      margin: 0;
-      padding: 0;
-      background: #fff;
-      color: #000;
-      font-family: Verdana, Arial, Helvetica, sans-serif;
-      font-size: 11px;
-    }
+<style>
+body{
+  background:#fff;
+  color:#000;
+  font-family:Verdana, Arial, sans-serif;
+  font-size:11px;
+}
+.wrap{width:720px;margin:30px auto;}
+h1{font-size:16px;font-weight:normal;}
+hr{border:0;border-top:1px solid #999;margin:12px 0;}
+.server{color:#666;font-size:10px;}
 
-    .wrap {
-      width: 720px;
-      margin: 34px auto;
-    }
+table{width:100%;font-family:"Courier New",monospace;font-size:12px;border-collapse:collapse;margin-top:15px;}
+th{text-align:left;border-bottom:1px solid #aaa;font-weight:normal;padding:3px 0;}
+td{padding:3px 0;color:#333;}
 
-    h1 {
-      font-size: 18px;
-      font-weight: normal;
-      margin: 0 0 8px;
-    }
+.dead{color:#888;text-decoration:line-through;}
 
-    p { line-height: 1.5; }
+.hidden{display:none;}
 
-    hr {
-      border: 0;
-      border-top: 1px solid #999;
-      margin: 14px 0;
-    }
+/* subtle interactive zone */
+.zone{
+  margin-top:20px;
+  height:120px;
+  border:1px solid #ccc;
+  background:#fafafa;
+  position:relative;
+}
 
-    .server {
-      color: #555;
-      font-size: 10px;
-    }
+.pixel{
+  position:absolute;
+  width:6px;
+  height:6px;
+  background:#000;
+  left:63%;
+  top:58%;
+  opacity:.08;
+  cursor:pointer;
+}
 
-    .dir {
-      margin-top: 30px;
-      border-collapse: collapse;
-      width: 100%;
-      font-family: "Courier New", monospace;
-      font-size: 12px;
-    }
+.module{
+  display:none;
+  margin-top:15px;
+  border:1px solid #bbb;
+  padding:10px;
+  font-family:"Courier New",monospace;
+  background:#f5f5f5;
+}
 
-    .dir th {
-      text-align: left;
-      font-weight: normal;
-      border-bottom: 1px solid #aaa;
-      padding: 3px 8px 3px 0;
-    }
+.module.visible{display:block;}
 
-    .dir td {
-      padding: 3px 8px 3px 0;
-      white-space: nowrap;
-    }
+.lock{
+  width:60px;height:50px;
+  background:#666;
+  position:relative;
+  margin:10px 0;
+}
 
-    .dir a { color: #00e; text-decoration: underline; }
-    .missing { color: #777; text-decoration: line-through; }
-    .zero { color: #999; }
+.lock:before{
+  content:"";
+  position:absolute;
+  width:30px;height:30px;
+  border:6px solid #666;
+  border-bottom:none;
+  border-radius:20px 20px 0 0;
+  left:9px;top:-28px;
+}
 
-    .note {
-      margin-top: 18px;
-      color: #666;
-      font-family: "Courier New", monospace;
-      font-size: 11px;
-      display: none;
-    }
+.key{
+  width:80px;height:20px;
+  background:#999;
+  margin-top:8px;
+  cursor:pointer;
+}
 
-    .note.visible { display: block; }
+.prompt{display:none;margin-top:10px;}
+.prompt.visible{display:block;}
 
-    .recovery {
-      margin-top: 26px;
-      border: 1px solid #bbb;
-      background: #f7f7f7;
-      padding: 10px;
-      font-family: "Courier New", monospace;
-      display: none;
-    }
+.result{display:none;margin-top:10px;color:#333;}
+.result.visible{display:block;}
 
-    .recovery.visible { display: block; }
-
-    .recovery-head {
-      color: #555;
-      margin-bottom: 8px;
-    }
-
-    .module {
-      width: 250px;
-      height: 145px;
-      border: 1px solid #ccc;
-      background: #fff;
-      position: relative;
-      overflow: hidden;
-      margin-top: 8px;
-    }
-
-    .module::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background-image: linear-gradient(45deg, #fafafa 25%, transparent 25%),
-        linear-gradient(-45deg, #fafafa 25%, transparent 25%),
-        linear-gradient(45deg, transparent 75%, #fafafa 75%),
-        linear-gradient(-45deg, transparent 75%, #fafafa 75%);
-      background-size: 12px 12px;
-      background-position: 0 0, 0 6px, 6px -6px, -6px 0px;
-      opacity: .8;
-    }
-
-    .lockbox {
-      position: absolute;
-      left: 132px;
-      top: 42px;
-      width: 54px;
-      height: 47px;
-      background: linear-gradient(135deg, #999, #555 55%, #222);
-      border: 1px solid #666;
-      box-shadow: 4px 5px 0 rgba(0,0,0,.18);
-      z-index: 2;
-    }
-
-    .lockbox.near { outline: 1px solid #333; }
-    .lockbox.open { background: linear-gradient(135deg, #777, #333 55%, #111); }
-
-    .shackle {
-      position: absolute;
-      left: 145px;
-      top: 15px;
-      width: 28px;
-      height: 40px;
-      border: 7px solid #777;
-      border-bottom: 0;
-      border-radius: 20px 20px 0 0;
-      z-index: 1;
-      transition: .3s;
-    }
-
-    .module.open .shackle {
-      top: 9px;
-      transform: rotate(-18deg);
-      transform-origin: left bottom;
-    }
-
-    .hole {
-      position: absolute;
-      left: 23px;
-      top: 19px;
-      width: 8px;
-      height: 8px;
-      background: #000;
-      border-radius: 50%;
-    }
-
-    .hole::after {
-      content: "";
-      position: absolute;
-      left: 3px;
-      top: 6px;
-      width: 2px;
-      height: 14px;
-      background: #000;
-    }
-
-    .key {
-      position: absolute;
-      left: 22px;
-      top: 102px;
-      width: 86px;
-      height: 24px;
-      cursor: move;
-      z-index: 3;
-    }
-
-    .key.hidden { display: none; }
-
-    .ring {
-      position: absolute;
-      left: 0;
-      top: 1px;
-      width: 22px;
-      height: 22px;
-      border: 4px solid #9b8d55;
-      border-radius: 50%;
-      background: #fff;
-    }
-
-    .stem {
-      position: absolute;
-      left: 22px;
-      top: 10px;
-      width: 52px;
-      height: 4px;
-      background: #9b8d55;
-    }
-
-    .tooth1, .tooth2 {
-      position: absolute;
-      background: #9b8d55;
-    }
-
-    .tooth1 { left: 68px; top: 13px; width: 7px; height: 10px; }
-    .tooth2 { left: 78px; top: 10px; width: 7px; height: 13px; }
-
-    .prompt {
-      display: none;
-      margin-top: 9px;
-    }
-
-    .prompt.visible { display: block; }
-
-    input {
-      font-family: "Courier New", monospace;
-      font-size: 11px;
-      border: 1px solid #999;
-      padding: 2px;
-      width: 110px;
-    }
-
-    button {
-      font-size: 11px;
-      border: 1px solid #777;
-      background: #eee;
-      padding: 1px 6px;
-    }
-
-    .msg {
-      margin-top: 6px;
-      color: #900;
-      min-height: 13px;
-    }
-
-    .result {
-      display: none;
-      margin-top: 12px;
-      border-top: 1px solid #ccc;
-      padding-top: 8px;
-      color: #333;
-      line-height: 1.6;
-    }
-
-    .result.visible { display: block; }
-
-    .tiny {
-      color: #fff;
-      user-select: text;
-    }
-  </style>
+</style>
 </head>
 <body>
-  <div class="wrap">
-    <h1>Forbidden</h1>
-    <p>You don't have permission to access <b>/des/final/</b> on this server.</p>
-    <hr>
-    <div class="server">Apache/1.3.29 Server at dreamentry.co.uk Port 80</div>
+<div class="wrap">
 
-    <table class="dir" aria-label="partial directory listing">
-      <tr><th>Name</th><th>Last modified</th><th>Size</th></tr>
-      <tr><td><a href="#" onclick="return false;">Parent Directory</a></td><td>-</td><td>-</td></tr>
-      <tr><td><span class="missing">index_old.html</span></td><td>03-Nov-2005 02:11</td><td class="zero">0</td></tr>
-      <tr><td><span class="missing">staff/</span></td><td>03-Nov-2005 02:12</td><td>-</td></tr>
-      <tr><td><span class="missing">sessions/</span></td><td>03-Nov-2005 02:13</td><td>-</td></tr>
-      <tr><td><a href="#" id="assetLink">img/tmp/key_token.gif</a></td><td>03-Nov-2005 02:15</td><td>1K</td></tr>
-      <tr><td><a href="#" id="gateLink">gate_fragment.html</a></td><td>03-Nov-2005 02:21</td><td>3K</td></tr>
-    </table>
+<h1>Index of /archive/</h1>
+<hr>
+<div class="server">Apache/1.3.26 Server</div>
 
-    <div class="note" id="note">cached file opened from local mirror.</div>
+<table>
+<tr><th>Name</th><th>Last modified</th><th>Size</th></tr>
+<tr><td><a href="#">Parent Directory</a></td><td>-</td><td>-</td></tr>
+<tr><td class="dead">final/</td><td>03-Nov-2005</td><td>-</td></tr>
+<tr><td class="dead">session.log</td><td>03-Nov-2005</td><td>0</td></tr>
+<tr><td><a href="#" id="open">tmp/</a></td><td>03-Nov-2005</td><td>-</td></tr>
+</table>
 
-    <div class="recovery" id="recovery">
-      <div class="recovery-head">gate_fragment.html</div>
-      status: incomplete<br>
-      token: not verified
+<div class="zone">
+  <div class="pixel" id="pixel"></div>
+</div>
 
-      <div class="module" id="module">
-        <div class="shackle"></div>
-        <div class="lockbox" id="lockbox"><div class="hole"></div></div>
-        <div class="key" id="key" title="key_token.gif">
-          <div class="ring"></div>
-          <div class="stem"></div>
-          <div class="tooth1"></div>
-          <div class="tooth2"></div>
-        </div>
-      </div>
+<div class="module" id="module">
+  fragment loaded<br>
+  integrity: partial<br><br>
 
-      <form class="prompt" id="prompt">
-        password <input id="password" type="password" autocomplete="off">
-        <button type="submit">ok</button>
-        <div class="msg" id="msg"></div>
-      </form>
+  <div class="lock" id="lock"></div>
+  <div class="key" id="key"></div>
 
-      <div class="result" id="result">
-        verified: yes<br>
-        final archive: unavailable<br>
-        checksum: failed<br>
-        <br>
-        no further files recovered
-      </div>
-    </div>
-
-    <p class="tiny">R-17</p>
+  <div class="prompt" id="prompt">
+    password <input id="password">
+    <button id="btn">ok</button>
   </div>
 
-  <script>
-    var PASSWORD = "R-17";
+  <div class="result" id="result">
+    ok<br>
+    archive missing<br>
+  </div>
+</div>
 
-    var gateLink = document.getElementById("gateLink");
-    var assetLink = document.getElementById("assetLink");
-    var note = document.getElementById("note");
-    var recovery = document.getElementById("recovery");
-    var key = document.getElementById("key");
-    var lockbox = document.getElementById("lockbox");
-    var module = document.getElementById("module");
-    var prompt = document.getElementById("prompt");
-    var password = document.getElementById("password");
-    var msg = document.getElementById("msg");
-    var result = document.getElementById("result");
+<!-- R-17 -->
 
-    var dragging = false;
-    var inserted = false;
-    var ox = 0;
-    var oy = 0;
+</div>
 
-    gateLink.onclick = function () {
-      recovery.className = "recovery visible";
-      note.className = "note visible";
-      return false;
-    };
+<script>
+var PASSWORD="R-17";
 
-    assetLink.onclick = function () {
-      recovery.className = "recovery visible";
-      note.className = "note visible";
-      return false;
-    };
+var pixel=document.getElementById("pixel");
+var module=document.getElementById("module");
+var key=document.getElementById("key");
+var lock=document.getElementById("lock");
+var prompt=document.getElementById("prompt");
+var result=document.getElementById("result");
+var password=document.getElementById("password");
 
-    function start(x, y) {
-      if (inserted) return;
-      dragging = true;
-      var r = key.getBoundingClientRect();
-      ox = x - r.left;
-      oy = y - r.top;
-      key.style.position = "fixed";
-      key.style.left = r.left + "px";
-      key.style.top = r.top + "px";
-      key.style.zIndex = 50;
-    }
+pixel.onclick=function(){
+  module.className="module visible";
+};
 
-    function move(x, y) {
-      if (!dragging || inserted) return;
-      key.style.left = (x - ox) + "px";
-      key.style.top = (y - oy) + "px";
-      lockbox.className = over() ? "lockbox near" : "lockbox";
-    }
+key.onclick=function(){
+  prompt.className="prompt visible";
+};
 
-    function stop() {
-      if (!dragging || inserted) return;
-      dragging = false;
-      if (over()) {
-        inserted = true;
-        key.className = "key hidden";
-        lockbox.className = "lockbox";
-        prompt.className = "prompt visible";
-        setTimeout(function(){ password.focus(); }, 80);
-      } else {
-        lockbox.className = "lockbox";
-      }
-    }
-
-    function over() {
-      var k = key.getBoundingClientRect();
-      var l = lockbox.getBoundingClientRect();
-      var x = k.left + k.width / 2;
-      var y = k.top + k.height / 2;
-      return x > l.left && x < l.right && y > l.top && y < l.bottom;
-    }
-
-    key.onmousedown = function(e) {
-      start(e.clientX, e.clientY);
-      return false;
-    };
-
-    document.onmousemove = function(e) { move(e.clientX, e.clientY); };
-    document.onmouseup = stop;
-
-    key.ontouchstart = function(e) {
-      var t = e.touches[0];
-      start(t.clientX, t.clientY);
-    };
-    document.ontouchmove = function(e) {
-      if (!dragging) return;
-      var t = e.touches[0];
-      move(t.clientX, t.clientY);
-    };
-    document.ontouchend = stop;
-
-    prompt.onsubmit = function(e) {
-      e.preventDefault();
-      if (password.value === PASSWORD) {
-        msg.innerHTML = "";
-        module.className = "module open";
-        lockbox.className = "lockbox open";
-        result.className = "result visible";
-      } else {
-        msg.innerHTML = "403";
-        password.value = "";
-      }
-    };
-  </script>
+document.getElementById("btn").onclick=function(){
+  if(password.value===PASSWORD){
+    result.className="result visible";
+  }else{
+    password.value="";
+  }
+};
+</script>
 </body>
 </html>
