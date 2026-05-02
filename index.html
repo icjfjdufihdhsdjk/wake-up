@@ -1,520 +1,552 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>seuil</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DES Internal Access</title>
 
   <style>
-    :root {
-      --bg: #050506;
-      --fog: #0d0e0f;
-      --text: #b8b4a8;
-      --muted: #676258;
-      --line: rgba(190, 184, 166, .16);
-      --glow: rgba(214, 205, 174, .28);
-      --danger: #8d5a52;
-    }
-
-    * { box-sizing: border-box; }
-
     html, body {
       margin: 0;
+      padding: 0;
       min-height: 100%;
-      background: var(--bg);
-      color: var(--text);
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-      overflow: hidden;
-      cursor: default;
+      background: #101010;
+      color: #b7b7b7;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 12px;
     }
 
     body {
-      background:
-        radial-gradient(circle at 50% 56%, rgba(180, 170, 140, .05), transparent 360px),
-        linear-gradient(to bottom, #020203 0%, #090909 48%, #040404 100%);
+      background-image:
+        linear-gradient(#171717 1px, transparent 1px),
+        linear-gradient(90deg, #171717 1px, transparent 1px);
+      background-size: 20px 20px;
     }
 
-    body::before {
+    .page {
+      width: 760px;
+      margin: 42px auto;
+      background: #d6d6d6;
+      color: #111;
+      border: 1px solid #000;
+      box-shadow: 0 0 0 3px #333, 0 0 40px #000;
+    }
+
+    .topbar {
+      background: #000080;
+      color: #fff;
+      padding: 5px 8px;
+      font-weight: bold;
+      font-size: 12px;
+    }
+
+    .header {
+      padding: 14px 18px;
+      border-bottom: 1px solid #8b8b8b;
+      background: #ececec;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 21px;
+      font-weight: normal;
+      letter-spacing: 1px;
+    }
+
+    .sub {
+      margin-top: 6px;
+      color: #555;
+      font-size: 11px;
+    }
+
+    .warning {
+      margin-top: 10px;
+      padding: 7px;
+      border: 1px solid #9a9a9a;
+      background: #ffffcc;
+      color: #222;
+      font-family: "Courier New", monospace;
+      font-size: 11px;
+    }
+
+    .content {
+      display: grid;
+      grid-template-columns: 210px 1fr;
+      min-height: 420px;
+    }
+
+    .side {
+      background: #c4c4c4;
+      border-right: 1px solid #8b8b8b;
+      padding: 12px;
+    }
+
+    .side-title {
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+
+    .side a {
+      display: block;
+      color: #000080;
+      text-decoration: underline;
+      margin: 7px 0;
+      cursor: default;
+    }
+
+    .side .disabled {
+      color: #777;
+      text-decoration: none;
+    }
+
+    .main {
+      padding: 18px;
+      background: #efefef;
+      position: relative;
+    }
+
+    .box {
+      border: 1px solid #777;
+      background: #ddd;
+      padding: 12px;
+      margin-bottom: 14px;
+    }
+
+    .box-title {
+      font-weight: bold;
+      margin-bottom: 8px;
+      border-bottom: 1px solid #999;
+      padding-bottom: 5px;
+    }
+
+    .small {
+      font-family: "Courier New", monospace;
+      font-size: 11px;
+      color: #333;
+      line-height: 1.6;
+    }
+
+    .access-area {
+      height: 245px;
+      border: 1px inset #aaa;
+      background: #bdbdbd;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .access-area::before {
       content: "";
-      position: fixed;
+      position: absolute;
       inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='.75' numOctaves='2'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)' opacity='.13'/%3E%3C/svg%3E");
       pointer-events: none;
-      background:
-        linear-gradient(to bottom, rgba(255,255,255,.035) 1px, transparent 1px),
-        radial-gradient(circle at center, transparent 35%, rgba(0,0,0,.74) 100%);
-      background-size: 100% 4px, auto;
-      opacity: .45;
-      z-index: 20;
     }
 
-    body::after {
-      content: "";
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='.38'/%3E%3C/svg%3E");
-      opacity: .16;
-      mix-blend-mode: screen;
-      z-index: 21;
-    }
-
-    .room {
-      position: relative;
-      min-height: 100vh;
-      display: grid;
-      place-items: center;
-      perspective: 900px;
-    }
-
-    .corridor {
+    .lock-wrap {
       position: absolute;
-      inset: 0;
-      background:
-        linear-gradient(115deg, transparent 0 37%, rgba(255,255,255,.035) 37.2%, transparent 38%),
-        linear-gradient(245deg, transparent 0 37%, rgba(255,255,255,.028) 37.2%, transparent 38%),
-        linear-gradient(to top, rgba(255,255,255,.07), transparent 24%),
-        radial-gradient(ellipse at center, transparent 0 20%, rgba(0,0,0,.76) 72%);
-      opacity: .62;
-      transform: scale(1.04);
-    }
-
-    .door {
-      width: min(420px, 72vw);
-      height: min(640px, 78vh);
-      border: 1px solid var(--line);
-      background:
-        linear-gradient(90deg, transparent 49.7%, rgba(255,255,255,.055) 50%, transparent 50.3%),
-        radial-gradient(circle at 50% 20%, rgba(200,190,160,.045), transparent 160px),
-        #060607;
-      box-shadow:
-        inset 0 0 90px rgba(0,0,0,.9),
-        0 0 80px rgba(0,0,0,.95);
-      transform: rotateX(1deg);
-      position: relative;
-      display: grid;
-      place-items: center;
-    }
-
-    .door::before {
-      content: "";
-      position: absolute;
-      inset: 18px;
-      border: 1px solid rgba(190,184,166,.07);
-    }
-
-    .door::after {
-      content: "CE N'EST PAS UNE PORTE";
-      position: absolute;
-      bottom: 22px;
-      left: 0;
-      right: 0;
-      text-align: center;
-      color: rgba(184,180,168,.18);
-      letter-spacing: .36em;
-      font-size: 10px;
-    }
-
-    .lock-zone {
-      position: relative;
-      width: 230px;
-      height: 280px;
-      display: grid;
-      place-items: center;
-      transform-style: preserve-3d;
+      left: 50%;
+      top: 48%;
+      transform: translate(-50%, -50%);
+      width: 150px;
+      height: 170px;
     }
 
     .lock {
-      position: relative;
-      width: 132px;
-      height: 126px;
-      border-radius: 20px 20px 18px 18px;
-      background:
-        linear-gradient(135deg, #34312c, #11100f 58%, #050505),
-        radial-gradient(circle at 30% 18%, rgba(255,245,210,.26), transparent 20%);
-      border: 1px solid rgba(210,200,170,.22);
-      box-shadow:
-        inset -18px -20px 28px rgba(0,0,0,.72),
-        inset 10px 8px 18px rgba(255,245,210,.06),
-        0 26px 55px rgba(0,0,0,.92),
-        0 0 30px rgba(214,205,174,.08);
-      transform: rotateX(12deg) rotateY(-16deg);
-      transition: transform .6s ease, filter .6s ease;
+      position: absolute;
+      left: 27px;
+      top: 58px;
+      width: 96px;
+      height: 82px;
+      background: linear-gradient(135deg, #777, #2a2a2a 65%, #111);
+      border: 2px outset #999;
+      border-radius: 4px;
+      box-shadow: 9px 12px 16px rgba(0,0,0,.45);
+      transform: skewY(-2deg);
     }
 
-    .lock.waiting {
-      filter: drop-shadow(0 0 18px var(--glow));
-      transform: rotateX(10deg) rotateY(-8deg) scale(1.035);
+    .lock.near {
+      outline: 2px solid #ffffcc;
     }
 
     .lock.open {
-      animation: openLock 1.4s ease forwards;
+      background: linear-gradient(135deg, #666, #151515 65%, #050505);
     }
 
     .shackle {
       position: absolute;
-      left: 28px;
-      top: -78px;
-      width: 76px;
-      height: 104px;
-      border: 16px solid #2a2824;
+      left: 44px;
+      top: 12px;
+      width: 56px;
+      height: 74px;
+      border: 13px solid #444;
       border-bottom: 0;
-      border-radius: 46px 46px 0 0;
-      box-shadow:
-        inset 4px 0 8px rgba(255,245,210,.08),
-        inset -10px 0 12px rgba(0,0,0,.65);
-      transform-origin: 18px 95px;
-      transition: transform 1s ease, top 1s ease;
+      border-radius: 36px 36px 0 0;
+      box-shadow: inset 3px 0 3px #888, inset -4px 0 4px #111;
+      transition: transform .5s, top .5s;
     }
 
     .lock.open .shackle {
-      transform: rotate(-24deg) translateY(-14px);
-      top: -90px;
+      top: 0;
+      transform: rotate(-18deg);
+      transform-origin: left bottom;
     }
 
-    .keyhole {
+    .hole {
       position: absolute;
       left: 50%;
-      top: 49%;
-      width: 20px;
-      height: 20px;
-      background: #030303;
+      top: 37px;
+      width: 14px;
+      height: 14px;
+      margin-left: -7px;
+      background: #000;
       border-radius: 50%;
-      transform: translate(-50%, -50%);
-      box-shadow: inset 0 0 10px #000, 0 0 0 1px rgba(220,210,180,.12);
+      box-shadow: inset 1px 1px 4px #333;
     }
 
-    .keyhole::after {
+    .hole::after {
       content: "";
       position: absolute;
-      left: 50%;
-      top: 13px;
-      width: 10px;
-      height: 34px;
-      background: #030303;
-      transform: translateX(-50%);
-      border-radius: 0 0 6px 6px;
+      left: 4px;
+      top: 10px;
+      width: 6px;
+      height: 25px;
+      background: #000;
     }
 
     .key {
       position: absolute;
-      right: -170px;
-      bottom: 28px;
-      width: 138px;
-      height: 42px;
-      cursor: grab;
-      transform: rotate(-18deg);
-      filter: drop-shadow(0 18px 18px rgba(0,0,0,.8));
-      transition: filter .2s ease, opacity .4s ease;
+      right: 24px;
+      bottom: 22px;
+      width: 116px;
+      height: 38px;
+      cursor: move;
       z-index: 5;
+      transform: rotate(-10deg);
     }
 
-    .key:active { cursor: grabbing; }
-
-    .key.hidden {
-      opacity: 0;
-      pointer-events: none;
+    .key.hide {
+      display: none;
     }
 
-    .key .ring {
+    .ring {
       position: absolute;
       left: 0;
       top: 3px;
-      width: 38px;
-      height: 38px;
-      border: 8px solid #857b63;
+      width: 32px;
+      height: 32px;
+      border: 6px solid #8a7d55;
       border-radius: 50%;
-      background: #080807;
-      box-shadow: inset 0 0 10px rgba(0,0,0,.8);
+      background: #bdbdbd;
     }
 
-    .key .stem {
+    .stem {
       position: absolute;
-      left: 34px;
-      top: 18px;
-      width: 86px;
-      height: 8px;
-      background: linear-gradient(to right, #a89d79, #514b3d);
-      border-radius: 8px;
+      left: 31px;
+      top: 17px;
+      width: 74px;
+      height: 7px;
+      background: #8a7d55;
+      border-top: 1px solid #d2c58b;
     }
 
-    .key .tooth-a,
-    .key .tooth-b {
+    .tooth1, .tooth2 {
       position: absolute;
-      background: #6d634d;
+      background: #8a7d55;
+      border-left: 1px solid #51492f;
     }
 
-    .key .tooth-a {
-      left: 104px;
+    .tooth1 {
+      left: 92px;
       top: 22px;
+      width: 9px;
+      height: 14px;
+    }
+
+    .tooth2 {
+      left: 104px;
+      top: 17px;
       width: 10px;
-      height: 18px;
+      height: 19px;
     }
 
-    .key .tooth-b {
-      left: 119px;
-      top: 18px;
-      width: 12px;
-      height: 24px;
-    }
-
-    .hint {
+    .status {
       position: absolute;
-      top: 26px;
-      left: 50%;
-      transform: translateX(-50%);
-      color: var(--muted);
-      letter-spacing: .28em;
+      left: 8px;
+      bottom: 7px;
+      font-family: "Courier New", monospace;
       font-size: 11px;
-      white-space: nowrap;
-      opacity: .72;
+      color: #222;
     }
 
-    .password-panel {
-      position: fixed;
-      left: 50%;
-      bottom: 10vh;
-      transform: translateX(-50%) translateY(18px);
-      width: min(360px, calc(100vw - 40px));
-      border: 1px solid rgba(190,184,166,.2);
-      background: rgba(3,3,3,.82);
-      box-shadow: 0 0 70px rgba(0,0,0,.96);
-      padding: 18px;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity .7s ease, transform .7s ease;
-      z-index: 10;
-    }
-
-    .password-panel.visible {
-      opacity: 1;
-      pointer-events: auto;
-      transform: translateX(-50%) translateY(0);
-    }
-
-    .password-panel label {
-      display: block;
-      color: var(--muted);
-      letter-spacing: .34em;
-      font-size: 10px;
-      margin-bottom: 12px;
-    }
-
-    .password-panel input {
-      width: 100%;
-      background: #050505;
-      border: 1px solid rgba(190,184,166,.25);
-      color: var(--text);
-      padding: 12px;
-      outline: none;
-      font: inherit;
-      letter-spacing: .18em;
-    }
-
-    .password-panel input:focus {
-      border-color: rgba(214,205,174,.55);
-      box-shadow: 0 0 20px rgba(214,205,174,.08);
-    }
-
-    .message {
-      min-height: 18px;
+    .password-box {
+      display: none;
       margin-top: 12px;
-      color: var(--danger);
-      letter-spacing: .2em;
-      font-size: 10px;
+      border: 1px solid #777;
+      background: #dcdcdc;
+      padding: 12px;
     }
 
-    .opened-text {
-      position: fixed;
-      inset: 0;
-      display: grid;
-      place-items: center;
-      text-align: center;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 2s ease;
-      z-index: 12;
-      background: radial-gradient(circle at center, rgba(20,20,18,.2), rgba(0,0,0,.92));
+    .password-box.visible {
+      display: block;
     }
 
-    .opened-text.visible { opacity: 1; }
+    label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 6px;
+    }
 
-    .opened-text div {
-      max-width: 520px;
-      line-height: 2.2;
-      color: rgba(220,214,195,.78);
-      letter-spacing: .22em;
+    input {
+      width: 220px;
+      border: 2px inset #aaa;
+      background: #fff;
+      padding: 4px;
+      font-family: "Courier New", monospace;
       font-size: 12px;
     }
 
-    @keyframes openLock {
-      0% { transform: rotateX(10deg) rotateY(-8deg) scale(1.035); }
-      60% { transform: rotateX(13deg) rotateY(18deg) scale(1.05); }
-      100% { transform: rotateX(16deg) rotateY(26deg) translateY(18px) scale(.96); filter: brightness(.65); }
+    button {
+      border: 2px outset #bbb;
+      background: #d0d0d0;
+      padding: 3px 12px;
+      font-size: 12px;
+      margin-left: 5px;
+      cursor: pointer;
     }
 
-    @media (max-width: 720px) {
-      .key {
-        right: auto;
-        left: 50%;
-        bottom: -82px;
-        transform: translateX(-50%) rotate(-18deg);
+    button:active {
+      border-style: inset;
+    }
+
+    .msg {
+      margin-top: 8px;
+      min-height: 15px;
+      font-family: "Courier New", monospace;
+      color: #800000;
+      font-size: 11px;
+    }
+
+    .result {
+      display: none;
+      margin-top: 12px;
+      border: 1px solid #000;
+      background: #000;
+      color: #9f9f9f;
+      padding: 12px;
+      font-family: "Courier New", monospace;
+      font-size: 11px;
+      line-height: 1.7;
+    }
+
+    .result.visible {
+      display: block;
+    }
+
+    .footer {
+      border-top: 1px solid #8b8b8b;
+      padding: 8px 18px;
+      background: #cfcfcf;
+      color: #555;
+      font-size: 11px;
+    }
+
+    @media (max-width: 820px) {
+      .page {
+        width: calc(100% - 24px);
+        margin: 12px auto;
       }
 
-      .door {
-        height: 68vh;
+      .content {
+        grid-template-columns: 1fr;
+      }
+
+      .side {
+        border-right: 0;
+        border-bottom: 1px solid #8b8b8b;
       }
     }
   </style>
 </head>
 <body>
-  <main class="room">
-    <div class="corridor"></div>
+  <div class="page">
+    <div class="topbar">Dream Entry Service - Restricted Terminal</div>
 
-    <section class="door" aria-label="porte sombre">
-      <div class="hint" id="hint">prends la clé</div>
+    <div class="header">
+      <h1>DES Internal Access</h1>
+      <div class="sub">Archived service page / compatibility mode / last updated 03-11-2005</div>
+      <div class="warning">NOTICE: This interface is deprecated. Unauthorised access is logged.</div>
+    </div>
 
-      <div class="lock-zone" id="lockZone">
-        <div class="lock" id="lock">
-          <div class="shackle"></div>
-          <div class="keyhole"></div>
+    <div class="content">
+      <aside class="side">
+        <div class="side-title">Navigation</div>
+        <a class="disabled">Home</a>
+        <a class="disabled">Staff Directory</a>
+        <a class="disabled">Device Records</a>
+        <a class="disabled">Session Archive</a>
+        <a>Access Gate</a>
+        <a class="disabled">Contact</a>
+      </aside>
+
+      <main class="main">
+        <div class="box">
+          <div class="box-title">Access Gate</div>
+          <div class="small">
+            Insert key item into the lock module.<br>
+            Password prompt will initialise after physical token confirmation.
+          </div>
         </div>
 
-        <div class="key" id="key" role="button" aria-label="clé draggable" tabindex="0">
-          <div class="ring"></div>
-          <div class="stem"></div>
-          <div class="tooth-a"></div>
-          <div class="tooth-b"></div>
+        <div class="access-area" id="accessArea">
+          <div class="lock-wrap">
+            <div class="shackle"></div>
+            <div class="lock" id="lock">
+              <div class="hole"></div>
+            </div>
+          </div>
+
+          <div class="key" id="key">
+            <div class="ring"></div>
+            <div class="stem"></div>
+            <div class="tooth1"></div>
+            <div class="tooth2"></div>
+          </div>
+
+          <div class="status" id="status">TOKEN STATUS: NOT INSERTED</div>
         </div>
-      </div>
-    </section>
 
-    <form class="password-panel" id="passwordPanel" autocomplete="off">
-      <label for="password">MOT DE PASSE</label>
-      <input id="password" type="password" spellcheck="false" />
-      <div class="message" id="message"></div>
-    </form>
+        <form class="password-box" id="passwordBox">
+          <label for="password">Password:</label>
+          <input type="password" id="password" autocomplete="off">
+          <button type="submit">Submit</button>
+          <div class="msg" id="msg"></div>
+        </form>
 
-    <section class="opened-text" id="openedText">
-      <div>
-        tu as ouvert quelque chose.<br>
-        mais ce n'était pas le cadenas.<br><br>
-        regarde derrière la lumière.
-      </div>
-    </section>
-  </main>
+        <div class="result" id="result">
+          ACCESS GRANTED<br>
+          NODE: FINAL<br>
+          STATUS: AVAILABLE<br>
+          <br>
+          Please wait for next instruction.
+        </div>
+      </main>
+    </div>
+
+    <div class="footer">
+      DES intranet mirror. Best viewed in Internet Explorer 6.0 or higher. © Dream Entry Service Ltd.
+    </div>
+  </div>
 
   <script>
-    const key = document.getElementById('key');
-    const lock = document.getElementById('lock');
-    const lockZone = document.getElementById('lockZone');
-    const hint = document.getElementById('hint');
-    const panel = document.getElementById('passwordPanel');
-    const password = document.getElementById('password');
-    const message = document.getElementById('message');
-    const openedText = document.getElementById('openedText');
+    var PASSWORD = "R-17";
 
-    const PASSWORD = 'R-17';
+    var key = document.getElementById("key");
+    var lock = document.getElementById("lock");
+    var passwordBox = document.getElementById("passwordBox");
+    var password = document.getElementById("password");
+    var msg = document.getElementById("msg");
+    var result = document.getElementById("result");
+    var statusText = document.getElementById("status");
 
-    let dragging = false;
-    let offsetX = 0;
-    let offsetY = 0;
-    let inserted = false;
+    var dragging = false;
+    var dx = 0;
+    var dy = 0;
+    var inserted = false;
 
-    function startDrag(clientX, clientY) {
+    function startDrag(x, y) {
       if (inserted) return;
       dragging = true;
-      const rect = key.getBoundingClientRect();
-      offsetX = clientX - rect.left;
-      offsetY = clientY - rect.top;
-      key.style.position = 'fixed';
-      key.style.left = rect.left + 'px';
-      key.style.top = rect.top + 'px';
-      key.style.right = 'auto';
-      key.style.bottom = 'auto';
-      key.style.zIndex = '30';
-      hint.textContent = 'mets-la dans la serrure';
+      var r = key.getBoundingClientRect();
+      dx = x - r.left;
+      dy = y - r.top;
+      key.style.position = "fixed";
+      key.style.left = r.left + "px";
+      key.style.top = r.top + "px";
+      key.style.right = "auto";
+      key.style.bottom = "auto";
     }
 
-    function moveDrag(clientX, clientY) {
+    function moveDrag(x, y) {
       if (!dragging || inserted) return;
-      key.style.left = (clientX - offsetX) + 'px';
-      key.style.top = (clientY - offsetY) + 'px';
 
-      const keyRect = key.getBoundingClientRect();
-      const lockRect = lock.getBoundingClientRect();
-      const keyCenterX = keyRect.left + keyRect.width / 2;
-      const keyCenterY = keyRect.top + keyRect.height / 2;
+      key.style.left = (x - dx) + "px";
+      key.style.top = (y - dy) + "px";
 
-      const near =
-        keyCenterX > lockRect.left &&
-        keyCenterX < lockRect.right &&
-        keyCenterY > lockRect.top &&
-        keyCenterY < lockRect.bottom;
-
-      lock.classList.toggle('waiting', near);
+      if (isOverLock()) {
+        lock.className = "lock near";
+        statusText.innerHTML = "TOKEN STATUS: READY";
+      } else {
+        lock.className = "lock";
+        statusText.innerHTML = "TOKEN STATUS: NOT INSERTED";
+      }
     }
 
     function endDrag() {
       if (!dragging || inserted) return;
       dragging = false;
 
-      const keyRect = key.getBoundingClientRect();
-      const lockRect = lock.getBoundingClientRect();
-      const keyCenterX = keyRect.left + keyRect.width / 2;
-      const keyCenterY = keyRect.top + keyRect.height / 2;
-
-      const insertedNow =
-        keyCenterX > lockRect.left &&
-        keyCenterX < lockRect.right &&
-        keyCenterY > lockRect.top &&
-        keyCenterY < lockRect.bottom;
-
-      if (insertedNow) {
+      if (isOverLock()) {
         inserted = true;
-        key.classList.add('hidden');
-        lock.classList.remove('waiting');
-        hint.textContent = 'ça attend un nom';
-        panel.classList.add('visible');
-        setTimeout(() => password.focus(), 500);
+        key.className = "key hide";
+        lock.className = "lock";
+        statusText.innerHTML = "TOKEN STATUS: INSERTED";
+        passwordBox.className = "password-box visible";
+        setTimeout(function(){ password.focus(); }, 200);
       } else {
-        lock.classList.remove('waiting');
-        hint.textContent = 'prends la clé';
+        lock.className = "lock";
+        statusText.innerHTML = "TOKEN STATUS: NOT INSERTED";
       }
     }
 
-    key.addEventListener('mousedown', e => startDrag(e.clientX, e.clientY));
-    window.addEventListener('mousemove', e => moveDrag(e.clientX, e.clientY));
-    window.addEventListener('mouseup', endDrag);
+    function isOverLock() {
+      var kr = key.getBoundingClientRect();
+      var lr = lock.getBoundingClientRect();
+      var cx = kr.left + kr.width / 2;
+      var cy = kr.top + kr.height / 2;
+      return cx > lr.left && cx < lr.right && cy > lr.top && cy < lr.bottom;
+    }
 
-    key.addEventListener('touchstart', e => {
-      const t = e.touches[0];
+    key.onmousedown = function(e) {
+      startDrag(e.clientX, e.clientY);
+      return false;
+    };
+
+    document.onmousemove = function(e) {
+      moveDrag(e.clientX, e.clientY);
+    };
+
+    document.onmouseup = function() {
+      endDrag();
+    };
+
+    key.ontouchstart = function(e) {
+      var t = e.touches[0];
       startDrag(t.clientX, t.clientY);
-    }, { passive: true });
+    };
 
-    window.addEventListener('touchmove', e => {
-      const t = e.touches[0];
+    document.ontouchmove = function(e) {
+      if (!dragging) return;
+      var t = e.touches[0];
       moveDrag(t.clientX, t.clientY);
-    }, { passive: true });
+    };
 
-    window.addEventListener('touchend', endDrag);
+    document.ontouchend = function() {
+      endDrag();
+    };
 
-    panel.addEventListener('submit', e => {
+    document.getElementById("passwordBox").onsubmit = function(e) {
       e.preventDefault();
-      const value = password.value.trim();
 
-      if (value === PASSWORD) {
-        message.textContent = '';
-        lock.classList.add('open');
-        panel.classList.remove('visible');
-        hint.textContent = '';
-        setTimeout(() => openedText.classList.add('visible'), 900);
-      } else if (!value) {
-        message.textContent = 'le vide ne compte pas';
+      if (password.value === PASSWORD) {
+        msg.innerHTML = "";
+        lock.className = "lock open";
+        statusText.innerHTML = "TOKEN STATUS: ACCEPTED";
+        result.className = "result visible";
       } else {
-        message.textContent = 'mauvais seuil';
-        password.value = '';
+        msg.innerHTML = "ACCESS DENIED";
+        password.value = "";
       }
-    });
+    };
   </script>
 </body>
 </html>
