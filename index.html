@@ -1,443 +1,150 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>D.E.S. archive</title>
-
-<!-- archived mirror / incomplete -->
-<!-- access key: R-17 -->
+<title>access</title>
 
 <style>
-*{box-sizing:border-box}
-
-html,body{
+body{
   margin:0;
-  min-height:100%;
-  background:#070707;
-  color:#a7a7a7;
-  font-family:"Courier New",monospace;
-  font-size:12px;
-}
-
-body:before{
-  content:"";
-  position:fixed;
-  inset:0;
-  pointer-events:none;
-  background:repeating-linear-gradient(to bottom,rgba(255,255,255,.025),rgba(255,255,255,.025) 1px,transparent 1px,transparent 4px);
-  opacity:.22;
-  z-index:20;
-}
-
-body:after{
-  content:"";
-  position:fixed;
-  inset:0;
-  pointer-events:none;
-  box-shadow:inset 0 0 120px #000;
-  z-index:21;
-}
-
-.page{
-  width:min(980px,calc(100% - 32px));
-  margin:28px auto;
-  border:1px solid #2b2b2b;
-  background:#0b0b0b;
-  position:relative;
-  z-index:1;
-}
-
-.top,.footer{
-  padding:10px 14px;
+  background:#000;
   display:flex;
-  justify-content:space-between;
-  color:#777;
-  border-bottom:1px solid #2b2b2b;
-}
-.footer{border-top:1px solid #2b2b2b;border-bottom:0;color:#555}
-
-.login{
-  min-height:520px;
-  display:grid;
-  grid-template-columns:190px 1fr;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+  font-family:monospace;
 }
 
-.side{
-  border-right:1px solid #2b2b2b;
-  padding:22px 18px;
-  color:#666;
-}
-.side .logo{
-  color:#aaa;
-  letter-spacing:5px;
-  line-height:1.55;
-  margin-bottom:45px;
-}
-.side div{margin:13px 0}
-.side .active{color:#d0d0d0}
-
-.main-login{
-  min-height:520px;
-  display:grid;
-  place-items:center;
+/* BOX */
+.box{
+  width:320px;
+  height:320px;
+  background:#fff;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  flex-direction:column;
   position:relative;
 }
 
-.access-title{
-  text-align:center;
-  margin-bottom:30px;
-  color:#9b9b9b;
-  letter-spacing:1px;
-}
-
-.lock-area{
-  width:360px;
-  height:260px;
-  border:1px solid #242424;
-  background:#050505;
+/* LOCK */
+.lock{
+  width:80px;
+  height:70px;
+  background:linear-gradient(145deg,#aaa,#444);
   position:relative;
-  overflow:hidden;
+  transform:perspective(200px) rotateX(10deg);
 }
 
-.lock-area:after{
-  content:"token required";
+.lock:before{
+  content:"";
   position:absolute;
-  right:9px;
-  bottom:7px;
-  color:#2c2c2c;
+  width:40px;
+  height:40px;
+  border:8px solid #666;
+  border-bottom:none;
+  border-radius:30px 30px 0 0;
+  left:12px;
+  top:-40px;
 }
-
-.lock-wrap{
-  position:absolute;
-  left:50%;
-  top:46%;
-  width:130px;
-  height:150px;
-  transform:translate(-50%,-50%);
-}
-
-.shackle{
-  position:absolute;
-  left:37px;
-  top:0;
-  width:54px;
-  height:72px;
-  border:10px solid #555;
-  border-bottom:0;
-  border-radius:34px 34px 0 0;
-  box-shadow:inset 3px 0 #777,inset -5px 0 #222;
-  transition:.45s;
-}
-
-.lockbox{
-  position:absolute;
-  left:24px;
-  top:64px;
-  width:82px;
-  height:72px;
-  background:linear-gradient(135deg,#777,#333 55%,#111);
-  border:1px solid #777;
-  box-shadow:8px 9px 0 rgba(0,0,0,.35);
-}
-.lockbox.near{outline:1px dotted #aaa}
-.lock-wrap.open .shackle{top:-8px;transform:rotate(-20deg);transform-origin:left bottom}
-.lock-wrap.open .lockbox{background:linear-gradient(135deg,#555,#1a1a1a 60%,#050505)}
 
 .hole{
-  position:absolute;
-  left:50%;
-  top:30px;
-  width:13px;
-  height:13px;
-  margin-left:-6px;
+  width:10px;
+  height:10px;
   background:#000;
   border-radius:50%;
-}
-.hole:after{
-  content:"";
   position:absolute;
-  left:4px;
-  top:10px;
-  width:5px;
-  height:25px;
-  background:#000;
+  left:50%;
+  top:20px;
+  transform:translateX(-50%);
 }
 
 .key{
-  position:absolute;
-  left:35px;
-  bottom:34px;
-  width:115px;
-  height:34px;
-  cursor:move;
-  z-index:3;
-  transform:rotate(-8deg);
-}
-.key.hidden{display:none}
-.ring{
-  position:absolute;
-  left:0;
-  top:1px;
-  width:31px;
-  height:31px;
-  border:5px solid #8c8052;
-  border-radius:50%;
-  background:#050505;
-}
-.stem{
-  position:absolute;
-  left:30px;
-  top:14px;
-  width:70px;
-  height:6px;
-  background:#8c8052;
-}
-.tooth1,.tooth2{position:absolute;background:#8c8052}
-.tooth1{left:91px;top:18px;width:8px;height:13px}
-.tooth2{left:102px;top:14px;width:9px;height:17px}
-
-.prompt{
-  display:none;
-  text-align:center;
-  margin-top:16px;
-}
-.prompt.visible{display:block}
-
-input{
-  background:#050505;
-  color:#c7c7c7;
-  border:1px solid #383838;
-  padding:6px;
-  font-family:inherit;
-  width:185px;
-}
-button{
-  background:#111;
-  color:#aaa;
-  border:1px solid #383838;
-  padding:6px 12px;
-  font-family:inherit;
+  width:80px;
+  height:15px;
+  background:#777;
+  margin-top:20px;
   cursor:pointer;
 }
-button:hover{color:#ddd;border-color:#555}
-.msg{margin-top:10px;min-height:15px;color:#765252}
 
-.archive{display:none}
-.archive.visible{display:block}
-.archive-head{
-  border-bottom:1px solid #2b2b2b;
-  padding:10px 14px;
-  display:flex;
-  justify-content:space-between;
-  color:#888;
+/* INPUT */
+.prompt{
+  display:none;
+  margin-top:20px;
 }
-.layout{display:grid;grid-template-columns:170px 1fr;min-height:520px}
-.archive-side{border-right:1px solid #2b2b2b;padding:18px 16px;color:#666}
-.archive-side div{margin:12px 0}.archive-side .active{color:#c5c5c5}
-.archive-main{padding:18px 20px 24px}
-.note{color:#777;margin-bottom:16px}
-.gallery{display:grid;grid-template-columns:1fr 1fr;gap:18px}
-.file{position:relative}
-.file img{width:100%;display:block;border:1px solid #393939;filter:contrast(.95) brightness(.78) saturate(.75)}
-.file-name{margin-top:6px;color:#777}
 
-.eye-hitbox{
+.eye{
+  display:none;
+  width:200px;
+  height:200px;
+  background:radial-gradient(circle,#fff 20%,#000 21%);
+  position:relative;
+}
+
+.hit{
   position:absolute;
-  left:45%;
-  top:53%;
-  width:13%;
-  height:18%;
+  width:40px;
+  height:40px;
+  top:50%;
+  left:50%;
   transform:translate(-50%,-50%);
-  cursor:crosshair;
-  border-radius:50%;
+  cursor:pointer;
 }
-.eye-hitbox:hover{outline:1px dotted rgba(255,255,255,.18)}
-.secret{display:none;margin-top:18px;border-top:1px solid #292929;padding-top:14px;color:#9c9c9c;line-height:1.7}
-.secret.visible{display:block}
 
-@media(max-width:760px){
-  .login,.layout{grid-template-columns:1fr}
-  .side,.archive-side{border-right:0;border-bottom:1px solid #2b2b2b}
-  .gallery{grid-template-columns:1fr}
-  .lock-area{width:100%}
-}
 </style>
 </head>
+
 <body>
 
-<div class="page">
-  <div class="top">
-    <span>DREAM ENTRY SERVICE</span>
-    <span>ARCHIVE NODE</span>
+<div class="box" id="box">
+
+  <div class="lock" id="lock">
+    <div class="hole"></div>
   </div>
 
-  <section class="login" id="login">
-    <aside class="side">
-      <div class="logo">D R E A M<br>E N T R Y<br>S E R V I C E</div>
-      <div>&gt; node.list</div>
-      <div>&gt; systems</div>
-      <div class="active">&gt; archive</div>
-      <div>&gt; support</div>
-    </aside>
+  <div class="key" id="key"></div>
 
-    <main class="main-login">
-      <div>
-        <div class="access-title">ARCHIVE NODE // AUTHORIZATION REQUIRED</div>
-        <div class="lock-area" id="lockArea">
-          <div class="lock-wrap" id="lockWrap">
-            <div class="shackle"></div>
-            <div class="lockbox" id="lockbox"><div class="hole"></div></div>
-          </div>
-
-          <div class="key" id="key" title="token">
-            <div class="ring"></div>
-            <div class="stem"></div>
-            <div class="tooth1"></div>
-            <div class="tooth2"></div>
-          </div>
-        </div>
-
-        <div class="prompt" id="prompt">
-          ACCESS KEY<br><br>
-          <input id="access" type="password" autocomplete="off">
-          <button id="enter">enter</button>
-          <div class="msg" id="msg"></div>
-        </div>
-      </div>
-    </main>
-  </section>
-
-  <section class="archive" id="archive">
-    <div class="archive-head">
-      <span>archive / image recovery</span>
-      <span>session: guest</span>
-    </div>
-
-    <div class="layout">
-      <aside class="archive-side">
-        <div>/ index</div>
-        <div>img_001</div>
-        <div class="active">img_002</div>
-        <div>doc_01</div>
-        <div>log_09</div>
-      </aside>
-
-      <main class="archive-main">
-        <div class="note">2 recovered files / checksum unstable</div>
-
-        <div class="gallery">
-          <div class="file">
-            <img src="Capture%20d%27%C3%A9cran%202026-04-25%20162455.png" alt="img_001">
-            <div class="file-name">img_001.jpg</div>
-          </div>
-
-          <div class="file" id="cloudFile">
-            <img src="image.png" alt="img_002">
-            <div class="eye-hitbox" id="eyeHitbox" title=""></div>
-            <div class="file-name">img_002.jpg</div>
-          </div>
-        </div>
-
-        <div class="secret" id="secret">
-          cursor registered<br>
-          pupil match: confirmed<br>
-          offset retained: 45 / 53<br>
-          <br>
-          check the centre that is not the centre
-        </div>
-      </main>
-    </div>
-  </section>
-
-  <div class="footer">
-    <span>D.E.S. internal archive system</span>
-    <span>2005</span>
+  <div class="prompt" id="prompt">
+    <input id="pwd" placeholder="key">
+    <button onclick="check()">ok</button>
   </div>
+
+  <div class="eye" id="eye">
+    <div class="hit" onclick="secret()"></div>
+  </div>
+
 </div>
 
 <script>
-var PASSWORD="R-17";
 
-var key=document.getElementById("key");
-var lockbox=document.getElementById("lockbox");
-var lockWrap=document.getElementById("lockWrap");
-var prompt=document.getElementById("prompt");
-var access=document.getElementById("access");
-var enter=document.getElementById("enter");
-var msg=document.getElementById("msg");
-var login=document.getElementById("login");
-var archive=document.getElementById("archive");
-var eyeHitbox=document.getElementById("eyeHitbox");
-var secret=document.getElementById("secret");
+let inserted = false;
+const PASSWORD = "R-17";
 
-var dragging=false;
-var inserted=false;
-var ox=0;
-var oy=0;
-
-function startDrag(x,y){
-  if(inserted)return;
-  dragging=true;
-  var r=key.getBoundingClientRect();
-  ox=x-r.left;
-  oy=y-r.top;
-  key.style.position="fixed";
-  key.style.left=r.left+"px";
-  key.style.top=r.top+"px";
-  key.style.zIndex=99;
-}
-
-function moveDrag(x,y){
-  if(!dragging||inserted)return;
-  key.style.left=(x-ox)+"px";
-  key.style.top=(y-oy)+"px";
-  lockbox.className=overLock()?"lockbox near":"lockbox";
-}
-
-function endDrag(){
-  if(!dragging||inserted)return;
-  dragging=false;
-  if(overLock()){
-    inserted=true;
-    key.className="key hidden";
-    lockbox.className="lockbox";
-    lockWrap.className="lock-wrap open";
-    prompt.className="prompt visible";
-    setTimeout(function(){access.focus()},200);
-  }else{
-    lockbox.className="lockbox";
+/* clé → active input */
+document.getElementById("key").onclick = function(){
+  if(!inserted){
+    inserted = true;
+    document.getElementById("prompt").style.display = "block";
   }
 }
 
-function overLock(){
-  var k=key.getBoundingClientRect();
-  var l=lockbox.getBoundingClientRect();
-  var x=k.left+k.width/2;
-  var y=k.top+k.height/2;
-  return x>l.left&&x<l.right&&y>l.top&&y<l.bottom;
-}
-
-key.addEventListener("mousedown",function(e){startDrag(e.clientX,e.clientY);e.preventDefault()});
-document.addEventListener("mousemove",function(e){moveDrag(e.clientX,e.clientY)});
-document.addEventListener("mouseup",endDrag);
-key.addEventListener("touchstart",function(e){var t=e.touches[0];startDrag(t.clientX,t.clientY)},{passive:true});
-document.addEventListener("touchmove",function(e){if(!dragging)return;var t=e.touches[0];moveDrag(t.clientX,t.clientY)},{passive:true});
-document.addEventListener("touchend",endDrag);
-
-function connect(){
-  if(access.value===PASSWORD){
-    login.style.display="none";
-    archive.className="archive visible";
-  }else{
-    msg.innerHTML="access denied";
-    access.value="";
+/* check mdp */
+function check(){
+  const val = document.getElementById("pwd").value;
+  if(val === PASSWORD){
+    document.getElementById("lock").style.display = "none";
+    document.getElementById("key").style.display = "none";
+    document.getElementById("prompt").style.display = "none";
+    document.getElementById("eye").style.display = "block";
   }
 }
 
-enter.onclick=connect;
-access.addEventListener("keydown",function(e){if(e.key==="Enter")connect()});
-eyeHitbox.onclick=function(){secret.className="secret visible"};
+/* clic oeil */
+function secret(){
+  alert("found");
+}
+
 </script>
+
 </body>
 </html>
