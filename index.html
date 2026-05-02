@@ -3,143 +3,114 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DES Internal Access</title>
+  <title>/des/final/</title>
+
+  <!--
+    Dream Entry Service Ltd.
+    recovered mirror: /des/final/
+    do not restore the missing pages
+  -->
 
   <style>
     html, body {
       margin: 0;
-      padding: 0;
       min-height: 100%;
-      background: #101010;
-      color: #b7b7b7;
-      font-family: Arial, Helvetica, sans-serif;
-      font-size: 12px;
+      background: #080808;
+      color: #9a9a9a;
+      font-family: "Courier New", Courier, monospace;
+      font-size: 13px;
     }
 
-    body {
-      background-image:
-        linear-gradient(#171717 1px, transparent 1px),
-        linear-gradient(90deg, #171717 1px, transparent 1px);
-      background-size: 20px 20px;
+    a { color: #7777cc; }
+    a:visited { color: #666699; }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background: repeating-linear-gradient(
+        to bottom,
+        rgba(255,255,255,.025),
+        rgba(255,255,255,.025) 1px,
+        transparent 1px,
+        transparent 3px
+      );
+      opacity: .35;
     }
 
     .page {
-      width: 760px;
-      margin: 42px auto;
-      background: #d6d6d6;
-      color: #111;
-      border: 1px solid #000;
-      box-shadow: 0 0 0 3px #333, 0 0 40px #000;
-    }
-
-    .topbar {
-      background: #000080;
-      color: #fff;
-      padding: 5px 8px;
-      font-weight: bold;
-      font-size: 12px;
-    }
-
-    .header {
-      padding: 14px 18px;
-      border-bottom: 1px solid #8b8b8b;
-      background: #ececec;
+      width: 690px;
+      margin: 28px auto;
+      padding-bottom: 40px;
     }
 
     h1 {
-      margin: 0;
-      font-size: 21px;
+      font-size: 18px;
       font-weight: normal;
-      letter-spacing: 1px;
+      color: #c8c8c8;
+      margin: 0 0 18px;
     }
 
-    .sub {
-      margin-top: 6px;
-      color: #555;
-      font-size: 11px;
+    .line {
+      border-top: 1px solid #333;
+      margin: 10px 0 18px;
     }
 
-    .warning {
-      margin-top: 10px;
-      padding: 7px;
-      border: 1px solid #9a9a9a;
-      background: #ffffcc;
-      color: #222;
-      font-family: "Courier New", monospace;
-      font-size: 11px;
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 28px;
     }
 
-    .content {
-      display: grid;
-      grid-template-columns: 210px 1fr;
-      min-height: 420px;
+    th {
+      color: #bbb;
+      font-weight: normal;
+      text-align: left;
+      border-bottom: 1px solid #2b2b2b;
+      padding: 3px 0;
     }
 
-    .side {
-      background: #c4c4c4;
-      border-right: 1px solid #8b8b8b;
-      padding: 12px;
-    }
-
-    .side-title {
-      font-weight: bold;
-      margin-bottom: 8px;
-    }
-
-    .side a {
-      display: block;
-      color: #000080;
-      text-decoration: underline;
-      margin: 7px 0;
-      cursor: default;
-    }
-
-    .side .disabled {
+    td {
+      padding: 4px 0;
       color: #777;
-      text-decoration: none;
     }
 
-    .main {
-      padding: 18px;
-      background: #efefef;
+    .bad { color: #4e4e4e; text-decoration: line-through; }
+    .ok { color: #aaa; }
+    .quiet { color: #555; }
+
+    .terminal {
+      border: 1px solid #252525;
+      background: #030303;
+      padding: 14px;
+      margin-top: 14px;
+      min-height: 260px;
       position: relative;
     }
 
-    .box {
-      border: 1px solid #777;
-      background: #ddd;
-      padding: 12px;
-      margin-bottom: 14px;
+    .terminal-title {
+      color: #666;
+      margin-bottom: 18px;
     }
 
-    .box-title {
-      font-weight: bold;
-      margin-bottom: 8px;
-      border-bottom: 1px solid #999;
-      padding-bottom: 5px;
-    }
-
-    .small {
-      font-family: "Courier New", monospace;
-      font-size: 11px;
-      color: #333;
-      line-height: 1.6;
-    }
-
-    .access-area {
-      height: 245px;
-      border: 1px inset #aaa;
-      background: #bdbdbd;
+    .lock-stage {
       position: relative;
+      height: 210px;
+      border: 1px dotted #242424;
+      background:
+        radial-gradient(circle at 50% 50%, rgba(255,255,255,.025), transparent 120px),
+        #050505;
       overflow: hidden;
     }
 
-    .access-area::before {
-      content: "";
+    .lock-stage::after {
+      content: "token required";
       position: absolute;
-      inset: 0;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='.75' numOctaves='2'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)' opacity='.13'/%3E%3C/svg%3E");
-      pointer-events: none;
+      right: 8px;
+      bottom: 6px;
+      color: #2e2e2e;
+      font-size: 11px;
     }
 
     .lock-wrap {
@@ -147,406 +118,367 @@
       left: 50%;
       top: 48%;
       transform: translate(-50%, -50%);
-      width: 150px;
-      height: 170px;
-    }
-
-    .lock {
-      position: absolute;
-      left: 27px;
-      top: 58px;
-      width: 96px;
-      height: 82px;
-      background: linear-gradient(135deg, #777, #2a2a2a 65%, #111);
-      border: 2px outset #999;
-      border-radius: 4px;
-      box-shadow: 9px 12px 16px rgba(0,0,0,.45);
-      transform: skewY(-2deg);
-    }
-
-    .lock.near {
-      outline: 2px solid #ffffcc;
-    }
-
-    .lock.open {
-      background: linear-gradient(135deg, #666, #151515 65%, #050505);
+      width: 120px;
+      height: 150px;
     }
 
     .shackle {
       position: absolute;
-      left: 44px;
-      top: 12px;
-      width: 56px;
-      height: 74px;
-      border: 13px solid #444;
+      left: 36px;
+      top: 3px;
+      width: 48px;
+      height: 64px;
+      border: 9px solid #535353;
       border-bottom: 0;
-      border-radius: 36px 36px 0 0;
-      box-shadow: inset 3px 0 3px #888, inset -4px 0 4px #111;
-      transition: transform .5s, top .5s;
+      border-radius: 38px 38px 0 0;
+      box-shadow: inset -4px 0 #222, inset 3px 0 #777;
+      transition: transform .45s linear, top .45s linear;
     }
 
-    .lock.open .shackle {
-      top: 0;
-      transform: rotate(-18deg);
+    .lock {
+      position: absolute;
+      left: 21px;
+      top: 62px;
+      width: 78px;
+      height: 68px;
+      background: linear-gradient(135deg, #777, #303030 48%, #111 100%);
+      border: 1px solid #888;
+      box-shadow: 8px 9px 0 rgba(0,0,0,.35);
+      transform: rotateY(-12deg) skewY(-2deg);
+    }
+
+    .lock.near {
+      outline: 1px solid #aaa;
+    }
+
+    .lock.open + .shackle,
+    .lock-wrap.open .shackle {
+      top: -6px;
+      transform: rotate(-20deg);
       transform-origin: left bottom;
+    }
+
+    .lock.open {
+      background: linear-gradient(135deg, #555, #151515 60%, #070707);
     }
 
     .hole {
       position: absolute;
       left: 50%;
-      top: 37px;
-      width: 14px;
-      height: 14px;
-      margin-left: -7px;
+      top: 28px;
+      width: 12px;
+      height: 12px;
+      margin-left: -6px;
       background: #000;
       border-radius: 50%;
-      box-shadow: inset 1px 1px 4px #333;
     }
 
     .hole::after {
       content: "";
       position: absolute;
       left: 4px;
-      top: 10px;
-      width: 6px;
-      height: 25px;
+      top: 9px;
+      width: 4px;
+      height: 22px;
       background: #000;
     }
 
     .key {
       position: absolute;
-      right: 24px;
-      bottom: 22px;
-      width: 116px;
-      height: 38px;
+      left: 38px;
+      top: 154px;
+      width: 105px;
+      height: 32px;
       cursor: move;
-      z-index: 5;
-      transform: rotate(-10deg);
+      transform: rotate(-7deg);
+      z-index: 3;
     }
 
-    .key.hide {
-      display: none;
-    }
+    .key.hidden { display: none; }
 
     .ring {
       position: absolute;
       left: 0;
-      top: 3px;
-      width: 32px;
-      height: 32px;
-      border: 6px solid #8a7d55;
+      top: 2px;
+      width: 27px;
+      height: 27px;
+      border: 5px solid #807750;
       border-radius: 50%;
-      background: #bdbdbd;
+      background: #050505;
     }
 
     .stem {
       position: absolute;
-      left: 31px;
-      top: 17px;
-      width: 74px;
-      height: 7px;
-      background: #8a7d55;
-      border-top: 1px solid #d2c58b;
+      left: 27px;
+      top: 14px;
+      width: 65px;
+      height: 5px;
+      background: #807750;
     }
 
-    .tooth1, .tooth2 {
+    .tooth-a, .tooth-b {
       position: absolute;
-      background: #8a7d55;
-      border-left: 1px solid #51492f;
+      background: #807750;
     }
 
-    .tooth1 {
-      left: 92px;
-      top: 22px;
+    .tooth-a {
+      left: 82px;
+      top: 18px;
+      width: 8px;
+      height: 12px;
+    }
+
+    .tooth-b {
+      left: 94px;
+      top: 14px;
       width: 9px;
-      height: 14px;
+      height: 16px;
     }
 
-    .tooth2 {
-      left: 104px;
-      top: 17px;
-      width: 10px;
-      height: 19px;
-    }
-
-    .status {
-      position: absolute;
-      left: 8px;
-      bottom: 7px;
-      font-family: "Courier New", monospace;
-      font-size: 11px;
-      color: #222;
-    }
-
-    .password-box {
+    .prompt {
       display: none;
-      margin-top: 12px;
-      border: 1px solid #777;
-      background: #dcdcdc;
-      padding: 12px;
+      margin-top: 14px;
+      color: #898989;
     }
 
-    .password-box.visible {
-      display: block;
-    }
-
-    label {
-      display: block;
-      font-weight: bold;
-      margin-bottom: 6px;
-    }
+    .prompt.visible { display: block; }
 
     input {
-      width: 220px;
-      border: 2px inset #aaa;
-      background: #fff;
-      padding: 4px;
-      font-family: "Courier New", monospace;
-      font-size: 12px;
+      background: transparent;
+      border: 0;
+      border-bottom: 1px solid #555;
+      color: #bdbdbd;
+      font-family: inherit;
+      font-size: 13px;
+      outline: none;
+      width: 150px;
     }
 
     button {
-      border: 2px outset #bbb;
-      background: #d0d0d0;
-      padding: 3px 12px;
+      background: transparent;
+      color: #777;
+      border: 1px solid #333;
+      font-family: inherit;
       font-size: 12px;
-      margin-left: 5px;
       cursor: pointer;
+      padding: 2px 8px;
     }
 
-    button:active {
-      border-style: inset;
-    }
+    button:hover { color: #ccc; border-color: #555; }
 
     .msg {
       margin-top: 8px;
-      min-height: 15px;
-      font-family: "Courier New", monospace;
-      color: #800000;
-      font-size: 11px;
+      color: #6f4a4a;
+      min-height: 16px;
     }
 
     .result {
       display: none;
-      margin-top: 12px;
-      border: 1px solid #000;
-      background: #000;
-      color: #9f9f9f;
-      padding: 12px;
-      font-family: "Courier New", monospace;
-      font-size: 11px;
-      line-height: 1.7;
+      margin-top: 18px;
+      color: #a0a0a0;
+      line-height: 1.6;
     }
 
-    .result.visible {
-      display: block;
-    }
+    .result.visible { display: block; }
 
     .footer {
-      border-top: 1px solid #8b8b8b;
-      padding: 8px 18px;
-      background: #cfcfcf;
-      color: #555;
+      margin-top: 28px;
+      color: #444;
       font-size: 11px;
     }
 
-    @media (max-width: 820px) {
+    .hidden-comment {
+      color: #080808;
+      user-select: text;
+    }
+
+    @media (max-width: 760px) {
       .page {
-        width: calc(100% - 24px);
-        margin: 12px auto;
-      }
-
-      .content {
-        grid-template-columns: 1fr;
-      }
-
-      .side {
-        border-right: 0;
-        border-bottom: 1px solid #8b8b8b;
+        width: calc(100% - 28px);
       }
     }
   </style>
 </head>
 <body>
   <div class="page">
-    <div class="topbar">Dream Entry Service - Restricted Terminal</div>
+    <h1>Index of /des/final/</h1>
+    <div class="line"></div>
 
-    <div class="header">
-      <h1>DES Internal Access</h1>
-      <div class="sub">Archived service page / compatibility mode / last updated 03-11-2005</div>
-      <div class="warning">NOTICE: This interface is deprecated. Unauthorised access is logged.</div>
-    </div>
+    <table>
+      <tr>
+        <th>Name</th>
+        <th>Last modified</th>
+        <th>Size</th>
+        <th>Description</th>
+      </tr>
+      <tr>
+        <td><a href="#">../</a></td>
+        <td>--</td>
+        <td>-</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="bad">staff.html</span></td>
+        <td>2005-11-03 02:14</td>
+        <td>0k</td>
+        <td>removed</td>
+      </tr>
+      <tr>
+        <td><span class="bad">session_log.txt</span></td>
+        <td>2005-11-03 02:18</td>
+        <td>0k</td>
+        <td>empty</td>
+      </tr>
+      <tr>
+        <td><span class="bad">map.dat</span></td>
+        <td>2005-11-03 02:20</td>
+        <td>0k</td>
+        <td>missing</td>
+      </tr>
+      <tr>
+        <td><span class="ok">gate.html</span></td>
+        <td>2005-11-03 02:21</td>
+        <td>4k</td>
+        <td></td>
+      </tr>
+    </table>
 
-    <div class="content">
-      <aside class="side">
-        <div class="side-title">Navigation</div>
-        <a class="disabled">Home</a>
-        <a class="disabled">Staff Directory</a>
-        <a class="disabled">Device Records</a>
-        <a class="disabled">Session Archive</a>
-        <a>Access Gate</a>
-        <a class="disabled">Contact</a>
-      </aside>
+    <div class="terminal">
+      <div class="terminal-title">./gate.html</div>
 
-      <main class="main">
-        <div class="box">
-          <div class="box-title">Access Gate</div>
-          <div class="small">
-            Insert key item into the lock module.<br>
-            Password prompt will initialise after physical token confirmation.
+      <div class="lock-stage" id="stage">
+        <div class="lock-wrap" id="lockWrap">
+          <div class="shackle"></div>
+          <div class="lock" id="lock">
+            <div class="hole"></div>
           </div>
         </div>
 
-        <div class="access-area" id="accessArea">
-          <div class="lock-wrap">
-            <div class="shackle"></div>
-            <div class="lock" id="lock">
-              <div class="hole"></div>
-            </div>
-          </div>
-
-          <div class="key" id="key">
-            <div class="ring"></div>
-            <div class="stem"></div>
-            <div class="tooth1"></div>
-            <div class="tooth2"></div>
-          </div>
-
-          <div class="status" id="status">TOKEN STATUS: NOT INSERTED</div>
+        <div class="key" id="key" title="key.item">
+          <div class="ring"></div>
+          <div class="stem"></div>
+          <div class="tooth-a"></div>
+          <div class="tooth-b"></div>
         </div>
+      </div>
 
-        <form class="password-box" id="passwordBox">
-          <label for="password">Password:</label>
-          <input type="password" id="password" autocomplete="off">
-          <button type="submit">Submit</button>
-          <div class="msg" id="msg"></div>
-        </form>
+      <form class="prompt" id="prompt">
+        password: <input id="password" type="password" autocomplete="off" spellcheck="false">
+        <button type="submit">enter</button>
+        <div class="msg" id="msg"></div>
+      </form>
 
-        <div class="result" id="result">
-          ACCESS GRANTED<br>
-          NODE: FINAL<br>
-          STATUS: AVAILABLE<br>
-          <br>
-          Please wait for next instruction.
-        </div>
-      </main>
+      <div class="result" id="result">
+        ACCESS: TRUE<br>
+        FINAL NODE: TRUE<br>
+        RETURN: NULL<br>
+        <br>
+        /next/ was not archived.
+      </div>
     </div>
 
     <div class="footer">
-      DES intranet mirror. Best viewed in Internet Explorer 6.0 or higher. © Dream Entry Service Ltd.
+      Apache/1.3.33 Server at mirror.dreamentry.local Port 80<br>
+      <span class="hidden-comment">R-17 is not a filename.</span>
     </div>
   </div>
 
   <script>
+    /* token: key.item */
     var PASSWORD = "R-17";
 
     var key = document.getElementById("key");
     var lock = document.getElementById("lock");
-    var passwordBox = document.getElementById("passwordBox");
+    var lockWrap = document.getElementById("lockWrap");
+    var promptBox = document.getElementById("prompt");
     var password = document.getElementById("password");
     var msg = document.getElementById("msg");
     var result = document.getElementById("result");
-    var statusText = document.getElementById("status");
 
     var dragging = false;
-    var dx = 0;
-    var dy = 0;
     var inserted = false;
+    var offsetX = 0;
+    var offsetY = 0;
 
-    function startDrag(x, y) {
+    function begin(x, y) {
       if (inserted) return;
       dragging = true;
       var r = key.getBoundingClientRect();
-      dx = x - r.left;
-      dy = y - r.top;
+      offsetX = x - r.left;
+      offsetY = y - r.top;
       key.style.position = "fixed";
       key.style.left = r.left + "px";
       key.style.top = r.top + "px";
-      key.style.right = "auto";
-      key.style.bottom = "auto";
+      key.style.zIndex = 99;
     }
 
-    function moveDrag(x, y) {
+    function move(x, y) {
       if (!dragging || inserted) return;
-
-      key.style.left = (x - dx) + "px";
-      key.style.top = (y - dy) + "px";
-
-      if (isOverLock()) {
-        lock.className = "lock near";
-        statusText.innerHTML = "TOKEN STATUS: READY";
-      } else {
-        lock.className = "lock";
-        statusText.innerHTML = "TOKEN STATUS: NOT INSERTED";
-      }
+      key.style.left = (x - offsetX) + "px";
+      key.style.top = (y - offsetY) + "px";
+      lock.className = overLock() ? "lock near" : "lock";
     }
 
-    function endDrag() {
+    function end() {
       if (!dragging || inserted) return;
       dragging = false;
 
-      if (isOverLock()) {
+      if (overLock()) {
         inserted = true;
-        key.className = "key hide";
+        key.className = "key hidden";
         lock.className = "lock";
-        statusText.innerHTML = "TOKEN STATUS: INSERTED";
-        passwordBox.className = "password-box visible";
-        setTimeout(function(){ password.focus(); }, 200);
+        promptBox.className = "prompt visible";
+        setTimeout(function () { password.focus(); }, 100);
       } else {
         lock.className = "lock";
-        statusText.innerHTML = "TOKEN STATUS: NOT INSERTED";
       }
     }
 
-    function isOverLock() {
+    function overLock() {
       var kr = key.getBoundingClientRect();
       var lr = lock.getBoundingClientRect();
-      var cx = kr.left + kr.width / 2;
-      var cy = kr.top + kr.height / 2;
-      return cx > lr.left && cx < lr.right && cy > lr.top && cy < lr.bottom;
+      var x = kr.left + kr.width / 2;
+      var y = kr.top + kr.height / 2;
+      return x > lr.left && x < lr.right && y > lr.top && y < lr.bottom;
     }
 
-    key.onmousedown = function(e) {
-      startDrag(e.clientX, e.clientY);
-      return false;
-    };
+    key.addEventListener("mousedown", function(e) {
+      begin(e.clientX, e.clientY);
+      e.preventDefault();
+    });
 
-    document.onmousemove = function(e) {
-      moveDrag(e.clientX, e.clientY);
-    };
+    document.addEventListener("mousemove", function(e) {
+      move(e.clientX, e.clientY);
+    });
 
-    document.onmouseup = function() {
-      endDrag();
-    };
+    document.addEventListener("mouseup", end);
 
-    key.ontouchstart = function(e) {
+    key.addEventListener("touchstart", function(e) {
       var t = e.touches[0];
-      startDrag(t.clientX, t.clientY);
-    };
+      begin(t.clientX, t.clientY);
+    }, { passive: true });
 
-    document.ontouchmove = function(e) {
+    document.addEventListener("touchmove", function(e) {
       if (!dragging) return;
       var t = e.touches[0];
-      moveDrag(t.clientX, t.clientY);
-    };
+      move(t.clientX, t.clientY);
+    }, { passive: true });
 
-    document.ontouchend = function() {
-      endDrag();
-    };
+    document.addEventListener("touchend", end);
 
-    document.getElementById("passwordBox").onsubmit = function(e) {
+    promptBox.addEventListener("submit", function(e) {
       e.preventDefault();
 
       if (password.value === PASSWORD) {
         msg.innerHTML = "";
         lock.className = "lock open";
-        statusText.innerHTML = "TOKEN STATUS: ACCEPTED";
+        lockWrap.className = "lock-wrap open";
         result.className = "result visible";
       } else {
-        msg.innerHTML = "ACCESS DENIED";
+        msg.innerHTML = "denied";
         password.value = "";
       }
-    };
+    });
   </script>
 </body>
 </html>
