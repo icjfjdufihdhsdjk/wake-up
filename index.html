@@ -5,66 +5,75 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Index of /archive/</title>
 
-<!--
-  mirror node // partial
-  missing: /final/
-  do not reconstruct
--->
+<!-- mirror node // partial -->
+<!-- some files were removed after indexing -->
 
 <style>
 body{
-  background:#fff;
-  color:#000;
-  font-family:Verdana, Arial, sans-serif;
-  font-size:11px;
+  background:#0a0a0a;
+  color:#cfcfcf;
+  font-family:"Courier New",monospace;
+  font-size:12px;
 }
 .wrap{width:720px;margin:30px auto;}
-h1{font-size:16px;font-weight:normal;}
-hr{border:0;border-top:1px solid #999;margin:12px 0;}
+h1{font-size:16px;font-weight:normal;color:#e0e0e0;}
+hr{border:0;border-top:1px solid #333;margin:12px 0;}
 .server{color:#666;font-size:10px;}
 
-table{width:100%;font-family:"Courier New",monospace;font-size:12px;border-collapse:collapse;margin-top:15px;}
-th{text-align:left;border-bottom:1px solid #aaa;font-weight:normal;padding:3px 0;}
-td{padding:3px 0;color:#333;}
+table{width:100%;border-collapse:collapse;margin-top:15px;}
+th{text-align:left;border-bottom:1px solid #444;font-weight:normal;padding:3px 0;color:#aaa;}
+td{padding:3px 0;color:#777;}
 
-.dead{color:#888;text-decoration:line-through;}
+.dead{color:#444;text-decoration:line-through;}
 
-.hidden{display:none;}
-
-/* subtle interactive zone */
 .zone{
   margin-top:20px;
-  height:120px;
-  border:1px solid #ccc;
-  background:#fafafa;
+  height:140px;
+  border:1px solid #222;
+  background:#050505;
   position:relative;
+  overflow:hidden;
+}
+
+.zone::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:repeating-linear-gradient(
+    to bottom,
+    rgba(255,255,255,.02),
+    rgba(255,255,255,.02) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  opacity:.3;
 }
 
 .pixel{
   position:absolute;
   width:6px;
   height:6px;
-  background:#000;
-  left:63%;
-  top:58%;
-  opacity:.08;
+  background:#fff;
+  left:62%;
+  top:57%;
+  opacity:.04;
   cursor:pointer;
 }
 
 .module{
   display:none;
   margin-top:15px;
-  border:1px solid #bbb;
+  border:1px solid #333;
   padding:10px;
-  font-family:"Courier New",monospace;
-  background:#f5f5f5;
+  background:#060606;
+  color:#aaa;
 }
 
 .module.visible{display:block;}
 
 .lock{
   width:60px;height:50px;
-  background:#666;
+  background:#444;
   position:relative;
   margin:10px 0;
 }
@@ -73,7 +82,7 @@ td{padding:3px 0;color:#333;}
   content:"";
   position:absolute;
   width:30px;height:30px;
-  border:6px solid #666;
+  border:6px solid #444;
   border-bottom:none;
   border-radius:20px 20px 0 0;
   left:9px;top:-28px;
@@ -81,7 +90,7 @@ td{padding:3px 0;color:#333;}
 
 .key{
   width:80px;height:20px;
-  background:#999;
+  background:#777;
   margin-top:8px;
   cursor:pointer;
 }
@@ -89,8 +98,39 @@ td{padding:3px 0;color:#333;}
 .prompt{display:none;margin-top:10px;}
 .prompt.visible{display:block;}
 
-.result{display:none;margin-top:10px;color:#333;}
+input{
+  background:#000;
+  border:1px solid #444;
+  color:#ccc;
+}
+
+button{
+  background:#111;
+  border:1px solid #333;
+  color:#aaa;
+}
+
+.result{display:none;margin-top:10px;color:#888;}
 .result.visible{display:block;}
+
+/* subtle disturbing detail */
+.glitch{
+  position:absolute;
+  left:0;
+  top:0;
+  width:100%;
+  height:100%;
+  background:rgba(255,255,255,.02);
+  animation:glitch 6s infinite;
+  pointer-events:none;
+}
+
+@keyframes glitch{
+  0%,95%,100%{opacity:0}
+  96%{opacity:.15}
+  97%{opacity:0}
+  98%{opacity:.2}
+}
 
 </style>
 </head>
@@ -106,18 +146,19 @@ td{padding:3px 0;color:#333;}
 <tr><td><a href="#">Parent Directory</a></td><td>-</td><td>-</td></tr>
 <tr><td class="dead">final/</td><td>03-Nov-2005</td><td>-</td></tr>
 <tr><td class="dead">session.log</td><td>03-Nov-2005</td><td>0</td></tr>
-<tr><td><a href="#" id="open">tmp/</a></td><td>03-Nov-2005</td><td>-</td></tr>
+<tr><td><a href="#">tmp/</a></td><td>03-Nov-2005</td><td>-</td></tr>
 </table>
 
 <div class="zone">
   <div class="pixel" id="pixel"></div>
+  <div class="glitch"></div>
 </div>
 
 <div class="module" id="module">
   fragment loaded<br>
   integrity: partial<br><br>
 
-  <div class="lock" id="lock"></div>
+  <div class="lock"></div>
   <div class="key" id="key"></div>
 
   <div class="prompt" id="prompt">
@@ -141,7 +182,6 @@ var PASSWORD="R-17";
 var pixel=document.getElementById("pixel");
 var module=document.getElementById("module");
 var key=document.getElementById("key");
-var lock=document.getElementById("lock");
 var prompt=document.getElementById("prompt");
 var result=document.getElementById("result");
 var password=document.getElementById("password");
