@@ -6,9 +6,7 @@
 <title>access</title>
 
 <style>
-*{
-  box-sizing:border-box;
-}
+*{box-sizing:border-box}
 
 html,body{
   margin:0;
@@ -21,27 +19,21 @@ html,body{
 
 body{
   display:flex;
-  justify-content:center;
   align-items:center;
+  justify-content:center;
 }
 
-/* =========================================================
-   MAIN BOX
-========================================================= */
 .box{
   width:430px;
   height:430px;
   background:#f2f2ec;
   border:1px solid #d6d6cf;
+  position:relative;
+  overflow:hidden;
   box-shadow:
     0 0 0 1px #111,
     0 22px 80px rgba(0,0,0,.95),
     inset 0 0 70px rgba(0,0,0,.08);
-  position:relative;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  overflow:hidden;
 }
 
 .box:before{
@@ -49,10 +41,10 @@ body{
   position:absolute;
   inset:0;
   background:
-    linear-gradient(to bottom, rgba(0,0,0,.04), transparent 22%, rgba(0,0,0,.07)),
-    repeating-linear-gradient(to bottom, rgba(0,0,0,.025), rgba(0,0,0,.025) 1px, transparent 1px, transparent 4px);
-  pointer-events:none;
+    linear-gradient(to bottom,rgba(0,0,0,.035),transparent 25%,rgba(0,0,0,.07)),
+    repeating-linear-gradient(to bottom,rgba(0,0,0,.025),rgba(0,0,0,.025) 1px,transparent 1px,transparent 4px);
   z-index:50;
+  pointer-events:none;
 }
 
 .box:after{
@@ -65,237 +57,68 @@ body{
 }
 
 .scene{
-  width:330px;
-  height:330px;
-  position:relative;
-  perspective:900px;
-  transform-style:preserve-3d;
+  position:absolute;
+  inset:0;
   z-index:2;
 }
 
-/* =========================================================
-   LOCK — stable 3D old school
-========================================================= */
-.lock-holder{
+/* =========================
+   STABLE SVG LOCK
+========================= */
+.lock-zone{
   position:absolute;
   left:50%;
   top:42%;
   width:190px;
-  height:220px;
+  height:210px;
   transform:translate(-50%,-50%);
-  transform-style:preserve-3d;
 }
 
-.lock{
+.lock-svg{
   position:absolute;
-  left:50%;
-  top:82px;
-  width:150px;
-  height:170px;
-  transform:translateX(-50%) rotateX(10deg) rotateY(-16deg);
-  transform-style:preserve-3d;
-  transition:transform .45s ease, filter .35s ease;
+  left:0;
+  top:0;
+  width:190px;
+  height:210px;
+  overflow:visible;
+  filter:drop-shadow(17px 20px 16px rgba(0,0,0,.36));
 }
 
-.lock.near{
-  filter:drop-shadow(0 0 13px rgba(80,70,35,.38));
-  transform:translateX(-50%) rotateX(9deg) rotateY(-8deg) scale(1.025);
+.lock-group{
+  transform-origin:95px 126px;
+  transition:transform .45s ease, filter .3s ease;
 }
 
-.lock.open{
-  transform:translateX(-50%) rotateX(11deg) rotateY(20deg) translateY(8px);
+.lock-group.near{
+  transform:scale(1.025);
+  filter:drop-shadow(0 0 10px rgba(88,77,37,.34));
 }
 
-/* invisible reliable hitbox */
+.shackle-group{
+  transform-origin:62px 112px;
+  transition:transform .65s ease;
+}
+
+.lock-group.open .shackle-group{
+  transform:translate(-5px,-16px) rotate(-23deg);
+}
+
 .lock-hit{
   position:absolute;
-  left:50%;
-  top:92px;
-  width:118px;
-  height:120px;
-  transform:translateX(-50%);
+  left:38px;
+  top:80px;
+  width:112px;
+  height:112px;
   pointer-events:none;
 }
 
-/* shackle sits behind body */
-.shackle-wrap{
-  position:absolute;
-  left:50%;
-  top:0;
-  width:118px;
-  height:126px;
-  transform:translateX(-50%);
-  transform-origin:31px 111px;
-  transition:transform .65s ease, top .65s ease;
-  z-index:1;
-}
-
-.lock.open .shackle-wrap{
-  top:-16px;
-  transform:translateX(-50%) rotate(-23deg);
-}
-
-.shackle-back,
-.shackle-front{
-  position:absolute;
-  left:10px;
-  top:0;
-  width:98px;
-  height:118px;
-  border:19px solid #595548;
-  border-bottom:0;
-  border-radius:64px 64px 0 0;
-}
-
-.shackle-back{
-  transform:translate(7px,7px);
-  border-color:#24211b;
-  opacity:.85;
-}
-
-.shackle-front{
-  background:transparent;
-  box-shadow:
-    inset 6px 0 7px rgba(255,255,255,.23),
-    inset -10px 0 10px rgba(0,0,0,.62),
-    8px 9px 16px rgba(0,0,0,.32);
-}
-
-.shackle-leg-left,
-.shackle-leg-right{
-  position:absolute;
-  top:82px;
-  width:19px;
-  height:50px;
-  background:linear-gradient(to bottom,#5e594b,#211e18);
-}
-
-.shackle-leg-left{left:10px;}
-.shackle-leg-right{right:10px;background:linear-gradient(to bottom,#716b5b,#28231d);}
-
-/* lock body */
-.body-wrap{
-  position:absolute;
-  left:50%;
-  top:76px;
-  width:144px;
-  height:124px;
-  transform:translateX(-50%);
-  transform-style:preserve-3d;
-  z-index:3;
-}
-
-.lock-body{
-  position:absolute;
-  inset:0;
-  border-radius:13px 13px 9px 9px;
-  background:
-    radial-gradient(circle at 24% 16%, rgba(255,255,255,.55), transparent 12%),
-    radial-gradient(circle at 76% 84%, rgba(0,0,0,.58), transparent 29%),
-    linear-gradient(135deg, #c9c2a6 0%, #958965 17%, #574f3a 47%, #2a261f 72%, #14120f 100%);
-  border:1px solid #5c5544;
-  box-shadow:
-    inset 8px 8px 13px rgba(255,255,255,.23),
-    inset -17px -19px 26px rgba(0,0,0,.63),
-    17px 19px 31px rgba(0,0,0,.45);
-}
-
-.body-side{
-  position:absolute;
-  right:-18px;
-  top:10px;
-  width:18px;
-  height:105px;
-  background:linear-gradient(to bottom,#5f5742,#171512);
-  transform:skewY(32deg);
-  transform-origin:left top;
-  border-right:1px solid #211e18;
-}
-
-.body-bottom{
-  position:absolute;
-  left:10px;
-  right:-8px;
-  bottom:-18px;
-  height:18px;
-  background:linear-gradient(to right,#423b2e,#12100e);
-  transform:skewX(53deg);
-  transform-origin:left top;
-  border-bottom:1px solid #15130f;
-}
-
-.plate{
-  position:absolute;
-  left:17px;
-  right:17px;
-  top:17px;
-  bottom:17px;
-  border-radius:8px;
-  border:1px solid rgba(255,255,255,.17);
-  box-shadow:inset 0 0 0 1px rgba(0,0,0,.25);
-}
-
-.keyhole{
-  position:absolute;
-  left:50%;
-  top:48%;
-  width:22px;
-  height:22px;
-  transform:translate(-50%,-50%);
-  background:#050505;
-  border-radius:50%;
-  box-shadow:
-    inset 3px 3px 6px rgba(255,255,255,.08),
-    0 0 0 2px rgba(0,0,0,.25),
-    0 0 0 4px rgba(255,255,255,.04);
-}
-
-.keyhole:after{
-  content:"";
-  position:absolute;
-  left:50%;
-  top:15px;
-  width:10px;
-  height:36px;
-  transform:translateX(-50%);
-  background:#050505;
-  border-radius:0 0 5px 5px;
-}
-
-.screw{
-  position:absolute;
-  width:13px;
-  height:13px;
-  border-radius:50%;
-  background:
-    linear-gradient(135deg, rgba(255,255,255,.45), transparent 35%),
-    radial-gradient(circle, #706852, #2b281f 70%);
-  box-shadow:inset -2px -2px 3px rgba(0,0,0,.65);
-}
-
-.screw:after{
-  content:"";
-  position:absolute;
-  left:2px;
-  right:2px;
-  top:6px;
-  height:1px;
-  background:#171512;
-  transform:rotate(-24deg);
-}
-
-.s1{left:16px;top:15px;}
-.s2{right:16px;top:15px;}
-.s3{left:16px;bottom:15px;}
-.s4{right:16px;bottom:15px;}
-
-/* =========================================================
-   KEY — draggable + snap animation
-========================================================= */
+/* =========================
+   KEY
+========================= */
 .key{
   position:absolute;
-  left:25px;
-  bottom:32px;
+  left:43px;
+  bottom:42px;
   width:168px;
   height:58px;
   cursor:grab;
@@ -303,14 +126,13 @@ body{
   transform:rotate(-13deg);
   filter:drop-shadow(10px 16px 12px rgba(0,0,0,.35));
   transform-origin:center;
-  transition:opacity .25s ease, transform .25s ease;
   touch-action:none;
 }
 
-.key:active{cursor:grabbing;}
-.key.hidden{opacity:0;pointer-events:none;}
+.key:active{cursor:grabbing}
+.key.hidden{opacity:0;pointer-events:none}
 .key.snap{
-  transition:left .35s ease, top .35s ease, transform .35s ease, opacity .25s ease .22s;
+  transition:left .35s ease, top .35s ease, transform .35s ease, opacity .2s ease .22s;
   transform:rotate(0deg) scale(.78);
 }
 
@@ -323,10 +145,7 @@ body{
   border-radius:50%;
   border:9px solid #9b8b57;
   background:#f2f2ec;
-  box-shadow:
-    inset 3px 3px 5px rgba(255,255,255,.45),
-    inset -5px -5px 7px rgba(0,0,0,.4),
-    2px 2px 0 #52492d;
+  box-shadow:inset 3px 3px 5px rgba(255,255,255,.45),inset -5px -5px 7px rgba(0,0,0,.4),2px 2px 0 #52492d;
 }
 
 .key-ring:after{
@@ -348,7 +167,7 @@ body{
   height:11px;
   background:linear-gradient(to bottom,#d4c37a,#776a3d 65%,#3f3720);
   border-radius:3px;
-  box-shadow:inset 0 2px 2px rgba(255,255,255,.4), inset 0 -2px 2px rgba(0,0,0,.45);
+  box-shadow:inset 0 2px 2px rgba(255,255,255,.4),inset 0 -2px 2px rgba(0,0,0,.45);
 }
 
 .key-stem{
@@ -359,7 +178,7 @@ body{
   height:9px;
   background:linear-gradient(to bottom,#d6c67c,#8f7f47 52%,#42381d);
   border-radius:7px;
-  box-shadow:inset 0 2px 2px rgba(255,255,255,.45), inset 0 -2px 2px rgba(0,0,0,.42);
+  box-shadow:inset 0 2px 2px rgba(255,255,255,.45),inset 0 -2px 2px rgba(0,0,0,.42);
 }
 
 .key-stem:after{
@@ -392,9 +211,9 @@ body{
   background:rgba(255,255,255,.32);
 }
 
-/* =========================================================
+/* =========================
    PASSWORD
-========================================================= */
+========================= */
 .prompt{
   display:none;
   position:absolute;
@@ -407,7 +226,7 @@ body{
   z-index:30;
 }
 
-.prompt.visible{display:block;}
+.prompt.visible{display:block}
 
 .prompt label{
   display:block;
@@ -439,9 +258,9 @@ body{
   font-size:11px;
 }
 
-/* =========================================================
-   EYE SCREEN
-========================================================= */
+/* =========================
+   EYE
+========================= */
 .eye-screen{
   display:none;
   position:absolute;
@@ -452,9 +271,7 @@ body{
   align-items:center;
 }
 
-.eye-screen.visible{
-  display:flex;
-}
+.eye-screen.visible{display:flex}
 
 .eye-wrap{
   width:260px;
@@ -471,16 +288,13 @@ body{
   transform:translate(-50%,-50%);
   border-radius:75% 75% 70% 70% / 65% 65% 55% 55%;
   background:
-    radial-gradient(circle at 50% 50%, #050505 0 11px, #dcdcdc 12px 18px, #111 19px 24px, transparent 25px),
-    radial-gradient(ellipse at center, #f7f7f2 0 45%, #c9c9c1 58%, #777 72%, #151515 73%, transparent 74%);
+    radial-gradient(circle at 50% 50%,#050505 0 11px,#dcdcdc 12px 18px,#111 19px 24px,transparent 25px),
+    radial-gradient(ellipse at center,#f7f7f2 0 45%,#c9c9c1 58%,#777 72%,#151515 73%,transparent 74%);
   border:1px solid #111;
-  box-shadow:
-    inset 0 0 26px rgba(0,0,0,.45),
-    0 12px 30px rgba(0,0,0,.25);
+  box-shadow:inset 0 0 26px rgba(0,0,0,.45),0 12px 30px rgba(0,0,0,.25);
 }
 
-.eye:before,
-.eye:after{
+.eye:before,.eye:after{
   content:"";
   position:absolute;
   top:50%;
@@ -489,9 +303,8 @@ body{
   background:#111;
   opacity:.25;
 }
-
-.eye:before{left:12px;transform:rotate(5deg);}
-.eye:after{right:12px;transform:rotate(-5deg);}
+.eye:before{left:12px;transform:rotate(5deg)}
+.eye:after{right:12px;transform:rotate(-5deg)}
 
 .dot-hit{
   position:absolute;
@@ -503,10 +316,7 @@ body{
   border-radius:50%;
   cursor:crosshair;
 }
-
-.dot-hit:hover{
-  outline:1px dotted rgba(0,0,0,.35);
-}
+.dot-hit:hover{outline:1px dotted rgba(0,0,0,.35)}
 
 .eye-note{
   display:none;
@@ -518,41 +328,75 @@ body{
   font-size:11px;
   letter-spacing:1px;
 }
-
-.eye-note.visible{display:block;}
+.eye-note.visible{display:block}
 
 @media(max-width:500px){
-  .box{width:92vw;height:92vw;max-height:430px;}
-  .scene{transform:scale(.9);}
+  .box{width:92vw;height:92vw;max-height:430px}
+  .scene{transform:scale(.9)}
 }
 </style>
 </head>
 <body>
 
-<div class="box" id="box">
+<div class="box">
   <div class="scene" id="scene">
-    <div class="lock-holder">
-      <div class="lock" id="lock">
-        <div class="shackle-wrap">
-          <div class="shackle-back"></div>
-          <div class="shackle-front"></div>
-          <div class="shackle-leg-left"></div>
-          <div class="shackle-leg-right"></div>
-        </div>
+    <div class="lock-zone">
+      <svg class="lock-svg" viewBox="0 0 190 210" aria-hidden="true">
+        <defs>
+          <linearGradient id="metalBody" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#d2cab0"/>
+            <stop offset="0.18" stop-color="#9a8e69"/>
+            <stop offset="0.48" stop-color="#574f3a"/>
+            <stop offset="0.75" stop-color="#29251e"/>
+            <stop offset="1" stop-color="#12100d"/>
+          </linearGradient>
+          <linearGradient id="metalSide" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#6b6249"/>
+            <stop offset="1" stop-color="#171512"/>
+          </linearGradient>
+          <linearGradient id="shackleMetal" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0" stop-color="#28251f"/>
+            <stop offset="0.25" stop-color="#706b5b"/>
+            <stop offset="0.55" stop-color="#5a5548"/>
+            <stop offset="1" stop-color="#1d1a16"/>
+          </linearGradient>
+          <radialGradient id="screwMetal" cx="35%" cy="30%" r="70%">
+            <stop offset="0" stop-color="#aaa07d"/>
+            <stop offset="0.55" stop-color="#5f5742"/>
+            <stop offset="1" stop-color="#211e18"/>
+          </radialGradient>
+        </defs>
 
-        <div class="body-wrap">
-          <div class="body-side"></div>
-          <div class="body-bottom"></div>
-          <div class="lock-body">
-            <div class="plate"></div>
-            <div class="screw s1"></div>
-            <div class="screw s2"></div>
-            <div class="screw s3"></div>
-            <div class="screw s4"></div>
-            <div class="keyhole"></div>
-          </div>
-        </div>
-      </div>
+        <g class="lock-group" id="lockGroup">
+          <g class="shackle-group" id="shackleGroup">
+            <path d="M58 105 L58 62 C58 29 132 29 132 62 L132 105"
+                  fill="none" stroke="#211f1a" stroke-width="24" stroke-linecap="round" opacity=".8" transform="translate(7 7)"/>
+            <path d="M58 105 L58 62 C58 29 132 29 132 62 L132 105"
+                  fill="none" stroke="url(#shackleMetal)" stroke-width="24" stroke-linecap="round"/>
+            <path d="M51 102 L51 137" stroke="#28241d" stroke-width="14"/>
+            <path d="M139 102 L139 137" stroke="#343029" stroke-width="14"/>
+          </g>
+
+          <polygon points="54,89 145,89 163,103 163,181 54,181" fill="#15130f" opacity=".9"/>
+          <polygon points="145,89 163,103 163,181 145,167" fill="url(#metalSide)"/>
+          <polygon points="54,181 145,181 163,167 70,167" fill="#211d16"/>
+
+          <rect x="43" y="82" width="110" height="102" rx="12" fill="url(#metalBody)" stroke="#5c5544"/>
+          <rect x="57" y="97" width="82" height="72" rx="7" fill="none" stroke="rgba(255,255,255,.25)"/>
+
+          <circle cx="98" cy="128" r="12" fill="#050505"/>
+          <rect x="93" y="138" width="10" height="34" rx="4" fill="#050505"/>
+
+          <circle cx="59" cy="98" r="7" fill="url(#screwMetal)"/>
+          <line x1="55" y1="98" x2="63" y2="98" stroke="#181510" stroke-width="1" transform="rotate(-25 59 98)"/>
+          <circle cx="137" cy="98" r="7" fill="url(#screwMetal)"/>
+          <line x1="133" y1="98" x2="141" y2="98" stroke="#181510" stroke-width="1" transform="rotate(18 137 98)"/>
+          <circle cx="59" cy="166" r="7" fill="url(#screwMetal)"/>
+          <line x1="55" y1="166" x2="63" y2="166" stroke="#181510" stroke-width="1" transform="rotate(12 59 166)"/>
+          <circle cx="137" cy="166" r="7" fill="url(#screwMetal)"/>
+          <line x1="133" y1="166" x2="141" y2="166" stroke="#181510" stroke-width="1" transform="rotate(-28 137 166)"/>
+        </g>
+      </svg>
       <div class="lock-hit" id="lockHit"></div>
     </div>
 
@@ -585,7 +429,7 @@ body{
 var PASSWORD = "R-17";
 
 var key = document.getElementById("key");
-var lock = document.getElementById("lock");
+var lockGroup = document.getElementById("lockGroup");
 var lockHit = document.getElementById("lockHit");
 var promptBox = document.getElementById("prompt");
 var password = document.getElementById("password");
@@ -620,7 +464,12 @@ function moveDrag(x,y){
 
   key.style.left = (x - offsetX) + "px";
   key.style.top = (y - offsetY) + "px";
-  lock.className = overLock() ? "lock near" : "lock";
+
+  if(overLock()){
+    lockGroup.classList.add("near");
+  }else{
+    lockGroup.classList.remove("near");
+  }
 }
 
 function endDrag(){
@@ -632,63 +481,66 @@ function endDrag(){
     inserted = true;
     snapKeyIntoLock();
   }else{
-    lock.className = "lock";
+    lockGroup.classList.remove("near");
   }
 }
 
 function overLock(){
   var k = key.getBoundingClientRect();
   var l = lockHit.getBoundingClientRect();
-  var x = k.left + k.width * .72;
-  var y = k.top + k.height * .52;
+  var x = k.left + k.width * 0.78;
+  var y = k.top + k.height * 0.52;
   return x > l.left && x < l.right && y > l.top && y < l.bottom;
 }
 
 function snapKeyIntoLock(){
-  var hole = document.querySelector(".keyhole").getBoundingClientRect();
+  var l = lockHit.getBoundingClientRect();
+  var targetX = l.left + l.width / 2 - 120;
+  var targetY = l.top + l.height / 2 - 28;
 
   key.className = "key snap";
-  key.style.left = (hole.left - 104) + "px";
-  key.style.top = (hole.top - 17) + "px";
+  key.style.left = targetX + "px";
+  key.style.top = targetY + "px";
 
-  lock.className = "lock near";
+  lockGroup.classList.add("near");
 
   setTimeout(function(){
     key.className = "key snap hidden";
-    lock.className = "lock open";
+    lockGroup.classList.remove("near");
+    lockGroup.classList.add("open");
     promptBox.className = "prompt visible";
-  }, 420);
+  },420);
 
   setTimeout(function(){
     password.focus();
-  }, 620);
+  },650);
 }
 
-key.addEventListener("mousedown", function(e){
+key.addEventListener("mousedown",function(e){
   startDrag(e.clientX,e.clientY);
   e.preventDefault();
 });
 
-document.addEventListener("mousemove", function(e){
+document.addEventListener("mousemove",function(e){
   moveDrag(e.clientX,e.clientY);
 });
 
-document.addEventListener("mouseup", endDrag);
+document.addEventListener("mouseup",endDrag);
 
-key.addEventListener("touchstart", function(e){
+key.addEventListener("touchstart",function(e){
   var t = e.touches[0];
   startDrag(t.clientX,t.clientY);
 },{passive:true});
 
-document.addEventListener("touchmove", function(e){
+document.addEventListener("touchmove",function(e){
   if(!dragging) return;
   var t = e.touches[0];
   moveDrag(t.clientX,t.clientY);
 },{passive:true});
 
-document.addEventListener("touchend", endDrag);
+document.addEventListener("touchend",endDrag);
 
-promptBox.addEventListener("submit", function(e){
+promptBox.addEventListener("submit",function(e){
   e.preventDefault();
 
   if(password.value === PASSWORD){
