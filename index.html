@@ -3,203 +3,337 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Index of /archive/</title>
+<title>D.E.S. archive</title>
 
-<!-- mirror node // partial -->
-<!-- some files were removed after indexing -->
+<!-- archived mirror / incomplete -->
+<!-- access key: R-17 -->
 
 <style>
-body{
-  background:#0a0a0a;
-  color:#cfcfcf;
-  font-family:"Courier New",monospace;
+*{
+  box-sizing:border-box;
+}
+
+html,body{
+  margin:0;
+  min-height:100%;
+  background:#070707;
+  color:#a7a7a7;
+  font-family:"Courier New", monospace;
   font-size:12px;
 }
-.wrap{width:720px;margin:30px auto;}
-h1{font-size:16px;font-weight:normal;color:#e0e0e0;}
-hr{border:0;border-top:1px solid #333;margin:12px 0;}
-.server{color:#666;font-size:10px;}
 
-table{width:100%;border-collapse:collapse;margin-top:15px;}
-th{text-align:left;border-bottom:1px solid #444;font-weight:normal;padding:3px 0;color:#aaa;}
-td{padding:3px 0;color:#777;}
-
-.dead{color:#444;text-decoration:line-through;}
-
-.zone{
-  margin-top:20px;
-  height:140px;
-  border:1px solid #222;
-  background:#050505;
-  position:relative;
-  overflow:hidden;
-}
-
-.zone::after{
+body:before{
   content:"";
-  position:absolute;
+  position:fixed;
   inset:0;
+  pointer-events:none;
   background:repeating-linear-gradient(
     to bottom,
-    rgba(255,255,255,.02),
-    rgba(255,255,255,.02) 1px,
+    rgba(255,255,255,.025),
+    rgba(255,255,255,.025) 1px,
     transparent 1px,
-    transparent 3px
+    transparent 4px
   );
-  opacity:.3;
+  opacity:.25;
 }
 
-.pixel{
-  position:absolute;
-  width:6px;
-  height:6px;
-  background:#fff;
-  left:62%;
-  top:57%;
-  opacity:.04;
-  cursor:pointer;
-}
-
-.module{
-  display:none;
-  margin-top:15px;
-  border:1px solid #333;
-  padding:10px;
-  background:#060606;
-  color:#aaa;
-}
-
-.module.visible{display:block;}
-
-.lock{
-  width:60px;height:50px;
-  background:#444;
-  position:relative;
-  margin:10px 0;
-}
-
-.lock:before{
+body:after{
   content:"";
-  position:absolute;
-  width:30px;height:30px;
-  border:6px solid #444;
-  border-bottom:none;
-  border-radius:20px 20px 0 0;
-  left:9px;top:-28px;
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  box-shadow:inset 0 0 120px #000;
 }
 
-.key{
-  width:80px;height:20px;
-  background:#777;
-  margin-top:8px;
-  cursor:pointer;
+a{color:#8b8bc0;text-decoration:none;}
+a:hover{text-decoration:underline;}
+
+.page{
+  width:min(980px, calc(100% - 32px));
+  margin:28px auto;
+  border:1px solid #2b2b2b;
+  background:#0b0b0b;
 }
 
-.prompt{display:none;margin-top:10px;}
-.prompt.visible{display:block;}
+.top{
+  border-bottom:1px solid #2b2b2b;
+  padding:10px 14px;
+  display:flex;
+  justify-content:space-between;
+  color:#9d9d9d;
+}
+
+.login{
+  min-height:360px;
+  display:grid;
+  place-items:center;
+  padding:40px;
+}
+
+.login-box{
+  width:310px;
+  text-align:center;
+}
+
+.logo{
+  letter-spacing:6px;
+  line-height:1.5;
+  color:#c0c0c0;
+  margin-bottom:38px;
+}
+
+label{
+  display:block;
+  margin-bottom:8px;
+  color:#858585;
+}
 
 input{
-  background:#000;
-  border:1px solid #444;
-  color:#ccc;
+  background:#050505;
+  color:#c7c7c7;
+  border:1px solid #383838;
+  padding:6px;
+  font-family:inherit;
+  width:190px;
 }
 
 button{
   background:#111;
-  border:1px solid #333;
   color:#aaa;
+  border:1px solid #383838;
+  padding:6px 12px;
+  font-family:inherit;
+  cursor:pointer;
 }
 
-.result{display:none;margin-top:10px;color:#888;}
-.result.visible{display:block;}
+button:hover{
+  color:#ddd;
+  border-color:#555;
+}
 
-/* subtle disturbing detail */
-.glitch{
-  position:absolute;
-  left:0;
-  top:0;
+.msg{
+  margin-top:12px;
+  min-height:16px;
+  color:#765252;
+}
+
+.archive{
+  display:none;
+}
+
+.archive.visible{
+  display:block;
+}
+
+.archive-head{
+  border-bottom:1px solid #2b2b2b;
+  padding:10px 14px;
+  display:flex;
+  justify-content:space-between;
+  color:#888;
+}
+
+.layout{
+  display:grid;
+  grid-template-columns:170px 1fr;
+  min-height:520px;
+}
+
+.side{
+  border-right:1px solid #2b2b2b;
+  padding:18px 16px;
+  color:#666;
+}
+
+.side div{
+  margin:12px 0;
+}
+
+.side .active{
+  color:#c5c5c5;
+}
+
+.main{
+  padding:18px 20px 24px;
+}
+
+.note{
+  color:#777;
+  margin-bottom:16px;
+}
+
+.gallery{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:18px;
+}
+
+.file{
+  position:relative;
+}
+
+.file img{
   width:100%;
-  height:100%;
-  background:rgba(255,255,255,.02);
-  animation:glitch 6s infinite;
-  pointer-events:none;
+  display:block;
+  border:1px solid #393939;
+  filter:contrast(.95) brightness(.78) saturate(.75);
 }
 
-@keyframes glitch{
-  0%,95%,100%{opacity:0}
-  96%{opacity:.15}
-  97%{opacity:0}
-  98%{opacity:.2}
+.file-name{
+  margin-top:6px;
+  color:#777;
 }
 
+.eye-hitbox{
+  position:absolute;
+  left:42%;
+  top:48%;
+  width:12%;
+  height:16%;
+  transform:translate(-50%,-50%);
+  cursor:crosshair;
+  border-radius:50%;
+}
+
+.eye-hitbox:hover{
+  outline:1px dotted rgba(255,255,255,.18);
+}
+
+.secret{
+  display:none;
+  margin-top:18px;
+  border-top:1px solid #292929;
+  padding-top:14px;
+  color:#9c9c9c;
+  line-height:1.7;
+}
+
+.secret.visible{
+  display:block;
+}
+
+.footer{
+  border-top:1px solid #2b2b2b;
+  padding:9px 14px;
+  color:#555;
+  display:flex;
+  justify-content:space-between;
+}
+
+@media(max-width:760px){
+  .layout{
+    grid-template-columns:1fr;
+  }
+  .side{
+    border-right:0;
+    border-bottom:1px solid #2b2b2b;
+  }
+  .gallery{
+    grid-template-columns:1fr;
+  }
+}
 </style>
 </head>
 <body>
-<div class="wrap">
 
-<h1>Index of /archive/</h1>
-<hr>
-<div class="server">Apache/1.3.26 Server</div>
-
-<table>
-<tr><th>Name</th><th>Last modified</th><th>Size</th></tr>
-<tr><td><a href="#">Parent Directory</a></td><td>-</td><td>-</td></tr>
-<tr><td class="dead">final/</td><td>03-Nov-2005</td><td>-</td></tr>
-<tr><td class="dead">session.log</td><td>03-Nov-2005</td><td>0</td></tr>
-<tr><td><a href="#">tmp/</a></td><td>03-Nov-2005</td><td>-</td></tr>
-</table>
-
-<div class="zone">
-  <div class="pixel" id="pixel"></div>
-  <div class="glitch"></div>
-</div>
-
-<div class="module" id="module">
-  fragment loaded<br>
-  integrity: partial<br><br>
-
-  <div class="lock"></div>
-  <div class="key" id="key"></div>
-
-  <div class="prompt" id="prompt">
-    password <input id="password">
-    <button id="btn">ok</button>
+<div class="page">
+  <div class="top">
+    <span>DREAM ENTRY SERVICE</span>
+    <span>ARCHIVE NODE</span>
   </div>
 
-  <div class="result" id="result">
-    ok<br>
-    archive missing<br>
+  <section class="login" id="login">
+    <div class="login-box">
+      <div class="logo">
+        D R E A M<br>
+        E N T R Y<br>
+        S E R V I C E
+      </div>
+
+      <label for="access">ACCESS KEY</label>
+      <input id="access" type="password" autocomplete="off">
+      <button id="enter">enter</button>
+      <div class="msg" id="msg"></div>
+    </div>
+  </section>
+
+  <section class="archive" id="archive">
+    <div class="archive-head">
+      <span>archive / image recovery</span>
+      <span>session: guest</span>
+    </div>
+
+    <div class="layout">
+      <aside class="side">
+        <div>/ index</div>
+        <div>img_001</div>
+        <div class="active">img_002</div>
+        <div>doc_01</div>
+        <div>log_09</div>
+      </aside>
+
+      <main class="main">
+        <div class="note">2 recovered files / checksum unstable</div>
+
+        <div class="gallery">
+          <div class="file">
+            <img src="Capture d'écran 2026-04-25 162455.png" alt="img_001">
+            <div class="file-name">img_001.jpg</div>
+          </div>
+
+          <div class="file" id="cloudFile">
+            <img src="image.png" alt="img_002">
+            <div class="eye-hitbox" id="eyeHitbox" title=""></div>
+            <div class="file-name">img_002.jpg</div>
+          </div>
+        </div>
+
+        <div class="secret" id="secret">
+          cursor registered<br>
+          pupil match: confirmed<br>
+          offset retained: 42 / 48<br>
+          <br>
+          check the centre that is not the centre
+        </div>
+      </main>
+    </div>
+  </section>
+
+  <div class="footer">
+    <span>D.E.S. internal archive system</span>
+    <span>2005</span>
   </div>
-</div>
-
-<!-- R-17 -->
-
 </div>
 
 <script>
-var PASSWORD="R-17";
+var PASSWORD = "R-17";
 
-var pixel=document.getElementById("pixel");
-var module=document.getElementById("module");
-var key=document.getElementById("key");
-var prompt=document.getElementById("prompt");
-var result=document.getElementById("result");
-var password=document.getElementById("password");
+var login = document.getElementById("login");
+var archive = document.getElementById("archive");
+var access = document.getElementById("access");
+var enter = document.getElementById("enter");
+var msg = document.getElementById("msg");
+var eyeHitbox = document.getElementById("eyeHitbox");
+var secret = document.getElementById("secret");
 
-pixel.onclick=function(){
-  module.className="module visible";
-};
-
-key.onclick=function(){
-  prompt.className="prompt visible";
-};
-
-document.getElementById("btn").onclick=function(){
-  if(password.value===PASSWORD){
-    result.className="result visible";
+function connect(){
+  if(access.value === PASSWORD){
+    login.style.display = "none";
+    archive.className = "archive visible";
   }else{
-    password.value="";
+    msg.innerHTML = "access denied";
+    access.value = "";
   }
+}
+
+enter.onclick = connect;
+
+access.addEventListener("keydown", function(e){
+  if(e.key === "Enter") connect();
+});
+
+eyeHitbox.onclick = function(){
+  secret.className = "secret visible";
 };
 </script>
 </body>
