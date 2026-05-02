@@ -2,149 +2,635 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>access</title>
 
 <style>
-body{
+*{
+  box-sizing:border-box;
+}
+
+html,body{
   margin:0;
+  width:100%;
+  height:100%;
   background:#000;
+  font-family:"Courier New", monospace;
+  overflow:hidden;
+}
+
+body{
   display:flex;
   justify-content:center;
   align-items:center;
-  height:100vh;
-  font-family:monospace;
 }
 
-/* BOX */
+/* ===== MAIN WHITE BOX ===== */
 .box{
-  width:320px;
-  height:320px;
-  background:#fff;
+  width:430px;
+  height:430px;
+  background:#f2f2ec;
+  border:1px solid #d6d6cf;
+  box-shadow:
+    0 0 0 1px #111,
+    0 22px 80px rgba(0,0,0,.95),
+    inset 0 0 70px rgba(0,0,0,.08);
+  position:relative;
   display:flex;
   justify-content:center;
   align-items:center;
-  flex-direction:column;
-  position:relative;
+  overflow:hidden;
 }
 
-/* LOCK */
-.lock{
-  width:80px;
-  height:70px;
-  background:linear-gradient(145deg,#aaa,#444);
-  position:relative;
-  transform:perspective(200px) rotateX(10deg);
-}
-
-.lock:before{
+.box:before{
   content:"";
   position:absolute;
-  width:40px;
-  height:40px;
-  border:8px solid #666;
-  border-bottom:none;
-  border-radius:30px 30px 0 0;
-  left:12px;
-  top:-40px;
+  inset:0;
+  background:
+    linear-gradient(to bottom, rgba(0,0,0,.04), transparent 22%, rgba(0,0,0,.07)),
+    repeating-linear-gradient(to bottom, rgba(0,0,0,.025), rgba(0,0,0,.025) 1px, transparent 1px, transparent 4px);
+  pointer-events:none;
 }
 
-.hole{
-  width:10px;
-  height:10px;
-  background:#000;
-  border-radius:50%;
+.box:after{
+  content:"";
+  position:absolute;
+  inset:18px;
+  border:1px solid rgba(0,0,0,.08);
+  pointer-events:none;
+}
+
+.scene{
+  width:330px;
+  height:330px;
+  position:relative;
+  perspective:900px;
+  transform-style:preserve-3d;
+}
+
+/* ===== 3D LOCK ===== */
+.lock-holder{
   position:absolute;
   left:50%;
-  top:20px;
-  transform:translateX(-50%);
+  top:46%;
+  width:190px;
+  height:220px;
+  transform:translate(-50%,-50%);
+  transform-style:preserve-3d;
 }
 
+.lock{
+  position:absolute;
+  left:50%;
+  top:105px;
+  width:136px;
+  height:118px;
+  transform:translateX(-50%) rotateX(12deg) rotateY(-18deg);
+  transform-style:preserve-3d;
+  transition:transform .6s ease, filter .4s ease;
+}
+
+.lock.near{
+  filter:drop-shadow(0 0 12px rgba(70,70,40,.35));
+  transform:translateX(-50%) rotateX(10deg) rotateY(-8deg) scale(1.03);
+}
+
+.lock.open{
+  transform:translateX(-50%) rotateX(14deg) rotateY(24deg) translateY(10px);
+}
+
+/* lock body front */
+.lock-body{
+  position:absolute;
+  inset:0;
+  border-radius:12px 12px 9px 9px;
+  background:
+    radial-gradient(circle at 26% 18%, rgba(255,255,255,.55), transparent 11%),
+    radial-gradient(circle at 72% 82%, rgba(0,0,0,.55), transparent 26%),
+    linear-gradient(135deg, #c9c2a6 0%, #928765 18%, #544d3a 48%, #2a261f 72%, #14120f 100%);
+  border:1px solid #5c5544;
+  box-shadow:
+    inset 7px 7px 12px rgba(255,255,255,.22),
+    inset -16px -18px 24px rgba(0,0,0,.62),
+    16px 18px 30px rgba(0,0,0,.45);
+  transform:translateZ(18px);
+}
+
+/* lock side depth */
+.lock-body:before{
+  content:"";
+  position:absolute;
+  right:-18px;
+  top:9px;
+  width:18px;
+  height:101px;
+  background:linear-gradient(to bottom,#5f5742,#191713);
+  transform:skewY(35deg);
+  transform-origin:left top;
+  border-right:1px solid #211e18;
+}
+
+.lock-body:after{
+  content:"";
+  position:absolute;
+  left:10px;
+  right:-8px;
+  bottom:-18px;
+  height:18px;
+  background:linear-gradient(to right,#423b2e,#13110f);
+  transform:skewX(55deg);
+  transform-origin:left top;
+  border-bottom:1px solid #15130f;
+}
+
+.plate{
+  position:absolute;
+  left:17px;
+  right:17px;
+  top:17px;
+  bottom:17px;
+  border-radius:8px;
+  border:1px solid rgba(255,255,255,.16);
+  box-shadow:inset 0 0 0 1px rgba(0,0,0,.25);
+}
+
+.keyhole{
+  position:absolute;
+  left:50%;
+  top:47%;
+  width:22px;
+  height:22px;
+  transform:translate(-50%,-50%);
+  background:#050505;
+  border-radius:50%;
+  box-shadow:
+    inset 3px 3px 6px rgba(255,255,255,.08),
+    0 0 0 2px rgba(0,0,0,.25),
+    0 0 0 4px rgba(255,255,255,.04);
+}
+
+.keyhole:after{
+  content:"";
+  position:absolute;
+  left:50%;
+  top:15px;
+  width:10px;
+  height:36px;
+  transform:translateX(-50%);
+  background:#050505;
+  border-radius:0 0 5px 5px;
+}
+
+.screw{
+  position:absolute;
+  width:13px;
+  height:13px;
+  border-radius:50%;
+  background:
+    linear-gradient(135deg, rgba(255,255,255,.45), transparent 35%),
+    radial-gradient(circle, #706852, #2b281f 70%);
+  box-shadow:inset -2px -2px 3px rgba(0,0,0,.65);
+}
+
+.screw:after{
+  content:"";
+  position:absolute;
+  left:2px;
+  right:2px;
+  top:6px;
+  height:1px;
+  background:#171512;
+  transform:rotate(-24deg);
+}
+
+.s1{left:16px;top:15px;}
+.s2{right:16px;top:15px;}
+.s3{left:16px;bottom:15px;}
+.s4{right:16px;bottom:15px;}
+
+/* shackle */
+.shackle-wrap{
+  position:absolute;
+  left:50%;
+  top:4px;
+  width:116px;
+  height:132px;
+  transform:translateX(-50%) rotateX(12deg) rotateY(-18deg);
+  transform-style:preserve-3d;
+  transition:transform .8s ease, top .8s ease;
+  z-index:0;
+}
+
+.lock.open .shackle-wrap{
+  top:-10px;
+  transform:translateX(-50%) rotateX(12deg) rotateY(-18deg) rotateZ(-24deg);
+}
+
+.shackle{
+  position:absolute;
+  left:16px;
+  top:0;
+  width:84px;
+  height:112px;
+  border:18px solid #565246;
+  border-bottom:0;
+  border-radius:60px 60px 0 0;
+  box-shadow:
+    inset 5px 0 6px rgba(255,255,255,.22),
+    inset -9px 0 9px rgba(0,0,0,.6),
+    10px 8px 18px rgba(0,0,0,.35);
+}
+
+.shackle:before{
+  content:"";
+  position:absolute;
+  left:-18px;
+  top:70px;
+  width:18px;
+  height:47px;
+  background:linear-gradient(to bottom,#494438,#1a1713);
+}
+
+.shackle:after{
+  content:"";
+  position:absolute;
+  right:-18px;
+  top:70px;
+  width:18px;
+  height:47px;
+  background:linear-gradient(to bottom,#6a6556,#201d18);
+}
+
+/* ===== REALISTIC OLD KEY ===== */
 .key{
-  width:80px;
-  height:15px;
-  background:#777;
-  margin-top:20px;
+  position:absolute;
+  left:28px;
+  bottom:36px;
+  width:168px;
+  height:58px;
+  cursor:grab;
+  z-index:10;
+  transform:rotate(-13deg);
+  filter:drop-shadow(10px 16px 12px rgba(0,0,0,.35));
+  transform-origin:center;
+}
+
+.key:active{cursor:grabbing;}
+.key.hidden{display:none;}
+
+.key-ring{
+  position:absolute;
+  left:0;
+  top:5px;
+  width:48px;
+  height:48px;
+  border-radius:50%;
+  border:9px solid #9b8b57;
+  background:#f2f2ec;
+  box-shadow:
+    inset 3px 3px 5px rgba(255,255,255,.45),
+    inset -5px -5px 7px rgba(0,0,0,.4),
+    2px 2px 0 #52492d;
+}
+
+.key-ring:after{
+  content:"";
+  position:absolute;
+  left:8px;
+  top:8px;
+  width:14px;
+  height:14px;
+  border-radius:50%;
+  background:rgba(255,255,255,.15);
+}
+
+.key-neck{
+  position:absolute;
+  left:43px;
+  top:24px;
+  width:24px;
+  height:11px;
+  background:linear-gradient(to bottom,#d4c37a,#776a3d 65%,#3f3720);
+  border-radius:3px;
+  box-shadow:inset 0 2px 2px rgba(255,255,255,.4), inset 0 -2px 2px rgba(0,0,0,.45);
+}
+
+.key-stem{
+  position:absolute;
+  left:63px;
+  top:25px;
+  width:78px;
+  height:9px;
+  background:linear-gradient(to bottom,#d6c67c,#8f7f47 52%,#42381d);
+  border-radius:7px;
+  box-shadow:inset 0 2px 2px rgba(255,255,255,.45), inset 0 -2px 2px rgba(0,0,0,.42);
+}
+
+.key-stem:after{
+  content:"";
+  position:absolute;
+  left:12px;
+  right:8px;
+  top:2px;
+  height:1px;
+  background:rgba(255,255,255,.45);
+}
+
+.key-bit{
+  position:absolute;
+  left:134px;
+  top:18px;
+  width:31px;
+  height:28px;
+  background:linear-gradient(135deg,#c8b96e,#716335 62%,#332c18);
+  clip-path:polygon(0 24%,100% 24%,100% 55%,76% 55%,76% 100%,55% 100%,55% 62%,35% 62%,35% 88%,14% 88%,14% 55%,0 55%);
+  box-shadow:inset 2px 2px 3px rgba(255,255,255,.4);
+}
+
+.key-lines{
+  position:absolute;
+  left:72px;
+  top:22px;
+  width:55px;
+  height:2px;
+  background:rgba(255,255,255,.32);
+}
+
+/* ===== PASSWORD ===== */
+.prompt{
+  display:none;
+  position:absolute;
+  left:50%;
+  bottom:34px;
+  transform:translateX(-50%);
+  width:245px;
+  text-align:center;
+  color:#333;
+  z-index:30;
+}
+
+.prompt.visible{display:block;}
+
+.prompt label{
+  display:block;
+  font-size:11px;
+  letter-spacing:2px;
+  margin-bottom:7px;
+}
+
+.prompt input{
+  width:150px;
+  background:#fff;
+  border:1px solid #777;
+  padding:5px;
+  font-family:"Courier New",monospace;
+}
+
+.prompt button{
+  border:1px solid #777;
+  background:#e6e6e6;
+  padding:5px 9px;
+  font-family:"Courier New",monospace;
   cursor:pointer;
 }
 
-/* INPUT */
-.prompt{
+.msg{
+  min-height:14px;
+  margin-top:8px;
+  color:#7b2222;
+  font-size:11px;
+}
+
+/* ===== EYE SCREEN ===== */
+.eye-screen{
   display:none;
-  margin-top:20px;
+  position:absolute;
+  inset:0;
+  background:#f2f2ec;
+  z-index:40;
+  justify-content:center;
+  align-items:center;
+}
+
+.eye-screen.visible{
+  display:flex;
+}
+
+.eye-wrap{
+  width:260px;
+  height:170px;
+  position:relative;
 }
 
 .eye{
-  display:none;
-  width:200px;
-  height:200px;
-  background:radial-gradient(circle,#fff 20%,#000 21%);
-  position:relative;
-}
-
-.hit{
   position:absolute;
-  width:40px;
-  height:40px;
-  top:50%;
   left:50%;
+  top:50%;
+  width:230px;
+  height:112px;
   transform:translate(-50%,-50%);
-  cursor:pointer;
+  border-radius:75% 75% 70% 70% / 65% 65% 55% 55%;
+  background:
+    radial-gradient(circle at 50% 50%, #050505 0 11px, #dcdcdc 12px 18px, #111 19px 24px, transparent 25px),
+    radial-gradient(ellipse at center, #f7f7f2 0 45%, #c9c9c1 58%, #777 72%, #151515 73%, transparent 74%);
+  border:1px solid #111;
+  box-shadow:
+    inset 0 0 26px rgba(0,0,0,.45),
+    0 12px 30px rgba(0,0,0,.25);
 }
 
+.eye:before,
+.eye:after{
+  content:"";
+  position:absolute;
+  top:50%;
+  width:72px;
+  height:1px;
+  background:#111;
+  opacity:.25;
+}
+
+.eye:before{left:12px;transform:rotate(5deg);}
+.eye:after{right:12px;transform:rotate(-5deg);}
+
+.dot-hit{
+  position:absolute;
+  left:50%;
+  top:50%;
+  width:38px;
+  height:38px;
+  transform:translate(-50%,-50%);
+  border-radius:50%;
+  cursor:crosshair;
+}
+
+.dot-hit:hover{
+  outline:1px dotted rgba(0,0,0,.35);
+}
+
+.eye-note{
+  display:none;
+  position:absolute;
+  left:50%;
+  bottom:34px;
+  transform:translateX(-50%);
+  color:#222;
+  font-size:11px;
+  letter-spacing:1px;
+}
+
+.eye-note.visible{display:block;}
+
+@media(max-width:500px){
+  .box{width:92vw;height:92vw;max-height:430px;}
+  .scene{transform:scale(.9);}
+}
 </style>
 </head>
-
 <body>
 
-<div class="box" id="box">
+<div class="box">
+  <div class="scene" id="scene">
+    <div class="lock-holder">
+      <div class="lock" id="lock">
+        <div class="shackle-wrap">
+          <div class="shackle"></div>
+        </div>
+        <div class="lock-body">
+          <div class="plate"></div>
+          <div class="screw s1"></div>
+          <div class="screw s2"></div>
+          <div class="screw s3"></div>
+          <div class="screw s4"></div>
+          <div class="keyhole"></div>
+        </div>
+      </div>
+    </div>
 
-  <div class="lock" id="lock">
-    <div class="hole"></div>
+    <div class="key" id="key" title="token">
+      <div class="key-ring"></div>
+      <div class="key-neck"></div>
+      <div class="key-stem"></div>
+      <div class="key-lines"></div>
+      <div class="key-bit"></div>
+    </div>
   </div>
 
-  <div class="key" id="key"></div>
+  <form class="prompt" id="prompt">
+    <label>ACCESS KEY</label>
+    <input id="password" type="password" autocomplete="off">
+    <button type="submit">ok</button>
+    <div class="msg" id="msg"></div>
+  </form>
 
-  <div class="prompt" id="prompt">
-    <input id="pwd" placeholder="key">
-    <button onclick="check()">ok</button>
+  <div class="eye-screen" id="eyeScreen">
+    <div class="eye-wrap">
+      <div class="eye"></div>
+      <div class="dot-hit" id="dotHit"></div>
+    </div>
+    <div class="eye-note" id="eyeNote">registered</div>
   </div>
-
-  <div class="eye" id="eye">
-    <div class="hit" onclick="secret()"></div>
-  </div>
-
 </div>
 
 <script>
+var PASSWORD = "R-17";
 
-let inserted = false;
-const PASSWORD = "R-17";
+var key = document.getElementById("key");
+var lock = document.getElementById("lock");
+var promptBox = document.getElementById("prompt");
+var password = document.getElementById("password");
+var msg = document.getElementById("msg");
+var eyeScreen = document.getElementById("eyeScreen");
+var dotHit = document.getElementById("dotHit");
+var eyeNote = document.getElementById("eyeNote");
 
-/* clé → active input */
-document.getElementById("key").onclick = function(){
-  if(!inserted){
+var dragging = false;
+var inserted = false;
+var offsetX = 0;
+var offsetY = 0;
+
+function startDrag(x,y){
+  if(inserted) return;
+  dragging = true;
+  var r = key.getBoundingClientRect();
+  offsetX = x - r.left;
+  offsetY = y - r.top;
+  key.style.position = "fixed";
+  key.style.left = r.left + "px";
+  key.style.top = r.top + "px";
+  key.style.bottom = "auto";
+  key.style.zIndex = 999;
+}
+
+function moveDrag(x,y){
+  if(!dragging || inserted) return;
+  key.style.left = (x - offsetX) + "px";
+  key.style.top = (y - offsetY) + "px";
+  lock.className = overLock() ? "lock near" : "lock";
+}
+
+function endDrag(){
+  if(!dragging || inserted) return;
+  dragging = false;
+
+  if(overLock()){
     inserted = true;
-    document.getElementById("prompt").style.display = "block";
+    key.className = "key hidden";
+    lock.className = "lock open";
+    promptBox.className = "prompt visible";
+    setTimeout(function(){ password.focus(); }, 250);
+  }else{
+    lock.className = "lock";
   }
 }
 
-/* check mdp */
-function check(){
-  const val = document.getElementById("pwd").value;
-  if(val === PASSWORD){
-    document.getElementById("lock").style.display = "none";
-    document.getElementById("key").style.display = "none";
-    document.getElementById("prompt").style.display = "none";
-    document.getElementById("eye").style.display = "block";
+function overLock(){
+  var k = key.getBoundingClientRect();
+  var l = lock.getBoundingClientRect();
+  var x = k.left + k.width / 2;
+  var y = k.top + k.height / 2;
+  return x > l.left && x < l.right && y > l.top && y < l.bottom;
+}
+
+key.addEventListener("mousedown", function(e){
+  startDrag(e.clientX,e.clientY);
+  e.preventDefault();
+});
+
+document.addEventListener("mousemove", function(e){
+  moveDrag(e.clientX,e.clientY);
+});
+
+document.addEventListener("mouseup", endDrag);
+
+key.addEventListener("touchstart", function(e){
+  var t = e.touches[0];
+  startDrag(t.clientX,t.clientY);
+},{passive:true});
+
+document.addEventListener("touchmove", function(e){
+  if(!dragging) return;
+  var t = e.touches[0];
+  moveDrag(t.clientX,t.clientY);
+},{passive:true});
+
+document.addEventListener("touchend", endDrag);
+
+promptBox.addEventListener("submit", function(e){
+  e.preventDefault();
+  if(password.value === PASSWORD){
+    promptBox.style.display = "none";
+    document.getElementById("scene").style.display = "none";
+    eyeScreen.className = "eye-screen visible";
+  }else{
+    msg.innerHTML = "denied";
+    password.value = "";
   }
-}
+});
 
-/* clic oeil */
-function secret(){
-  alert("found");
-}
-
+dotHit.onclick = function(){
+  eyeNote.className = "eye-note visible";
+};
 </script>
-
 </body>
 </html>
