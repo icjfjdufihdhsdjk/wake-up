@@ -3,139 +3,159 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mission Chronos</title>
+<title>CHRONOS OS</title>
 
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{
-  font-family:Arial, sans-serif;
-  background:#050816;
-  color:white;
-  overflow-x:hidden;
+  font-family:Consolas,monospace;
+  background:#020617;
+  color:#d1fae5;
+  min-height:100vh;
+}
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  background:linear-gradient(rgba(255,255,255,.03) 1px,transparent 1px);
+  background-size:100% 4px;
+  pointer-events:none;
 }
 header{
   min-height:100vh;
   display:flex;
-  flex-direction:column;
-  justify-content:center;
   align-items:center;
-  text-align:center;
-  padding:40px 20px;
-  background:
-    radial-gradient(circle at top,#1f6feb55,transparent 35%),
-    linear-gradient(180deg,#050816,#0b1026);
+  justify-content:center;
+  padding:30px;
 }
-.badge{
-  border:1px solid #58a6ff;
-  color:#58a6ff;
-  padding:8px 16px;
-  border-radius:30px;
-  margin-bottom:20px;
+.screen{
+  width:100%;
+  max-width:1050px;
+  border:2px solid #22c55e;
+  border-radius:18px;
+  background:#020617;
+  box-shadow:0 0 40px #22c55e55;
+  padding:28px;
+}
+.topbar{
+  display:flex;
+  justify-content:space-between;
+  border-bottom:1px solid #22c55e;
+  padding-bottom:12px;
+  margin-bottom:25px;
+  color:#86efac;
 }
 h1{
-  font-size:clamp(45px,9vw,95px);
-  letter-spacing:3px;
-  color:#7dd3fc;
-  text-shadow:0 0 25px #38bdf8;
+  font-size:clamp(38px,8vw,90px);
+  color:#22c55e;
+  text-shadow:0 0 25px #22c55e;
 }
 .subtitle{
-  font-size:22px;
   margin:20px 0;
-  color:#dbeafe;
+  color:#bbf7d0;
+  font-size:20px;
 }
-.intro{
-  max-width:800px;
+.terminal{
+  background:#000;
+  border:1px solid #14532d;
+  padding:20px;
+  border-radius:12px;
   line-height:1.7;
-  color:#cbd5e1;
+  color:#86efac;
 }
 button{
-  margin-top:30px;
-  padding:15px 28px;
-  border:none;
-  border-radius:30px;
-  background:#38bdf8;
+  margin-top:25px;
+  background:#22c55e;
   color:#020617;
+  border:none;
+  padding:14px 22px;
+  border-radius:8px;
   font-weight:bold;
   cursor:pointer;
-  font-size:16px;
 }
-button:hover{background:#7dd3fc}
-section{
-  padding:70px 20px;
-  max-width:1100px;
+button:hover{background:#86efac}
+main{
+  max-width:1150px;
   margin:auto;
+  padding:40px 20px;
+}
+.panel{
+  border:1px solid #22c55e;
+  border-radius:16px;
+  padding:24px;
+  margin-bottom:30px;
+  background:#020617;
+  box-shadow:0 0 20px #22c55e22;
 }
 h2{
-  font-size:35px;
-  margin-bottom:25px;
-  color:#7dd3fc;
+  color:#22c55e;
+  margin-bottom:15px;
 }
-.story{
-  background:#0f172a;
-  border:1px solid #1e40af;
-  border-radius:20px;
-  padding:30px;
-  line-height:1.7;
-  color:#cbd5e1;
-}
-.controls{
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
-  margin:30px 0;
-}
-.controls button{
-  margin:0;
-  padding:10px 16px;
-  background:#1e293b;
-  color:white;
-  border:1px solid #38bdf8;
-}
-.controls button:hover{background:#0369a1}
-.timeline{
+.grid{
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
-  gap:18px;
+  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+  gap:15px;
 }
 .card{
-  background:linear-gradient(145deg,#0f172a,#111827);
-  border:1px solid #1d4ed8;
-  border-radius:18px;
-  padding:20px;
-  min-height:180px;
-  transition:0.2s;
+  border:1px solid #166534;
+  background:#03120a;
+  padding:18px;
+  border-radius:12px;
+  min-height:170px;
+  transition:.2s;
 }
 .card:hover{
-  transform:translateY(-5px);
-  box-shadow:0 0 25px #38bdf855;
+  transform:scale(1.03);
+  box-shadow:0 0 20px #22c55e55;
 }
 .date{
-  color:#38bdf8;
+  color:#22c55e;
   font-size:24px;
   font-weight:bold;
 }
-.card h3{
-  margin:10px 0;
-  color:white;
-}
-.card p{
-  color:#cbd5e1;
-  line-height:1.5;
-}
+.card h3{margin:10px 0;color:white}
+.card p{color:#bbf7d0;line-height:1.5}
 .tag{
-  margin-top:15px;
   display:inline-block;
-  font-size:12px;
-  color:#bae6fd;
-  border:1px solid #0ea5e9;
-  padding:5px 10px;
+  margin-top:12px;
+  color:#86efac;
+  border:1px solid #22c55e;
+  padding:4px 8px;
   border-radius:20px;
+  font-size:12px;
+}
+.controls{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  margin:20px 0;
+}
+.controls button{
+  margin:0;
+  background:#03120a;
+  color:#bbf7d0;
+  border:1px solid #22c55e;
+}
+.progress{
+  height:18px;
+  background:#052e16;
+  border-radius:20px;
+  overflow:hidden;
+  margin-top:15px;
+}
+.bar{
+  height:100%;
+  width:0%;
+  background:#22c55e;
+}
+.bigdate{
+  font-size:45px;
+  color:#22c55e;
 }
 footer{
   text-align:center;
   padding:40px;
-  color:#94a3b8;
-  border-top:1px solid #1e293b;
+  color:#86efac;
 }
 </style>
 </head>
@@ -143,188 +163,210 @@ footer{
 <body>
 
 <header>
-  <div class="badge">Projet — Histoire de l’informatique</div>
-  <h1>MISSION CHRONOS</h1>
-  <p class="subtitle">Voyage dans le temps numérique</p>
-  <p class="intro">
-    En 2126, les archives numériques de l’humanité ont disparu.
-    Pour sauver la mémoire du monde, l’Agence Chronos m’envoie dans le passé.
-    Ma mission : retrouver 100 dates qui ont construit l’histoire de l’informatique.
-  </p>
-  <button onclick="document.getElementById('mission').scrollIntoView({behavior:'smooth'})">
-    Commencer le voyage
-  </button>
+  <div class="screen">
+    <div class="topbar">
+      <span>CHRONOS OS v2.126</span>
+      <span>MISSION ACTIVE</span>
+    </div>
+
+    <h1>CHRONOS OS</h1>
+    <p class="subtitle">Interface de voyage temporel — Histoire de l’informatique</p>
+
+    <div class="terminal">
+      > Connexion à l’Agence Chronos... OK<br>
+      > Année actuelle : 2126<br>
+      > Incident détecté : archives informatiques effacées<br>
+      > Objectif : récupérer 100 artefacts numériques<br>
+      > Statut : agent temporel prêt
+    </div>
+
+    <button onclick="document.getElementById('voyage').scrollIntoView({behavior:'smooth'})">
+      Lancer la mission
+    </button>
+  </div>
 </header>
 
-<section id="mission">
-  <h2>Prologue</h2>
-  <div class="story">
-    L’ordinateur central Chronos a perdu tous ses souvenirs.  
-    Les calculatrices, les ordinateurs, Internet, les smartphones et l’intelligence artificielle
-    risquent d’être oubliés.  
-    Chaque étape de cette page représente un artefact numérique à récupérer dans le passé.
+<main>
+
+<section class="panel" id="voyage">
+  <h2>Tableau de bord temporel</h2>
+  <p>Artefacts retrouvés : <span id="count">0</span>/100</p>
+  <div class="progress"><div class="bar" id="bar"></div></div>
+  <button onclick="randomEvent()">Voyage temporel aléatoire</button>
+  <div id="randomBox" class="terminal" style="margin-top:20px;">
+    > En attente d’une destination temporelle...
   </div>
 </section>
 
-<section>
-  <h2>Choisir une époque</h2>
+<section class="panel">
+  <h2>Dossiers temporels</h2>
   <div class="controls">
-    <button onclick="filterCards('all')">Toutes les dates</button>
-    <button onclick="filterCards('pionniers')">Pionniers</button>
-    <button onclick="filterCards('machines')">Premiers ordinateurs</button>
-    <button onclick="filterCards('micro')">Micro-informatique</button>
-    <button onclick="filterCards('internet')">Internet</button>
-    <button onclick="filterCards('ia')">IA et futur</button>
+    <button onclick="showEvents('all')">Tous</button>
+    <button onclick="showEvents('pionniers')">Pionniers</button>
+    <button onclick="showEvents('machines')">Machines</button>
+    <button onclick="showEvents('micro')">Micro-informatique</button>
+    <button onclick="showEvents('internet')">Internet</button>
+    <button onclick="showEvents('ia')">IA et futur</button>
   </div>
-
-  <div class="timeline" id="timeline"></div>
+  <div class="grid" id="grid"></div>
 </section>
+
+</main>
 
 <footer>
-  Mission Chronos — 100 dates pour comprendre l’histoire de l’informatique
+  CHRONOS OS — Mission de restauration de l’histoire informatique
 </footer>
 
 <script>
 const events = [
-["1642","Blaise Pascal invente la Pascaline, une machine mécanique capable d’effectuer des additions.","pionniers"],
-["1673","Leibniz crée une machine à calculer plus avancée, capable de multiplier et diviser.","pionniers"],
-["1801","Le métier Jacquard utilise des cartes perforées pour automatiser le tissage.","pionniers"],
-["1822","Charles Babbage imagine la machine à différences.","pionniers"],
-["1837","Babbage conçoit la machine analytique, proche du principe de l’ordinateur.","pionniers"],
-["1843","Ada Lovelace écrit le premier algorithme destiné à une machine.","pionniers"],
-["1854","George Boole crée l’algèbre booléenne, essentielle au fonctionnement des ordinateurs.","pionniers"],
-["1889","Herman Hollerith développe des machines à cartes perforées.","pionniers"],
-["1890","Le recensement américain est traité avec des machines automatiques.","pionniers"],
-["1896","Hollerith fonde une entreprise qui deviendra plus tard IBM.","pionniers"],
+["1642","La Pascaline","Blaise Pascal invente une machine mécanique capable de faire des calculs.","pionniers"],
+["1673","Machine de Leibniz","Leibniz améliore les machines à calculer mécaniques.","pionniers"],
+["1801","Métier Jacquard","Les cartes perforées automatisent le tissage.","pionniers"],
+["1822","Machine à différences","Charles Babbage imagine une machine de calcul automatique.","pionniers"],
+["1837","Machine analytique","Babbage conçoit un ancêtre théorique de l’ordinateur.","pionniers"],
+["1843","Ada Lovelace","Ada Lovelace écrit le premier algorithme pensé pour une machine.","pionniers"],
+["1854","Algèbre de Boole","George Boole crée une logique essentielle à l’informatique.","pionniers"],
+["1889","Cartes perforées","Hollerith développe des machines de traitement de données.","pionniers"],
+["1890","Recensement automatisé","Les États-Unis utilisent des machines pour traiter le recensement.","pionniers"],
+["1896","Future IBM","Hollerith fonde une entreprise qui deviendra IBM.","pionniers"],
 
-["1906","La triode est inventée, ouvrant la voie à l’électronique moderne.","machines"],
-["1911","La société CTR est créée, futur IBM.","machines"],
-["1924","CTR prend officiellement le nom IBM.","machines"],
-["1931","Vannevar Bush construit l’analyseur différentiel.","machines"],
-["1936","Alan Turing imagine la machine de Turing.","machines"],
-["1938","Konrad Zuse construit le Z1, un ordinateur mécanique programmable.","machines"],
-["1939","Hewlett-Packard est fondée dans un garage.","machines"],
-["1941","Le Z3 de Konrad Zuse devient l’un des premiers ordinateurs programmables.","machines"],
-["1943","Colossus aide les Britanniques à décrypter des messages pendant la guerre.","machines"],
-["1944","Le Harvard Mark I est mis en service.","machines"],
-["1945","Von Neumann décrit une architecture qui inspire les ordinateurs modernes.","machines"],
-["1946","L’ENIAC est présenté au public.","machines"],
-["1947","Le transistor est inventé aux laboratoires Bell.","machines"],
-["1948","Le Manchester Baby exécute un programme stocké en mémoire.","machines"],
-["1949","L’EDSAC devient l’un des premiers ordinateurs à programme enregistré.","machines"],
-["1950","Alan Turing propose le célèbre test de Turing.","machines"],
-["1951","L’UNIVAC I devient l’un des premiers ordinateurs commerciaux.","machines"],
-["1952","Grace Hopper travaille sur les premiers compilateurs.","machines"],
-["1953","IBM lance l’IBM 701.","machines"],
-["1954","FORTRAN commence à être développé.","machines"],
-["1955","IBM présente l’un des premiers disques durs.","machines"],
-["1956","La conférence de Dartmouth marque la naissance officielle de l’intelligence artificielle.","machines"],
-["1957","FORTRAN est publié.","machines"],
-["1958","Le circuit intégré est inventé.","machines"],
-["1959","Le langage COBOL apparaît.","machines"],
-["1960","Les premiers modems commerciaux apparaissent.","machines"],
+["1906","Triode","La triode ouvre la voie à l’électronique moderne.","machines"],
+["1911","CTR","La société CTR est créée, futur IBM.","machines"],
+["1924","IBM","CTR devient officiellement IBM.","machines"],
+["1931","Analyseur différentiel","Vannevar Bush construit une machine de calcul scientifique.","machines"],
+["1936","Machine de Turing","Alan Turing pose les bases théoriques de l’informatique.","machines"],
+["1938","Z1","Konrad Zuse construit un ordinateur mécanique programmable.","machines"],
+["1939","HP","Hewlett-Packard naît dans un garage.","machines"],
+["1941","Z3","Le Z3 devient l’un des premiers ordinateurs programmables.","machines"],
+["1943","Colossus","Colossus aide au déchiffrement pendant la Seconde Guerre mondiale.","machines"],
+["1944","Harvard Mark I","Un grand calculateur électromécanique est mis en service.","machines"],
+["1945","Architecture Von Neumann","Un modèle fondamental de l’ordinateur moderne est décrit.","machines"],
+["1946","ENIAC","L’un des premiers ordinateurs électroniques programmables est présenté.","machines"],
+["1947","Transistor","Le transistor remplace progressivement les tubes à vide.","machines"],
+["1948","Manchester Baby","Un programme est exécuté depuis la mémoire.","machines"],
+["1949","EDSAC","Un ordinateur à programme enregistré fonctionne réellement.","machines"],
+["1950","Test de Turing","Turing propose une manière de réfléchir à l’intelligence des machines.","machines"],
+["1951","UNIVAC I","Un des premiers ordinateurs commerciaux apparaît.","machines"],
+["1952","Compilateur","Grace Hopper participe aux premiers compilateurs.","machines"],
+["1953","IBM 701","IBM lance son premier grand ordinateur scientifique.","machines"],
+["1954","FORTRAN","Le langage FORTRAN commence à être développé.","machines"],
+["1955","Disque dur","IBM présente un système de stockage sur disque.","machines"],
+["1956","Naissance de l’IA","La conférence de Dartmouth lance l’intelligence artificielle.","machines"],
+["1957","FORTRAN publié","FORTRAN devient un langage majeur du calcul scientifique.","machines"],
+["1958","Circuit intégré","Le circuit intégré permet de miniaturiser l’électronique.","machines"],
+["1959","COBOL","COBOL devient un langage important pour la gestion.","machines"],
+["1960","Modem","Les premiers modems commerciaux apparaissent.","machines"],
 
-["1961","Le premier robot industriel entre en service.","micro"],
-["1962","Spacewar! devient l’un des premiers jeux vidéo.","micro"],
-["1963","Sketchpad annonce les interfaces graphiques et la conception assistée par ordinateur.","micro"],
-["1964","IBM lance le System/360.","micro"],
-["1965","Gordon Moore formule la loi de Moore.","micro"],
-["1967","La disquette est inventée.","micro"],
-["1968","Douglas Engelbart présente la souris et des idées révolutionnaires.","micro"],
-["1969","Le premier message ARPANET est envoyé.","micro"],
-["1970","Le modèle de base de données relationnelle est proposé.","micro"],
-["1971","Intel commercialise le microprocesseur 4004.","micro"],
-["1972","Le langage C est créé.","micro"],
-["1973","Ethernet est inventé.","micro"],
-["1974","Le protocole TCP est proposé.","micro"],
-["1975","Microsoft est fondée par Bill Gates et Paul Allen.","micro"],
-["1976","Apple est fondée par Steve Jobs, Steve Wozniak et Ronald Wayne.","micro"],
-["1977","L’Apple II participe à la popularisation de l’ordinateur personnel.","micro"],
-["1978","Les premiers BBS permettent de communiquer entre ordinateurs.","micro"],
-["1979","VisiCalc devient le premier grand tableur.","micro"],
-["1980","Le Sinclair ZX80 rend l’informatique plus accessible.","micro"],
-["1981","IBM lance le PC IBM.","micro"],
-["1982","Le Commodore 64 devient un ordinateur personnel très populaire.","micro"],
-["1983","Internet adopte officiellement TCP/IP.","internet"],
-["1984","Apple lance le Macintosh avec une interface graphique.","micro"],
-["1985","Microsoft sort Windows 1.0.","micro"],
-["1986","NSFNET accélère le développement d’Internet.","internet"],
-["1987","Le standard VGA améliore l’affichage des ordinateurs.","micro"],
-["1988","Le ver Morris montre les dangers de la sécurité informatique.","internet"],
-["1989","Tim Berners-Lee invente le World Wide Web.","internet"],
-["1990","ARPANET est arrêté, laissant place à Internet.","internet"],
+["1961","Robot industriel","Le robot Unimate entre en service.","micro"],
+["1962","Spacewar!","Un des premiers jeux vidéo est créé.","micro"],
+["1963","Sketchpad","Sketchpad annonce les interfaces graphiques et la CAO.","micro"],
+["1964","IBM System/360","IBM lance une famille d’ordinateurs compatibles.","micro"],
+["1965","Loi de Moore","Moore observe l’augmentation rapide du nombre de transistors.","micro"],
+["1967","Disquette","La disquette devient un support de stockage important.","micro"],
+["1968","Souris","Engelbart présente la souris et l’interface moderne.","micro"],
+["1969","ARPANET","Le premier message ARPANET est envoyé.","micro"],
+["1970","Base relationnelle","Le modèle des bases de données relationnelles est proposé.","micro"],
+["1971","Intel 4004","Intel commercialise le premier microprocesseur.","micro"],
+["1972","Langage C","Le langage C est créé.","micro"],
+["1973","Ethernet","Ethernet facilite les réseaux locaux.","micro"],
+["1974","TCP","Le protocole TCP est proposé.","micro"],
+["1975","Microsoft","Microsoft est fondée.","micro"],
+["1976","Apple","Apple est créée.","micro"],
+["1977","Apple II","L’Apple II popularise l’ordinateur personnel.","micro"],
+["1978","BBS","Les premiers systèmes de discussion entre ordinateurs apparaissent.","micro"],
+["1979","VisiCalc","Le tableur devient une application décisive.","micro"],
+["1980","ZX80","Le Sinclair ZX80 rend l’ordinateur plus accessible.","micro"],
+["1981","IBM PC","Le PC IBM devient une référence.","micro"],
+["1982","Commodore 64","Un ordinateur personnel très populaire arrive.","micro"],
+["1983","TCP/IP","Internet adopte TCP/IP.","internet"],
+["1984","Macintosh","Apple lance un ordinateur avec interface graphique.","micro"],
+["1985","Windows 1.0","Microsoft lance la première version de Windows.","micro"],
 
-["1991","Linus Torvalds crée Linux.","internet"],
-["1992","Le premier SMS est envoyé.","internet"],
-["1993","Le navigateur Mosaic rend le Web plus accessible.","internet"],
-["1994","Amazon est fondée.","internet"],
-["1995","Windows 95 popularise l’informatique familiale.","internet"],
-["1996","Hotmail popularise le courrier électronique en ligne.","internet"],
-["1997","Deep Blue bat Garry Kasparov aux échecs.","ia"],
-["1998","Google est fondé.","internet"],
-["1999","Le Wi-Fi commence à se diffuser auprès du grand public.","internet"],
-["2000","La clé USB devient populaire.","internet"],
-["2001","Wikipédia est lancée.","internet"],
-["2002","Friendster annonce l’ère des réseaux sociaux modernes.","internet"],
-["2003","Skype popularise les appels par Internet.","internet"],
-["2004","Facebook est créé.","internet"],
-["2005","YouTube est lancé.","internet"],
-["2006","Le cloud computing moderne se développe.","internet"],
-["2007","Apple présente le premier iPhone.","internet"],
-["2008","Android arrive sur les smartphones.","internet"],
-["2009","Bitcoin lance une nouvelle ère autour des cryptomonnaies.","internet"],
-["2010","Instagram est lancé.","internet"],
+["1986","NSFNET","Le réseau NSFNET accélère le développement d’Internet.","internet"],
+["1987","VGA","Le standard VGA améliore l’affichage.","internet"],
+["1988","Ver Morris","Un ver informatique montre les risques de sécurité.","internet"],
+["1989","World Wide Web","Tim Berners-Lee invente le Web.","internet"],
+["1990","Fin d’ARPANET","ARPANET disparaît au profit d’Internet.","internet"],
+["1991","Linux","Linus Torvalds crée Linux.","internet"],
+["1992","Premier SMS","Le premier SMS est envoyé.","internet"],
+["1993","Mosaic","Le navigateur Mosaic rend le Web plus simple.","internet"],
+["1994","Amazon","Amazon est fondée.","internet"],
+["1995","Windows 95","Windows 95 popularise l’informatique familiale.","internet"],
+["1996","Hotmail","Le mail en ligne devient populaire.","internet"],
+["1997","Deep Blue","Deep Blue bat Kasparov aux échecs.","ia"],
+["1998","Google","Google est fondé.","internet"],
+["1999","Wi-Fi","Le Wi-Fi se diffuse auprès du public.","internet"],
+["2000","Clé USB","La clé USB devient un support pratique.","internet"],
+["2001","Wikipédia","L’encyclopédie collaborative est lancée.","internet"],
+["2002","Friendster","Les réseaux sociaux modernes commencent à apparaître.","internet"],
+["2003","Skype","Les appels par Internet se popularisent.","internet"],
+["2004","Facebook","Facebook est créé.","internet"],
+["2005","YouTube","YouTube transforme la vidéo en ligne.","internet"],
+["2006","Cloud","Le cloud computing moderne se développe.","internet"],
+["2007","iPhone","Apple présente l’iPhone.","internet"],
+["2008","Android","Android arrive sur les smartphones.","internet"],
+["2009","Bitcoin","Bitcoin lance une nouvelle ère numérique.","internet"],
+["2010","Instagram","Instagram apparaît.","internet"],
 
-["2011","Siri popularise les assistants vocaux.","ia"],
-["2012","Le Raspberry Pi rend l’apprentissage de l’informatique moins cher.","ia"],
-["2013","L’impression 3D se démocratise.","ia"],
-["2014","Alexa arrive comme assistant vocal domestique.","ia"],
-["2015","Windows 10 est lancé.","ia"],
-["2016","AlphaGo bat Lee Sedol au jeu de go.","ia"],
-["2017","L’architecture Transformer révolutionne l’intelligence artificielle.","ia"],
-["2018","Le RGPD renforce la protection des données en Europe.","ia"],
-["2019","La 5G commence à se déployer.","ia"],
-["2020","Le télétravail numérique explose avec la crise sanitaire.","ia"],
-["2021","Windows 11 est lancé.","ia"],
-["2022","ChatGPT est rendu public.","ia"],
-["2023","L’IA générative se diffuse massivement.","ia"],
-["2024","Les assistants IA deviennent courants dans les outils numériques.","ia"],
-["2025","Les agents IA commencent à automatiser des tâches complexes.","ia"],
-["2026","L’IA s’intègre de plus en plus dans les outils du quotidien.","ia"]
+["2011","Siri","Les assistants vocaux deviennent populaires.","ia"],
+["2012","Raspberry Pi","Un mini-ordinateur aide à apprendre l’informatique.","ia"],
+["2013","Impression 3D","L’impression 3D se démocratise.","ia"],
+["2014","Alexa","Amazon lance son assistant vocal.","ia"],
+["2015","Windows 10","Microsoft lance Windows 10.","ia"],
+["2016","AlphaGo","AlphaGo bat Lee Sedol au jeu de go.","ia"],
+["2017","Transformer","Une architecture révolutionne l’IA moderne.","ia"],
+["2018","RGPD","La protection des données devient un enjeu majeur en Europe.","ia"],
+["2019","5G","Les premiers réseaux 5G se développent.","ia"],
+["2020","Télétravail","Les outils numériques deviennent centraux dans le travail à distance.","ia"],
+["2021","Windows 11","Microsoft lance Windows 11.","ia"],
+["2022","ChatGPT","ChatGPT est rendu public.","ia"],
+["2023","IA générative","L’IA générative se diffuse massivement.","ia"],
+["2024","Assistants IA","Les assistants IA deviennent courants.","ia"],
+["2025","Agents IA","Les agents IA commencent à automatiser des tâches complexes.","ia"],
+["2026","IA quotidienne","L’IA s’intègre dans les outils du quotidien.","ia"]
 ];
 
-function displayCards(category){
-  const timeline = document.getElementById("timeline");
-  timeline.innerHTML = "";
+function label(cat){
+  return {
+    pionniers:"Pionniers",
+    machines:"Premiers ordinateurs",
+    micro:"Micro-informatique",
+    internet:"Internet",
+    ia:"IA et futur"
+  }[cat];
+}
 
-  events.forEach((e,index)=>{
-    if(category === "all" || e[2] === category){
-      const card = document.createElement("div");
-      card.className = "card";
-      card.innerHTML = `
+function showEvents(category){
+  const grid=document.getElementById("grid");
+  grid.innerHTML="";
+  events.forEach((e,i)=>{
+    if(category==="all"||e[3]===category){
+      grid.innerHTML+=`
+      <div class="card">
         <div class="date">${e[0]}</div>
-        <h3>Artefact n°${index + 1}</h3>
-        <p>${e[1]}</p>
-        <span class="tag">${label(e[2])}</span>
-      `;
-      timeline.appendChild(card);
+        <h3>${e[1]}</h3>
+        <p>${e[2]}</p>
+        <span class="tag">${label(e[3])}</span>
+      </div>`;
     }
   });
 }
 
-function label(cat){
-  if(cat==="pionniers") return "Pionniers";
-  if(cat==="machines") return "Premiers ordinateurs";
-  if(cat==="micro") return "Micro-informatique";
-  if(cat==="internet") return "Internet";
-  if(cat==="ia") return "IA et futur";
+let found=0;
+function randomEvent(){
+  const e=events[Math.floor(Math.random()*events.length)];
+  if(found<100) found++;
+  document.getElementById("count").textContent=found;
+  document.getElementById("bar").style.width=found+"%";
+  document.getElementById("randomBox").innerHTML=
+  `> Destination verrouillée : <span class="bigdate">${e[0]}</span><br>
+   > Artefact détecté : ${e[1]}<br>
+   > Rapport : ${e[2]}<br>
+   > Dossier : ${label(e[3])}<br>
+   > Statut : artefact restauré`;
 }
 
-function filterCards(category){
-  displayCards(category);
-}
-
-displayCards("all");
+showEvents("all");
 </script>
 
 </body>
