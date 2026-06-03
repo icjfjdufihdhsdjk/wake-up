@@ -3,559 +3,329 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>access</title>
+<title>Mission Chronos</title>
 
 <style>
-*{box-sizing:border-box}
-
-html,body{
-  margin:0;
-  width:100%;
-  height:100%;
-  background:#000;
-  font-family:"Courier New", monospace;
-  overflow:hidden;
-}
-
+*{box-sizing:border-box;margin:0;padding:0}
 body{
+  font-family:Arial, sans-serif;
+  background:#050816;
+  color:white;
+  overflow-x:hidden;
+}
+header{
+  min-height:100vh;
   display:flex;
-  align-items:center;
+  flex-direction:column;
   justify-content:center;
-}
-
-.box{
-  width:430px;
-  height:430px;
-  background:#f2f2ec;
-  border:1px solid #d6d6cf;
-  position:relative;
-  overflow:hidden;
-  box-shadow:
-    0 0 0 1px #111,
-    0 22px 80px rgba(0,0,0,.95),
-    inset 0 0 70px rgba(0,0,0,.08);
-}
-
-.box:before{
-  content:"";
-  position:absolute;
-  inset:0;
-  background:
-    linear-gradient(to bottom,rgba(0,0,0,.035),transparent 25%,rgba(0,0,0,.07)),
-    repeating-linear-gradient(to bottom,rgba(0,0,0,.025),rgba(0,0,0,.025) 1px,transparent 1px,transparent 4px);
-  z-index:50;
-  pointer-events:none;
-}
-
-.box:after{
-  content:"";
-  position:absolute;
-  inset:18px;
-  border:1px solid rgba(0,0,0,.08);
-  pointer-events:none;
-  z-index:51;
-}
-
-.scene{
-  position:absolute;
-  inset:0;
-  z-index:2;
-}
-
-/* =========================
-   STABLE SVG LOCK
-========================= */
-.lock-zone{
-  position:absolute;
-  left:50%;
-  top:42%;
-  width:190px;
-  height:210px;
-  transform:translate(-50%,-50%);
-}
-
-.lock-svg{
-  position:absolute;
-  left:0;
-  top:0;
-  width:190px;
-  height:210px;
-  overflow:visible;
-  filter:drop-shadow(17px 20px 16px rgba(0,0,0,.36));
-}
-
-.lock-group{
-  transform-origin:95px 126px;
-  transition:transform .45s ease, filter .3s ease;
-}
-
-.lock-group.near{
-  transform:scale(1.025);
-  filter:drop-shadow(0 0 10px rgba(88,77,37,.34));
-}
-
-.shackle-group{
-  transform-origin:62px 112px;
-  transition:transform .65s ease;
-}
-
-.lock-group.open .shackle-group{
-  transform:translate(-5px,-16px) rotate(-23deg);
-}
-
-.lock-hit{
-  position:absolute;
-  left:38px;
-  top:80px;
-  width:112px;
-  height:112px;
-  pointer-events:none;
-}
-
-/* =========================
-   KEY
-========================= */
-.key{
-  position:absolute;
-  left:43px;
-  bottom:42px;
-  width:168px;
-  height:58px;
-  cursor:grab;
-  z-index:10;
-  transform:rotate(-13deg);
-  filter:drop-shadow(10px 16px 12px rgba(0,0,0,.35));
-  transform-origin:center;
-  touch-action:none;
-}
-
-.key:active{cursor:grabbing}
-.key.hidden{opacity:0;pointer-events:none}
-.key.snap{
-  transition:left .35s ease, top .35s ease, transform .35s ease, opacity .2s ease .22s;
-  transform:rotate(0deg) scale(.78);
-}
-
-.key-ring{
-  position:absolute;
-  left:0;
-  top:5px;
-  width:48px;
-  height:48px;
-  border-radius:50%;
-  border:9px solid #9b8b57;
-  background:#f2f2ec;
-  box-shadow:inset 3px 3px 5px rgba(255,255,255,.45),inset -5px -5px 7px rgba(0,0,0,.4),2px 2px 0 #52492d;
-}
-
-.key-ring:after{
-  content:"";
-  position:absolute;
-  left:8px;
-  top:8px;
-  width:14px;
-  height:14px;
-  border-radius:50%;
-  background:rgba(255,255,255,.15);
-}
-
-.key-neck{
-  position:absolute;
-  left:43px;
-  top:24px;
-  width:24px;
-  height:11px;
-  background:linear-gradient(to bottom,#d4c37a,#776a3d 65%,#3f3720);
-  border-radius:3px;
-  box-shadow:inset 0 2px 2px rgba(255,255,255,.4),inset 0 -2px 2px rgba(0,0,0,.45);
-}
-
-.key-stem{
-  position:absolute;
-  left:63px;
-  top:25px;
-  width:78px;
-  height:9px;
-  background:linear-gradient(to bottom,#d6c67c,#8f7f47 52%,#42381d);
-  border-radius:7px;
-  box-shadow:inset 0 2px 2px rgba(255,255,255,.45),inset 0 -2px 2px rgba(0,0,0,.42);
-}
-
-.key-stem:after{
-  content:"";
-  position:absolute;
-  left:12px;
-  right:8px;
-  top:2px;
-  height:1px;
-  background:rgba(255,255,255,.45);
-}
-
-.key-bit{
-  position:absolute;
-  left:134px;
-  top:18px;
-  width:31px;
-  height:28px;
-  background:linear-gradient(135deg,#c8b96e,#716335 62%,#332c18);
-  clip-path:polygon(0 24%,100% 24%,100% 55%,76% 55%,76% 100%,55% 100%,55% 62%,35% 62%,35% 88%,14% 88%,14% 55%,0 55%);
-  box-shadow:inset 2px 2px 3px rgba(255,255,255,.4);
-}
-
-.key-lines{
-  position:absolute;
-  left:72px;
-  top:22px;
-  width:55px;
-  height:2px;
-  background:rgba(255,255,255,.32);
-}
-
-/* =========================
-   PASSWORD
-========================= */
-.prompt{
-  display:none;
-  position:absolute;
-  left:50%;
-  bottom:32px;
-  transform:translateX(-50%);
-  width:245px;
+  align-items:center;
   text-align:center;
-  color:#333;
-  z-index:30;
-}
-
-.prompt.visible{display:block}
-
-.prompt label{
-  display:block;
-  font-size:11px;
-  letter-spacing:2px;
-  margin-bottom:7px;
-}
-
-.prompt input{
-  width:150px;
-  background:#fff;
-  border:1px solid #777;
-  padding:5px;
-  font-family:"Courier New",monospace;
-}
-
-.prompt button{
-  border:1px solid #777;
-  background:#e6e6e6;
-  padding:5px 9px;
-  font-family:"Courier New",monospace;
-  cursor:pointer;
-}
-
-.msg{
-  min-height:14px;
-  margin-top:8px;
-  color:#7b2222;
-  font-size:11px;
-}
-
-/* =========================
-   EYE
-========================= */
-.eye-screen{
-  display:none;
-  position:absolute;
-  inset:0;
-  background:#f2f2ec;
-  z-index:40;
-  justify-content:center;
-  align-items:center;
-}
-
-.eye-screen.visible{display:flex}
-
-.eye-wrap{
-  width:260px;
-  height:170px;
-  position:relative;
-}
-
-.eye{
-  position:absolute;
-  left:50%;
-  top:50%;
-  width:230px;
-  height:112px;
-  transform:translate(-50%,-50%);
-  border-radius:75% 75% 70% 70% / 65% 65% 55% 55%;
+  padding:40px 20px;
   background:
-    radial-gradient(circle at 50% 50%,#050505 0 11px,#dcdcdc 12px 18px,#111 19px 24px,transparent 25px),
-    radial-gradient(ellipse at center,#f7f7f2 0 45%,#c9c9c1 58%,#777 72%,#151515 73%,transparent 74%);
-  border:1px solid #111;
-  box-shadow:inset 0 0 26px rgba(0,0,0,.45),0 12px 30px rgba(0,0,0,.25);
+    radial-gradient(circle at top,#1f6feb55,transparent 35%),
+    linear-gradient(180deg,#050816,#0b1026);
 }
-
-.eye:before,.eye:after{
-  content:"";
-  position:absolute;
-  top:50%;
-  width:72px;
-  height:1px;
-  background:#111;
-  opacity:.25;
+.badge{
+  border:1px solid #58a6ff;
+  color:#58a6ff;
+  padding:8px 16px;
+  border-radius:30px;
+  margin-bottom:20px;
 }
-.eye:before{left:12px;transform:rotate(5deg)}
-.eye:after{right:12px;transform:rotate(-5deg)}
-
-.dot-hit{
-  position:absolute;
-  left:50%;
-  top:50%;
-  width:38px;
-  height:38px;
-  transform:translate(-50%,-50%);
-  border-radius:50%;
-  cursor:crosshair;
+h1{
+  font-size:clamp(45px,9vw,95px);
+  letter-spacing:3px;
+  color:#7dd3fc;
+  text-shadow:0 0 25px #38bdf8;
 }
-.dot-hit:hover{outline:1px dotted rgba(0,0,0,.35)}
-
-.eye-note{
-  display:none;
-  position:absolute;
-  left:50%;
-  bottom:34px;
-  transform:translateX(-50%);
-  color:#222;
-  font-size:11px;
-  letter-spacing:1px;
+.subtitle{
+  font-size:22px;
+  margin:20px 0;
+  color:#dbeafe;
 }
-.eye-note.visible{display:block}
-
-@media(max-width:500px){
-  .box{width:92vw;height:92vw;max-height:430px}
-  .scene{transform:scale(.9)}
+.intro{
+  max-width:800px;
+  line-height:1.7;
+  color:#cbd5e1;
+}
+button{
+  margin-top:30px;
+  padding:15px 28px;
+  border:none;
+  border-radius:30px;
+  background:#38bdf8;
+  color:#020617;
+  font-weight:bold;
+  cursor:pointer;
+  font-size:16px;
+}
+button:hover{background:#7dd3fc}
+section{
+  padding:70px 20px;
+  max-width:1100px;
+  margin:auto;
+}
+h2{
+  font-size:35px;
+  margin-bottom:25px;
+  color:#7dd3fc;
+}
+.story{
+  background:#0f172a;
+  border:1px solid #1e40af;
+  border-radius:20px;
+  padding:30px;
+  line-height:1.7;
+  color:#cbd5e1;
+}
+.controls{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  margin:30px 0;
+}
+.controls button{
+  margin:0;
+  padding:10px 16px;
+  background:#1e293b;
+  color:white;
+  border:1px solid #38bdf8;
+}
+.controls button:hover{background:#0369a1}
+.timeline{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+  gap:18px;
+}
+.card{
+  background:linear-gradient(145deg,#0f172a,#111827);
+  border:1px solid #1d4ed8;
+  border-radius:18px;
+  padding:20px;
+  min-height:180px;
+  transition:0.2s;
+}
+.card:hover{
+  transform:translateY(-5px);
+  box-shadow:0 0 25px #38bdf855;
+}
+.date{
+  color:#38bdf8;
+  font-size:24px;
+  font-weight:bold;
+}
+.card h3{
+  margin:10px 0;
+  color:white;
+}
+.card p{
+  color:#cbd5e1;
+  line-height:1.5;
+}
+.tag{
+  margin-top:15px;
+  display:inline-block;
+  font-size:12px;
+  color:#bae6fd;
+  border:1px solid #0ea5e9;
+  padding:5px 10px;
+  border-radius:20px;
+}
+footer{
+  text-align:center;
+  padding:40px;
+  color:#94a3b8;
+  border-top:1px solid #1e293b;
 }
 </style>
 </head>
+
 <body>
 
-<div class="box">
-  <div class="scene" id="scene">
-    <div class="lock-zone">
-      <svg class="lock-svg" viewBox="0 0 190 210" aria-hidden="true">
-        <defs>
-          <linearGradient id="metalBody" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0" stop-color="#d2cab0"/>
-            <stop offset="0.18" stop-color="#9a8e69"/>
-            <stop offset="0.48" stop-color="#574f3a"/>
-            <stop offset="0.75" stop-color="#29251e"/>
-            <stop offset="1" stop-color="#12100d"/>
-          </linearGradient>
-          <linearGradient id="metalSide" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0" stop-color="#6b6249"/>
-            <stop offset="1" stop-color="#171512"/>
-          </linearGradient>
-          <linearGradient id="shackleMetal" x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0" stop-color="#28251f"/>
-            <stop offset="0.25" stop-color="#706b5b"/>
-            <stop offset="0.55" stop-color="#5a5548"/>
-            <stop offset="1" stop-color="#1d1a16"/>
-          </linearGradient>
-          <radialGradient id="screwMetal" cx="35%" cy="30%" r="70%">
-            <stop offset="0" stop-color="#aaa07d"/>
-            <stop offset="0.55" stop-color="#5f5742"/>
-            <stop offset="1" stop-color="#211e18"/>
-          </radialGradient>
-        </defs>
+<header>
+  <div class="badge">Projet — Histoire de l’informatique</div>
+  <h1>MISSION CHRONOS</h1>
+  <p class="subtitle">Voyage dans le temps numérique</p>
+  <p class="intro">
+    En 2126, les archives numériques de l’humanité ont disparu.
+    Pour sauver la mémoire du monde, l’Agence Chronos m’envoie dans le passé.
+    Ma mission : retrouver 100 dates qui ont construit l’histoire de l’informatique.
+  </p>
+  <button onclick="document.getElementById('mission').scrollIntoView({behavior:'smooth'})">
+    Commencer le voyage
+  </button>
+</header>
 
-        <g class="lock-group" id="lockGroup">
-          <g class="shackle-group" id="shackleGroup">
-            <path d="M58 105 L58 62 C58 29 132 29 132 62 L132 105"
-                  fill="none" stroke="#211f1a" stroke-width="24" stroke-linecap="round" opacity=".8" transform="translate(7 7)"/>
-            <path d="M58 105 L58 62 C58 29 132 29 132 62 L132 105"
-                  fill="none" stroke="url(#shackleMetal)" stroke-width="24" stroke-linecap="round"/>
-            <path d="M51 102 L51 137" stroke="#28241d" stroke-width="14"/>
-            <path d="M139 102 L139 137" stroke="#343029" stroke-width="14"/>
-          </g>
+<section id="mission">
+  <h2>Prologue</h2>
+  <div class="story">
+    L’ordinateur central Chronos a perdu tous ses souvenirs.  
+    Les calculatrices, les ordinateurs, Internet, les smartphones et l’intelligence artificielle
+    risquent d’être oubliés.  
+    Chaque étape de cette page représente un artefact numérique à récupérer dans le passé.
+  </div>
+</section>
 
-          <polygon points="54,89 145,89 163,103 163,181 54,181" fill="#15130f" opacity=".9"/>
-          <polygon points="145,89 163,103 163,181 145,167" fill="url(#metalSide)"/>
-          <polygon points="54,181 145,181 163,167 70,167" fill="#211d16"/>
-
-          <rect x="43" y="82" width="110" height="102" rx="12" fill="url(#metalBody)" stroke="#5c5544"/>
-          <rect x="57" y="97" width="82" height="72" rx="7" fill="none" stroke="rgba(255,255,255,.25)"/>
-
-          <circle cx="98" cy="128" r="12" fill="#050505"/>
-          <rect x="93" y="138" width="10" height="34" rx="4" fill="#050505"/>
-
-          <circle cx="59" cy="98" r="7" fill="url(#screwMetal)"/>
-          <line x1="55" y1="98" x2="63" y2="98" stroke="#181510" stroke-width="1" transform="rotate(-25 59 98)"/>
-          <circle cx="137" cy="98" r="7" fill="url(#screwMetal)"/>
-          <line x1="133" y1="98" x2="141" y2="98" stroke="#181510" stroke-width="1" transform="rotate(18 137 98)"/>
-          <circle cx="59" cy="166" r="7" fill="url(#screwMetal)"/>
-          <line x1="55" y1="166" x2="63" y2="166" stroke="#181510" stroke-width="1" transform="rotate(12 59 166)"/>
-          <circle cx="137" cy="166" r="7" fill="url(#screwMetal)"/>
-          <line x1="133" y1="166" x2="141" y2="166" stroke="#181510" stroke-width="1" transform="rotate(-28 137 166)"/>
-        </g>
-      </svg>
-      <div class="lock-hit" id="lockHit"></div>
-    </div>
-
-    <div class="key" id="key" title="token">
-      <div class="key-ring"></div>
-      <div class="key-neck"></div>
-      <div class="key-stem"></div>
-      <div class="key-lines"></div>
-      <div class="key-bit"></div>
-    </div>
+<section>
+  <h2>Choisir une époque</h2>
+  <div class="controls">
+    <button onclick="filterCards('all')">Toutes les dates</button>
+    <button onclick="filterCards('pionniers')">Pionniers</button>
+    <button onclick="filterCards('machines')">Premiers ordinateurs</button>
+    <button onclick="filterCards('micro')">Micro-informatique</button>
+    <button onclick="filterCards('internet')">Internet</button>
+    <button onclick="filterCards('ia')">IA et futur</button>
   </div>
 
-  <form class="prompt" id="prompt">
-    <label>ACCESS KEY</label>
-    <input id="password" type="password" autocomplete="off">
-    <button type="submit">ok</button>
-    <div class="msg" id="msg"></div>
-  </form>
+  <div class="timeline" id="timeline"></div>
+</section>
 
-  <div class="eye-screen" id="eyeScreen">
-    <div class="eye-wrap">
-      <div class="eye"></div>
-      <div class="dot-hit" id="dotHit"></div>
-    </div>
-    <div class="eye-note" id="eyeNote">registered</div>
-  </div>
-</div>
+<footer>
+  Mission Chronos — 100 dates pour comprendre l’histoire de l’informatique
+</footer>
 
 <script>
-var PASSWORD = "R-17";
+const events = [
+["1642","Blaise Pascal invente la Pascaline, une machine mécanique capable d’effectuer des additions.","pionniers"],
+["1673","Leibniz crée une machine à calculer plus avancée, capable de multiplier et diviser.","pionniers"],
+["1801","Le métier Jacquard utilise des cartes perforées pour automatiser le tissage.","pionniers"],
+["1822","Charles Babbage imagine la machine à différences.","pionniers"],
+["1837","Babbage conçoit la machine analytique, proche du principe de l’ordinateur.","pionniers"],
+["1843","Ada Lovelace écrit le premier algorithme destiné à une machine.","pionniers"],
+["1854","George Boole crée l’algèbre booléenne, essentielle au fonctionnement des ordinateurs.","pionniers"],
+["1889","Herman Hollerith développe des machines à cartes perforées.","pionniers"],
+["1890","Le recensement américain est traité avec des machines automatiques.","pionniers"],
+["1896","Hollerith fonde une entreprise qui deviendra plus tard IBM.","pionniers"],
 
-var key = document.getElementById("key");
-var lockGroup = document.getElementById("lockGroup");
-var lockHit = document.getElementById("lockHit");
-var promptBox = document.getElementById("prompt");
-var password = document.getElementById("password");
-var msg = document.getElementById("msg");
-var eyeScreen = document.getElementById("eyeScreen");
-var dotHit = document.getElementById("dotHit");
-var eyeNote = document.getElementById("eyeNote");
-var scene = document.getElementById("scene");
+["1906","La triode est inventée, ouvrant la voie à l’électronique moderne.","machines"],
+["1911","La société CTR est créée, futur IBM.","machines"],
+["1924","CTR prend officiellement le nom IBM.","machines"],
+["1931","Vannevar Bush construit l’analyseur différentiel.","machines"],
+["1936","Alan Turing imagine la machine de Turing.","machines"],
+["1938","Konrad Zuse construit le Z1, un ordinateur mécanique programmable.","machines"],
+["1939","Hewlett-Packard est fondée dans un garage.","machines"],
+["1941","Le Z3 de Konrad Zuse devient l’un des premiers ordinateurs programmables.","machines"],
+["1943","Colossus aide les Britanniques à décrypter des messages pendant la guerre.","machines"],
+["1944","Le Harvard Mark I est mis en service.","machines"],
+["1945","Von Neumann décrit une architecture qui inspire les ordinateurs modernes.","machines"],
+["1946","L’ENIAC est présenté au public.","machines"],
+["1947","Le transistor est inventé aux laboratoires Bell.","machines"],
+["1948","Le Manchester Baby exécute un programme stocké en mémoire.","machines"],
+["1949","L’EDSAC devient l’un des premiers ordinateurs à programme enregistré.","machines"],
+["1950","Alan Turing propose le célèbre test de Turing.","machines"],
+["1951","L’UNIVAC I devient l’un des premiers ordinateurs commerciaux.","machines"],
+["1952","Grace Hopper travaille sur les premiers compilateurs.","machines"],
+["1953","IBM lance l’IBM 701.","machines"],
+["1954","FORTRAN commence à être développé.","machines"],
+["1955","IBM présente l’un des premiers disques durs.","machines"],
+["1956","La conférence de Dartmouth marque la naissance officielle de l’intelligence artificielle.","machines"],
+["1957","FORTRAN est publié.","machines"],
+["1958","Le circuit intégré est inventé.","machines"],
+["1959","Le langage COBOL apparaît.","machines"],
+["1960","Les premiers modems commerciaux apparaissent.","machines"],
 
-var dragging = false;
-var inserted = false;
-var offsetX = 0;
-var offsetY = 0;
+["1961","Le premier robot industriel entre en service.","micro"],
+["1962","Spacewar! devient l’un des premiers jeux vidéo.","micro"],
+["1963","Sketchpad annonce les interfaces graphiques et la conception assistée par ordinateur.","micro"],
+["1964","IBM lance le System/360.","micro"],
+["1965","Gordon Moore formule la loi de Moore.","micro"],
+["1967","La disquette est inventée.","micro"],
+["1968","Douglas Engelbart présente la souris et des idées révolutionnaires.","micro"],
+["1969","Le premier message ARPANET est envoyé.","micro"],
+["1970","Le modèle de base de données relationnelle est proposé.","micro"],
+["1971","Intel commercialise le microprocesseur 4004.","micro"],
+["1972","Le langage C est créé.","micro"],
+["1973","Ethernet est inventé.","micro"],
+["1974","Le protocole TCP est proposé.","micro"],
+["1975","Microsoft est fondée par Bill Gates et Paul Allen.","micro"],
+["1976","Apple est fondée par Steve Jobs, Steve Wozniak et Ronald Wayne.","micro"],
+["1977","L’Apple II participe à la popularisation de l’ordinateur personnel.","micro"],
+["1978","Les premiers BBS permettent de communiquer entre ordinateurs.","micro"],
+["1979","VisiCalc devient le premier grand tableur.","micro"],
+["1980","Le Sinclair ZX80 rend l’informatique plus accessible.","micro"],
+["1981","IBM lance le PC IBM.","micro"],
+["1982","Le Commodore 64 devient un ordinateur personnel très populaire.","micro"],
+["1983","Internet adopte officiellement TCP/IP.","internet"],
+["1984","Apple lance le Macintosh avec une interface graphique.","micro"],
+["1985","Microsoft sort Windows 1.0.","micro"],
+["1986","NSFNET accélère le développement d’Internet.","internet"],
+["1987","Le standard VGA améliore l’affichage des ordinateurs.","micro"],
+["1988","Le ver Morris montre les dangers de la sécurité informatique.","internet"],
+["1989","Tim Berners-Lee invente le World Wide Web.","internet"],
+["1990","ARPANET est arrêté, laissant place à Internet.","internet"],
 
-function startDrag(x,y){
-  if(inserted) return;
+["1991","Linus Torvalds crée Linux.","internet"],
+["1992","Le premier SMS est envoyé.","internet"],
+["1993","Le navigateur Mosaic rend le Web plus accessible.","internet"],
+["1994","Amazon est fondée.","internet"],
+["1995","Windows 95 popularise l’informatique familiale.","internet"],
+["1996","Hotmail popularise le courrier électronique en ligne.","internet"],
+["1997","Deep Blue bat Garry Kasparov aux échecs.","ia"],
+["1998","Google est fondé.","internet"],
+["1999","Le Wi-Fi commence à se diffuser auprès du grand public.","internet"],
+["2000","La clé USB devient populaire.","internet"],
+["2001","Wikipédia est lancée.","internet"],
+["2002","Friendster annonce l’ère des réseaux sociaux modernes.","internet"],
+["2003","Skype popularise les appels par Internet.","internet"],
+["2004","Facebook est créé.","internet"],
+["2005","YouTube est lancé.","internet"],
+["2006","Le cloud computing moderne se développe.","internet"],
+["2007","Apple présente le premier iPhone.","internet"],
+["2008","Android arrive sur les smartphones.","internet"],
+["2009","Bitcoin lance une nouvelle ère autour des cryptomonnaies.","internet"],
+["2010","Instagram est lancé.","internet"],
 
-  dragging = true;
-  var r = key.getBoundingClientRect();
-  offsetX = x - r.left;
-  offsetY = y - r.top;
+["2011","Siri popularise les assistants vocaux.","ia"],
+["2012","Le Raspberry Pi rend l’apprentissage de l’informatique moins cher.","ia"],
+["2013","L’impression 3D se démocratise.","ia"],
+["2014","Alexa arrive comme assistant vocal domestique.","ia"],
+["2015","Windows 10 est lancé.","ia"],
+["2016","AlphaGo bat Lee Sedol au jeu de go.","ia"],
+["2017","L’architecture Transformer révolutionne l’intelligence artificielle.","ia"],
+["2018","Le RGPD renforce la protection des données en Europe.","ia"],
+["2019","La 5G commence à se déployer.","ia"],
+["2020","Le télétravail numérique explose avec la crise sanitaire.","ia"],
+["2021","Windows 11 est lancé.","ia"],
+["2022","ChatGPT est rendu public.","ia"],
+["2023","L’IA générative se diffuse massivement.","ia"],
+["2024","Les assistants IA deviennent courants dans les outils numériques.","ia"],
+["2025","Les agents IA commencent à automatiser des tâches complexes.","ia"],
+["2026","L’IA s’intègre de plus en plus dans les outils du quotidien.","ia"]
+];
 
-  key.style.position = "fixed";
-  key.style.left = r.left + "px";
-  key.style.top = r.top + "px";
-  key.style.bottom = "auto";
-  key.style.zIndex = 999;
+function displayCards(category){
+  const timeline = document.getElementById("timeline");
+  timeline.innerHTML = "";
+
+  events.forEach((e,index)=>{
+    if(category === "all" || e[2] === category){
+      const card = document.createElement("div");
+      card.className = "card";
+      card.innerHTML = `
+        <div class="date">${e[0]}</div>
+        <h3>Artefact n°${index + 1}</h3>
+        <p>${e[1]}</p>
+        <span class="tag">${label(e[2])}</span>
+      `;
+      timeline.appendChild(card);
+    }
+  });
 }
 
-function moveDrag(x,y){
-  if(!dragging || inserted) return;
-
-  key.style.left = (x - offsetX) + "px";
-  key.style.top = (y - offsetY) + "px";
-
-  if(overLock()){
-    lockGroup.classList.add("near");
-  }else{
-    lockGroup.classList.remove("near");
-  }
+function label(cat){
+  if(cat==="pionniers") return "Pionniers";
+  if(cat==="machines") return "Premiers ordinateurs";
+  if(cat==="micro") return "Micro-informatique";
+  if(cat==="internet") return "Internet";
+  if(cat==="ia") return "IA et futur";
 }
 
-function endDrag(){
-  if(!dragging || inserted) return;
-
-  dragging = false;
-
-  if(overLock()){
-    inserted = true;
-    snapKeyIntoLock();
-  }else{
-    lockGroup.classList.remove("near");
-  }
+function filterCards(category){
+  displayCards(category);
 }
 
-function overLock(){
-  var k = key.getBoundingClientRect();
-  var l = lockHit.getBoundingClientRect();
-  var x = k.left + k.width * 0.78;
-  var y = k.top + k.height * 0.52;
-  return x > l.left && x < l.right && y > l.top && y < l.bottom;
-}
-
-function snapKeyIntoLock(){
-  var l = lockHit.getBoundingClientRect();
-  var targetX = l.left + l.width / 2 - 120;
-  var targetY = l.top + l.height / 2 - 28;
-
-  key.className = "key snap";
-  key.style.left = targetX + "px";
-  key.style.top = targetY + "px";
-
-  lockGroup.classList.add("near");
-
-  setTimeout(function(){
-    key.className = "key snap hidden";
-    lockGroup.classList.remove("near");
-    lockGroup.classList.add("open");
-    promptBox.className = "prompt visible";
-  },420);
-
-  setTimeout(function(){
-    password.focus();
-  },650);
-}
-
-key.addEventListener("mousedown",function(e){
-  startDrag(e.clientX,e.clientY);
-  e.preventDefault();
-});
-
-document.addEventListener("mousemove",function(e){
-  moveDrag(e.clientX,e.clientY);
-});
-
-document.addEventListener("mouseup",endDrag);
-
-key.addEventListener("touchstart",function(e){
-  var t = e.touches[0];
-  startDrag(t.clientX,t.clientY);
-},{passive:true});
-
-document.addEventListener("touchmove",function(e){
-  if(!dragging) return;
-  var t = e.touches[0];
-  moveDrag(t.clientX,t.clientY);
-},{passive:true});
-
-document.addEventListener("touchend",endDrag);
-
-promptBox.addEventListener("submit",function(e){
-  e.preventDefault();
-
-  if(password.value === PASSWORD){
-    promptBox.style.display = "none";
-    scene.style.display = "none";
-    eyeScreen.className = "eye-screen visible";
-  }else{
-    msg.innerHTML = "denied";
-    password.value = "";
-  }
-});
-
-dotHit.onclick = function(){
-  eyeNote.className = "eye-note visible";
-};
+displayCards("all");
 </script>
+
 </body>
 </html>
