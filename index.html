@@ -1,373 +1,1354 @@
+```html
 <!DOCTYPE html>
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CHRONOS OS</title>
+
+<title>FSO — Fédération Solennelle d'Orion</title>
 
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{
-  font-family:Consolas,monospace;
-  background:#020617;
-  color:#d1fae5;
-  min-height:100vh;
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700;800;900&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+:root {
+    --bg: #090b09;
+    --bg2: #111510;
+    --panel: #151a14;
+    --panel2: #1b2119;
+    --text: #dce3d4;
+    --muted: #7d8777;
+    --green: #9caf68;
+    --green2: #c4d58b;
+    --red: #b84a42;
+    --yellow: #c8aa5b;
+    --line: rgba(177, 195, 145, .18);
 }
-body::before{
-  content:"";
-  position:fixed;
-  inset:0;
-  background:linear-gradient(rgba(255,255,255,.03) 1px,transparent 1px);
-  background-size:100% 4px;
-  pointer-events:none;
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
-header{
-  min-height:100vh;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  padding:30px;
+
+html {
+    scroll-behavior: smooth;
 }
-.screen{
-  width:100%;
-  max-width:1050px;
-  border:2px solid #22c55e;
-  border-radius:18px;
-  background:#020617;
-  box-shadow:0 0 40px #22c55e55;
-  padding:28px;
+
+body {
+    background:
+        radial-gradient(circle at 50% -10%, rgba(135,160,95,.12), transparent 40%),
+        var(--bg);
+    color: var(--text);
+    font-family: "Barlow Condensed", sans-serif;
+    overflow-x: hidden;
 }
-.topbar{
-  display:flex;
-  justify-content:space-between;
-  border-bottom:1px solid #22c55e;
-  padding-bottom:12px;
-  margin-bottom:25px;
-  color:#86efac;
+
+/* CRT overlay */
+
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 999;
+    background:
+        repeating-linear-gradient(
+            0deg,
+            rgba(255,255,255,.018) 0px,
+            rgba(255,255,255,.018) 1px,
+            transparent 1px,
+            transparent 4px
+        );
+    mix-blend-mode: overlay;
 }
-h1{
-  font-size:clamp(38px,8vw,90px);
-  color:#22c55e;
-  text-shadow:0 0 25px #22c55e;
+
+body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 998;
+    box-shadow: inset 0 0 180px rgba(0,0,0,.85);
 }
-.subtitle{
-  margin:20px 0;
-  color:#bbf7d0;
-  font-size:20px;
+
+/* NAV */
+
+nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 68px;
+    background: rgba(7,9,7,.92);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--line);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 5%;
+    z-index: 100;
 }
-.terminal{
-  background:#000;
-  border:1px solid #14532d;
-  padding:20px;
-  border-radius:12px;
-  line-height:1.7;
-  color:#86efac;
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    font-size: 18px;
 }
-button{
-  margin-top:25px;
-  background:#22c55e;
-  color:#020617;
-  border:none;
-  padding:14px 22px;
-  border-radius:8px;
-  font-weight:bold;
-  cursor:pointer;
+
+.logo-symbol {
+    width: 34px;
+    height: 34px;
+    border: 2px solid var(--green);
+    display: grid;
+    place-items: center;
+    color: var(--green);
+    font-family: "IBM Plex Mono";
+    font-size: 12px;
 }
-button:hover{background:#86efac}
-main{
-  max-width:1150px;
-  margin:auto;
-  padding:40px 20px;
+
+nav ul {
+    display: flex;
+    list-style: none;
+    gap: 30px;
 }
-.panel{
-  border:1px solid #22c55e;
-  border-radius:16px;
-  padding:24px;
-  margin-bottom:30px;
-  background:#020617;
-  box-shadow:0 0 20px #22c55e22;
+
+nav a {
+    color: var(--muted);
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    font-size: 14px;
+    transition: .2s;
 }
-h2{
-  color:#22c55e;
-  margin-bottom:15px;
+
+nav a:hover {
+    color: var(--green2);
 }
-.grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-  gap:15px;
+
+/* HERO */
+
+.hero {
+    min-height: 100vh;
+    padding: 150px 7% 90px;
+    display: flex;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
 }
-.card{
-  border:1px solid #166534;
-  background:#03120a;
-  padding:18px;
-  border-radius:12px;
-  min-height:170px;
-  transition:.2s;
+
+.hero-grid {
+    position: absolute;
+    inset: 0;
+    opacity: .09;
+    background-image:
+        linear-gradient(var(--green) 1px, transparent 1px),
+        linear-gradient(90deg, var(--green) 1px, transparent 1px);
+    background-size: 60px 60px;
+    transform: perspective(500px) rotateX(50deg) scale(1.5);
+    transform-origin: bottom;
 }
-.card:hover{
-  transform:scale(1.03);
-  box-shadow:0 0 20px #22c55e55;
+
+.hero-content {
+    position: relative;
+    max-width: 850px;
 }
-.date{
-  color:#22c55e;
-  font-size:24px;
-  font-weight:bold;
+
+.classification {
+    display: inline-block;
+    border: 1px solid var(--green);
+    color: var(--green2);
+    padding: 6px 11px;
+    font-family: "IBM Plex Mono";
+    font-size: 11px;
+    letter-spacing: 2px;
+    margin-bottom: 25px;
 }
-.card h3{margin:10px 0;color:white}
-.card p{color:#bbf7d0;line-height:1.5}
-.tag{
-  display:inline-block;
-  margin-top:12px;
-  color:#86efac;
-  border:1px solid #22c55e;
-  padding:4px 8px;
-  border-radius:20px;
-  font-size:12px;
+
+.hero h1 {
+    font-size: clamp(65px, 10vw, 150px);
+    line-height: .78;
+    text-transform: uppercase;
+    font-weight: 900;
+    letter-spacing: -3px;
+    max-width: 900px;
 }
-.controls{
-  display:flex;
-  flex-wrap:wrap;
-  gap:10px;
-  margin:20px 0;
+
+.hero h1 span {
+    color: var(--green);
 }
-.controls button{
-  margin:0;
-  background:#03120a;
-  color:#bbf7d0;
-  border:1px solid #22c55e;
+
+.hero-subtitle {
+    margin-top: 35px;
+    max-width: 600px;
+    color: #9ca696;
+    font-size: 20px;
+    line-height: 1.35;
 }
-.progress{
-  height:18px;
-  background:#052e16;
-  border-radius:20px;
-  overflow:hidden;
-  margin-top:15px;
+
+.cta-row {
+    margin-top: 40px;
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
 }
-.bar{
-  height:100%;
-  width:0%;
-  background:#22c55e;
+
+.btn {
+    border: 1px solid var(--green);
+    background: var(--green);
+    color: #11140e;
+    padding: 13px 22px;
+    font-family: inherit;
+    font-size: 16px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: .2s;
 }
-.bigdate{
-  font-size:45px;
-  color:#22c55e;
+
+.btn:hover {
+    background: var(--green2);
+    transform: translateY(-2px);
 }
-footer{
-  text-align:center;
-  padding:40px;
-  color:#86efac;
+
+.btn.secondary {
+    background: transparent;
+    color: var(--green2);
+}
+
+.hero-status {
+    position: absolute;
+    right: 7%;
+    bottom: 70px;
+    width: 300px;
+    border-left: 2px solid var(--green);
+    padding-left: 20px;
+    font-family: "IBM Plex Mono";
+    font-size: 11px;
+    color: var(--muted);
+}
+
+.status-line {
+    display: flex;
+    justify-content: space-between;
+    margin: 8px 0;
+}
+
+.status-line strong {
+    color: var(--green2);
+}
+
+/* SECTION */
+
+section {
+    padding: 110px 7%;
+    border-top: 1px solid var(--line);
+}
+
+.section-label {
+    font-family: "IBM Plex Mono";
+    color: var(--green);
+    font-size: 11px;
+    letter-spacing: 2px;
+    margin-bottom: 14px;
+}
+
+.section-title {
+    font-size: clamp(42px, 6vw, 78px);
+    text-transform: uppercase;
+    line-height: .9;
+    margin-bottom: 50px;
+}
+
+/* STATS */
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--line);
+}
+
+.stat {
+    background: var(--panel);
+    padding: 30px;
+}
+
+.stat-number {
+    font-family: "IBM Plex Mono";
+    color: var(--green2);
+    font-size: 38px;
+    margin-bottom: 8px;
+}
+
+.stat-label {
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 14px;
+}
+
+.stat small {
+    display: block;
+    color: #4f574c;
+    margin-top: 13px;
+    font-family: "IBM Plex Mono";
+}
+
+/* CAMPAIGNS */
+
+.campaign-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+}
+
+.card {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    padding: 25px;
+    position: relative;
+    overflow: hidden;
+}
+
+.card::before {
+    content: "CLASSIFIED";
+    position: absolute;
+    top: 15px;
+    right: -35px;
+    transform: rotate(35deg);
+    font-family: "IBM Plex Mono";
+    color: rgba(184,74,66,.18);
+    font-size: 10px;
+}
+
+.card h3 {
+    font-size: 31px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+}
+
+.card .date {
+    font-family: "IBM Plex Mono";
+    color: var(--green);
+    font-size: 11px;
+}
+
+.card p {
+    color: var(--muted);
+    line-height: 1.45;
+    margin: 20px 0;
+}
+
+.result {
+    border-top: 1px solid var(--line);
+    padding-top: 15px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.result strong {
+    color: var(--green2);
+}
+
+/* HEROES */
+
+.hero-grid-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+}
+
+.soldier {
+    min-height: 380px;
+    background:
+        linear-gradient(to top, rgba(0,0,0,.9), transparent 65%),
+        linear-gradient(135deg, #20271e, #080a08);
+    border: 1px solid var(--line);
+    padding: 25px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    position: relative;
+}
+
+.soldier::after {
+    content: "";
+    position: absolute;
+    inset: 20px;
+    border: 1px solid rgba(190,210,145,.12);
+}
+
+.soldier h3 {
+    font-size: 38px;
+    text-transform: uppercase;
+    position: relative;
+    z-index: 2;
+}
+
+.soldier p {
+    color: var(--green2);
+    font-family: "IBM Plex Mono";
+    font-size: 11px;
+    position: relative;
+    z-index: 2;
+}
+
+.soldier .death {
+    margin-top: 15px;
+    color: #777;
+    font-size: 12px;
+    position: relative;
+    z-index: 2;
+}
+
+/* DARK SECTION */
+
+.dark-section {
+    background: #070807;
+}
+
+.warning {
+    border: 1px solid var(--red);
+    padding: 20px;
+    margin-bottom: 30px;
+    font-family: "IBM Plex Mono";
+    color: #bd716b;
+    font-size: 12px;
+    line-height: 1.6;
+}
+
+.documents {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.document {
+    background: #0c0f0c;
+    border: 1px solid rgba(184,74,66,.25);
+    padding: 28px;
+}
+
+.doc-head {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 13px;
+    margin-bottom: 20px;
+}
+
+.doc-head span {
+    font-family: "IBM Plex Mono";
+    font-size: 10px;
+    color: #777;
+}
+
+.document h3 {
+    text-transform: uppercase;
+    font-size: 27px;
+    margin-bottom: 15px;
+}
+
+.document p {
+    font-family: "IBM Plex Mono";
+    color: #788076;
+    font-size: 12px;
+    line-height: 1.7;
+}
+
+.redacted {
+    background: #20231f;
+    color: transparent;
+    user-select: none;
+}
+
+.reveal {
+    margin-top: 20px;
+    color: var(--red);
+    font-family: "IBM Plex Mono";
+    font-size: 10px;
+    cursor: pointer;
+}
+
+/* TERMINAL */
+
+.terminal {
+    background: #050605;
+    border: 1px solid #394133;
+    padding: 25px;
+    font-family: "IBM Plex Mono";
+    font-size: 12px;
+    line-height: 1.8;
+    color: #879477;
+    min-height: 350px;
+}
+
+.terminal .prompt {
+    color: var(--green);
+}
+
+.terminal .danger {
+    color: #b65a53;
+}
+
+.terminal-input {
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.terminal-input input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid #394133;
+    color: var(--green2);
+    outline: none;
+    font-family: inherit;
+    padding: 8px 0;
+}
+
+.terminal-input button {
+    background: transparent;
+    color: var(--green);
+    border: 1px solid #394133;
+    padding: 7px 15px;
+    cursor: pointer;
+    font-family: inherit;
+}
+
+/* FOOTER */
+
+footer {
+    border-top: 1px solid var(--line);
+    padding: 40px 7%;
+    display: flex;
+    justify-content: space-between;
+    color: #555c52;
+    font-family: "IBM Plex Mono";
+    font-size: 10px;
+}
+
+/* GLITCH */
+
+.glitch {
+    animation: glitch 5s infinite;
+}
+
+@keyframes glitch {
+    0%, 92%, 100% {
+        transform: none;
+        opacity: 1;
+    }
+
+    93% {
+        transform: translateX(2px);
+        opacity: .8;
+    }
+
+    94% {
+        transform: translateX(-2px);
+        opacity: .9;
+    }
+
+    95% {
+        transform: none;
+    }
+}
+
+/* MOBILE */
+
+@media(max-width: 850px) {
+
+    nav ul {
+        display: none;
+    }
+
+    .hero-status {
+        display: none;
+    }
+
+    .stats {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .campaign-grid,
+    .hero-grid-cards,
+    .documents {
+        grid-template-columns: 1fr;
+    }
+
+    section {
+        padding: 80px 5%;
+    }
+
+    .hero {
+        padding-left: 5%;
+        padding-right: 5%;
+    }
+
+    .hero h1 {
+        font-size: 72px;
+    }
+}
+
+@media(max-width: 500px) {
+
+    .stats {
+        grid-template-columns: 1fr;
+    }
+
+    .hero h1 {
+        font-size: 58px;
+    }
+
+    .stat-number {
+        font-size: 30px;
+    }
 }
 </style>
 </head>
 
 <body>
 
-<header>
-  <div class="screen">
-    <div class="topbar">
-      <span>CHRONOS OS v2.126</span>
-      <span>MISSION ACTIVE</span>
+<nav>
+    <div class="logo">
+        <div class="logo-symbol">FSO</div>
+        FÉDÉRATION SOLENNELLE
     </div>
 
-    <h1>CHRONOS OS</h1>
-    <p class="subtitle">Interface de voyage temporel — Histoire de l’informatique</p>
+    <ul>
+        <li><a href="#federation">Fédération</a></li>
+        <li><a href="#campagnes">Campagnes</a></li>
+        <li><a href="#heros">Héros</a></li>
+        <li><a href="#archives">Archives</a></li>
+    </ul>
+</nav>
 
-    <div class="terminal">
-      > Connexion à l’Agence Chronos... OK<br>
-      > Année actuelle : 2126<br>
-      > Incident détecté : archives informatiques effacées<br>
-      > Objectif : récupérer 100 artefacts numériques<br>
-      > Statut : agent temporel prêt
+
+<!-- HERO -->
+
+<header class="hero">
+
+    <div class="hero-grid"></div>
+
+    <div class="hero-content">
+
+        <div class="classification">
+            RÉSEAU CIVIQUE — ACCÈS PUBLIC
+        </div>
+
+        <h1 class="glitch">
+            SERVIR.<br>
+            <span>SOURIRE.</span><br>
+            VAINCRE.
+        </h1>
+
+        <p class="hero-subtitle">
+            La Fédération Solennelle d'Orion protège les mondes libres
+            depuis 287 années. Aujourd'hui encore, des millions de citoyens
+            répondent à l'appel.
+        </p>
+
+        <div class="cta-row">
+            <button class="btn" onclick="scrollToSection('engagement')">
+                S'ENGAGER
+            </button>
+
+            <button class="btn secondary" onclick="scrollToSection('campagnes')">
+                VOIR NOS VICTOIRES
+            </button>
+        </div>
+
     </div>
 
-    <button onclick="document.getElementById('voyage').scrollIntoView({behavior:'smooth'})">
-      Lancer la mission
-    </button>
-  </div>
+    <div class="hero-status">
+
+        <div class="status-line">
+            <span>ÉTAT FÉDÉRAL</span>
+            <strong>STABLE</strong>
+        </div>
+
+        <div class="status-line">
+            <span>MORAL</span>
+            <strong>98.4%</strong>
+        </div>
+
+        <div class="status-line">
+            <span>PLANÈTES DÉFENDUES</span>
+            <strong>427</strong>
+        </div>
+
+        <div class="status-line">
+            <span>CONFLITS ACTIFS</span>
+            <strong>31</strong>
+        </div>
+
+    </div>
+
 </header>
 
-<main>
 
-<section class="panel" id="voyage">
-  <h2>Tableau de bord temporel</h2>
-  <p>Artefacts retrouvés : <span id="count">0</span>/100</p>
-  <div class="progress"><div class="bar" id="bar"></div></div>
-  <button onclick="randomEvent()">Voyage temporel aléatoire</button>
-  <div id="randomBox" class="terminal" style="margin-top:20px;">
-    > En attente d’une destination temporelle...
-  </div>
+<!-- FEDERATION -->
+
+<section id="federation">
+
+    <div class="section-label">
+        RAPPORT CIVIQUE 77-A
+    </div>
+
+    <h2 class="section-title">
+        Une armée.<br>
+        Un peuple.<br>
+        Un avenir.
+    </h2>
+
+    <div class="stats">
+
+        <div class="stat">
+            <div class="stat-number">18.4M</div>
+            <div class="stat-label">Soldats actifs</div>
+            <small>▲ 12.8% CETTE ANNÉE</small>
+        </div>
+
+        <div class="stat">
+            <div class="stat-number">427</div>
+            <div class="stat-label">Mondes protégés</div>
+            <small>▲ 31 NOUVEAUX MONDES</small>
+        </div>
+
+        <div class="stat">
+            <div class="stat-number">96.4%</div>
+            <div class="stat-label">Opérations réussies</div>
+            <small>DONNÉES CERTIFIÉES</small>
+        </div>
+
+        <div class="stat">
+            <div class="stat-number">∞</div>
+            <div class="stat-label">Détermination</div>
+            <small>IMPOSSIBLE À MESURER</small>
+        </div>
+
+    </div>
+
 </section>
 
-<section class="panel">
-  <h2>Dossiers temporels</h2>
-  <div class="controls">
-    <button onclick="showEvents('all')">Tous</button>
-    <button onclick="showEvents('pionniers')">Pionniers</button>
-    <button onclick="showEvents('machines')">Machines</button>
-    <button onclick="showEvents('micro')">Micro-informatique</button>
-    <button onclick="showEvents('internet')">Internet</button>
-    <button onclick="showEvents('ia')">IA et futur</button>
-  </div>
-  <div class="grid" id="grid"></div>
+
+<!-- CAMPAIGNS -->
+
+<section id="campagnes">
+
+    <div class="section-label">
+        HISTOIRE MILITAIRE — VERSION PUBLIQUE
+    </div>
+
+    <h2 class="section-title">
+        Nos glorieuses<br>
+        campagnes.
+    </h2>
+
+    <div class="campaign-grid">
+
+        <article class="card">
+
+            <div class="date">OPÉRATION 771 — 2381</div>
+
+            <h3>Aube Éternelle</h3>
+
+            <p>
+                Nos forces ont libéré Kharon-IV de la menace ennemie
+                et restauré l'ordre fédéral.
+            </p>
+
+            <div class="result">
+                <span>RÉSULTAT</span>
+                <strong>VICTOIRE</strong>
+            </div>
+
+        </article>
+
+
+        <article class="card">
+
+            <div class="date">OPÉRATION 819 — 2390</div>
+
+            <h3>Bouclier d'Orion</h3>
+
+            <p>
+                Une démonstration historique de courage face à une
+                flotte ennemie trois fois supérieure.
+            </p>
+
+            <div class="result">
+                <span>RÉSULTAT</span>
+                <strong>VICTOIRE</strong>
+            </div>
+
+        </article>
+
+
+        <article class="card">
+
+            <div class="date">OPÉRATION 901 — 2404</div>
+
+            <h3>Dernier Rempart</h3>
+
+            <p>
+                43 000 soldats ont tenu leur position jusqu'à l'arrivée
+                des renforts.
+            </p>
+
+            <div class="result">
+                <span>RÉSULTAT</span>
+                <strong>VICTOIRE</strong>
+            </div>
+
+        </article>
+
+    </div>
+
 </section>
 
-</main>
+
+<!-- HEROES -->
+
+<section id="heros">
+
+    <div class="section-label">
+        PANNEAU DES HÉROS
+    </div>
+
+    <h2 class="section-title">
+        Ils ont souri<br>
+        jusqu'au bout.
+    </h2>
+
+    <div class="hero-grid-cards">
+
+        <article class="soldier">
+
+            <p>CAPITAINE — 88e INFANTERIE</p>
+
+            <h3>Marcus Vale</h3>
+
+            <div class="death">
+                CITATION : « Un soldat ne demande jamais pourquoi. »
+            </div>
+
+        </article>
+
+
+        <article class="soldier">
+
+            <p>COMMANDANTE — FLOTTE ORBITALE</p>
+
+            <h3>Elena Voss</h3>
+
+            <div class="death">
+                CITATION : « Orion survivra. »
+            </div>
+
+        </article>
+
+
+        <article class="soldier">
+
+            <p>SERGENT — 14e DIVISION</p>
+
+            <h3>Jonas Kreel</h3>
+
+            <div class="death">
+                CITATION : « J'ai fait mon devoir. »
+            </div>
+
+        </article>
+
+    </div>
+
+</section>
+
+
+<!-- DARK -->
+
+<section id="archives" class="dark-section">
+
+    <div class="section-label">
+        █ ACCÈS RESTREINT — ARCHIVES MILITAIRES
+    </div>
+
+    <h2 class="section-title">
+        Ce que nous<br>
+        ne montrons pas.
+    </h2>
+
+    <div class="warning">
+        AVERTISSEMENT : Ces documents n'ont pas été validés par le
+        Bureau de Communication Civique. Leur consultation est
+        susceptible d'altérer votre perception de la situation militaire.
+    </div>
+
+
+    <div class="documents">
+
+        <article class="document">
+
+            <div class="doc-head">
+                <span>DOC-771-KH4</span>
+                <span>PARTIELLEMENT DÉCLASSIFIÉ</span>
+            </div>
+
+            <h3>Opération Aube Éternelle</h3>
+
+            <p>
+                Rapport de terrain :
+                <br><br>
+
+                L'objectif initial consistait à sécuriser
+                <span class="redacted">14 colonies</span>.
+                <br><br>
+
+                Colonies sécurisées :
+                <span class="redacted">3</span>.
+                <br><br>
+
+                Pertes militaires confirmées :
+                <span class="redacted">71 842</span>.
+                <br><br>
+
+                Pertes civiles estimées :
+                <span class="redacted">7,1 millions</span>.
+            </p>
+
+            <div class="reveal"
+                 onclick="revealDocument(this)">
+                [ AFFICHER LES DONNÉES MASQUÉES ]
+            </div>
+
+        </article>
+
+
+        <article class="document">
+
+            <div class="doc-head">
+                <span>DOC-901-LR</span>
+                <span>CONFIDENTIEL</span>
+            </div>
+
+            <h3>Dernier Rempart</h3>
+
+            <p>
+                Transmission du commandement :
+                <br><br>
+
+                « Les renforts arriveront dans six heures. »
+                <br><br>
+
+                Note logistique :
+                <span class="redacted">Les renforts n'ont jamais été envoyés.</span>
+                <br><br>
+
+                Effectifs initiaux :
+                <span class="redacted">43 012</span>
+                <br><br>
+
+                Survivants recensés :
+                <span class="redacted">219</span>.
+            </p>
+
+            <div class="reveal"
+                 onclick="revealDocument(this)">
+                [ AFFICHER LES DONNÉES MASQUÉES ]
+            </div>
+
+        </article>
+
+
+        <article class="document">
+
+            <div class="doc-head">
+                <span>DOC-NULL-44</span>
+                <span>NOIR ABSOLU</span>
+            </div>
+
+            <h3>Programme de recrutement</h3>
+
+            <p>
+                Objectif annuel :
+                <br><br>
+
+                Maintenir un niveau de recrutement supérieur
+                au taux de mortalité opérationnelle.
+                <br><br>
+
+                Projection 2405 :
+                <span class="redacted">Impossible sans mobilisation générale.</span>
+                <br><br>
+
+                Recommandation :
+                <span class="redacted">
+                    Intensifier les campagnes de propagande.
+                </span>
+            </p>
+
+            <div class="reveal"
+                 onclick="revealDocument(this)">
+                [ AFFICHER LES DONNÉES MASQUÉES ]
+            </div>
+
+        </article>
+
+
+        <article class="document">
+
+            <div class="doc-head">
+                <span>DOC-ARDEN-14</span>
+                <span>ERREUR SYSTÈME</span>
+            </div>
+
+            <h3>Capitaine Arden</h3>
+
+            <p>
+                Citation officielle :
+                <br><br>
+
+                « Tombé héroïquement face à l'ennemi. »
+                <br><br>
+
+                Enregistrement tactique :
+                <span class="redacted">
+                    Mort causée par tirs amis provenant du croiseur
+                    orbital FSO Valiant.
+                </span>
+                <br><br>
+
+                Statut du rapport :
+                <span class="redacted">MODIFIÉ PAR LE BUREAU CIVIQUE.</span>
+            </p>
+
+            <div class="reveal"
+                 onclick="revealDocument(this)">
+                [ AFFICHER LES DONNÉES MASQUÉES ]
+            </div>
+
+        </article>
+
+    </div>
+
+</section>
+
+
+<!-- TERMINAL -->
+
+<section id="engagement">
+
+    <div class="section-label">
+        TERMINAL D'ARCHIVES — NIVEAU 4
+    </div>
+
+    <h2 class="section-title">
+        Chercher la<br>
+        vérité.
+    </h2>
+
+    <div class="terminal" id="terminal">
+
+        <div>
+            <span class="prompt">FSO_ARCHIVE://</span>
+            connexion établie...
+        </div>
+
+        <div>
+            <span class="prompt">SYSTEM:</span>
+            bienvenue, citoyen.
+        </div>
+
+        <div>
+            Tapez <strong>HELP</strong> pour afficher les commandes.
+        </div>
+
+        <br>
+
+        <div id="terminal-output"></div>
+
+        <div class="terminal-input">
+            <span class="prompt">&gt;</span>
+            <input
+                id="terminal-input"
+                type="text"
+                autocomplete="off"
+                placeholder="Entrer une commande..."
+            >
+            <button onclick="runCommand()">EXEC</button>
+        </div>
+
+    </div>
+
+</section>
+
 
 <footer>
-  CHRONOS OS — Mission de restauration de l’histoire informatique
+
+    <span>© 2405 — FÉDÉRATION SOLENNELLE D'ORION</span>
+
+    <span>
+        GLOIRE • DEVOIR • HUMANITÉ
+    </span>
+
 </footer>
 
+
 <script>
-const events = [
-["1642","La Pascaline","Blaise Pascal invente une machine mécanique capable de faire des calculs.","pionniers"],
-["1673","Machine de Leibniz","Leibniz améliore les machines à calculer mécaniques.","pionniers"],
-["1801","Métier Jacquard","Les cartes perforées automatisent le tissage.","pionniers"],
-["1822","Machine à différences","Charles Babbage imagine une machine de calcul automatique.","pionniers"],
-["1837","Machine analytique","Babbage conçoit un ancêtre théorique de l’ordinateur.","pionniers"],
-["1843","Ada Lovelace","Ada Lovelace écrit le premier algorithme pensé pour une machine.","pionniers"],
-["1854","Algèbre de Boole","George Boole crée une logique essentielle à l’informatique.","pionniers"],
-["1889","Cartes perforées","Hollerith développe des machines de traitement de données.","pionniers"],
-["1890","Recensement automatisé","Les États-Unis utilisent des machines pour traiter le recensement.","pionniers"],
-["1896","Future IBM","Hollerith fonde une entreprise qui deviendra IBM.","pionniers"],
 
-["1906","Triode","La triode ouvre la voie à l’électronique moderne.","machines"],
-["1911","CTR","La société CTR est créée, futur IBM.","machines"],
-["1924","IBM","CTR devient officiellement IBM.","machines"],
-["1931","Analyseur différentiel","Vannevar Bush construit une machine de calcul scientifique.","machines"],
-["1936","Machine de Turing","Alan Turing pose les bases théoriques de l’informatique.","machines"],
-["1938","Z1","Konrad Zuse construit un ordinateur mécanique programmable.","machines"],
-["1939","HP","Hewlett-Packard naît dans un garage.","machines"],
-["1941","Z3","Le Z3 devient l’un des premiers ordinateurs programmables.","machines"],
-["1943","Colossus","Colossus aide au déchiffrement pendant la Seconde Guerre mondiale.","machines"],
-["1944","Harvard Mark I","Un grand calculateur électromécanique est mis en service.","machines"],
-["1945","Architecture Von Neumann","Un modèle fondamental de l’ordinateur moderne est décrit.","machines"],
-["1946","ENIAC","L’un des premiers ordinateurs électroniques programmables est présenté.","machines"],
-["1947","Transistor","Le transistor remplace progressivement les tubes à vide.","machines"],
-["1948","Manchester Baby","Un programme est exécuté depuis la mémoire.","machines"],
-["1949","EDSAC","Un ordinateur à programme enregistré fonctionne réellement.","machines"],
-["1950","Test de Turing","Turing propose une manière de réfléchir à l’intelligence des machines.","machines"],
-["1951","UNIVAC I","Un des premiers ordinateurs commerciaux apparaît.","machines"],
-["1952","Compilateur","Grace Hopper participe aux premiers compilateurs.","machines"],
-["1953","IBM 701","IBM lance son premier grand ordinateur scientifique.","machines"],
-["1954","FORTRAN","Le langage FORTRAN commence à être développé.","machines"],
-["1955","Disque dur","IBM présente un système de stockage sur disque.","machines"],
-["1956","Naissance de l’IA","La conférence de Dartmouth lance l’intelligence artificielle.","machines"],
-["1957","FORTRAN publié","FORTRAN devient un langage majeur du calcul scientifique.","machines"],
-["1958","Circuit intégré","Le circuit intégré permet de miniaturiser l’électronique.","machines"],
-["1959","COBOL","COBOL devient un langage important pour la gestion.","machines"],
-["1960","Modem","Les premiers modems commerciaux apparaissent.","machines"],
+/* Smooth scroll */
 
-["1961","Robot industriel","Le robot Unimate entre en service.","micro"],
-["1962","Spacewar!","Un des premiers jeux vidéo est créé.","micro"],
-["1963","Sketchpad","Sketchpad annonce les interfaces graphiques et la CAO.","micro"],
-["1964","IBM System/360","IBM lance une famille d’ordinateurs compatibles.","micro"],
-["1965","Loi de Moore","Moore observe l’augmentation rapide du nombre de transistors.","micro"],
-["1967","Disquette","La disquette devient un support de stockage important.","micro"],
-["1968","Souris","Engelbart présente la souris et l’interface moderne.","micro"],
-["1969","ARPANET","Le premier message ARPANET est envoyé.","micro"],
-["1970","Base relationnelle","Le modèle des bases de données relationnelles est proposé.","micro"],
-["1971","Intel 4004","Intel commercialise le premier microprocesseur.","micro"],
-["1972","Langage C","Le langage C est créé.","micro"],
-["1973","Ethernet","Ethernet facilite les réseaux locaux.","micro"],
-["1974","TCP","Le protocole TCP est proposé.","micro"],
-["1975","Microsoft","Microsoft est fondée.","micro"],
-["1976","Apple","Apple est créée.","micro"],
-["1977","Apple II","L’Apple II popularise l’ordinateur personnel.","micro"],
-["1978","BBS","Les premiers systèmes de discussion entre ordinateurs apparaissent.","micro"],
-["1979","VisiCalc","Le tableur devient une application décisive.","micro"],
-["1980","ZX80","Le Sinclair ZX80 rend l’ordinateur plus accessible.","micro"],
-["1981","IBM PC","Le PC IBM devient une référence.","micro"],
-["1982","Commodore 64","Un ordinateur personnel très populaire arrive.","micro"],
-["1983","TCP/IP","Internet adopte TCP/IP.","internet"],
-["1984","Macintosh","Apple lance un ordinateur avec interface graphique.","micro"],
-["1985","Windows 1.0","Microsoft lance la première version de Windows.","micro"],
-
-["1986","NSFNET","Le réseau NSFNET accélère le développement d’Internet.","internet"],
-["1987","VGA","Le standard VGA améliore l’affichage.","internet"],
-["1988","Ver Morris","Un ver informatique montre les risques de sécurité.","internet"],
-["1989","World Wide Web","Tim Berners-Lee invente le Web.","internet"],
-["1990","Fin d’ARPANET","ARPANET disparaît au profit d’Internet.","internet"],
-["1991","Linux","Linus Torvalds crée Linux.","internet"],
-["1992","Premier SMS","Le premier SMS est envoyé.","internet"],
-["1993","Mosaic","Le navigateur Mosaic rend le Web plus simple.","internet"],
-["1994","Amazon","Amazon est fondée.","internet"],
-["1995","Windows 95","Windows 95 popularise l’informatique familiale.","internet"],
-["1996","Hotmail","Le mail en ligne devient populaire.","internet"],
-["1997","Deep Blue","Deep Blue bat Kasparov aux échecs.","ia"],
-["1998","Google","Google est fondé.","internet"],
-["1999","Wi-Fi","Le Wi-Fi se diffuse auprès du public.","internet"],
-["2000","Clé USB","La clé USB devient un support pratique.","internet"],
-["2001","Wikipédia","L’encyclopédie collaborative est lancée.","internet"],
-["2002","Friendster","Les réseaux sociaux modernes commencent à apparaître.","internet"],
-["2003","Skype","Les appels par Internet se popularisent.","internet"],
-["2004","Facebook","Facebook est créé.","internet"],
-["2005","YouTube","YouTube transforme la vidéo en ligne.","internet"],
-["2006","Cloud","Le cloud computing moderne se développe.","internet"],
-["2007","iPhone","Apple présente l’iPhone.","internet"],
-["2008","Android","Android arrive sur les smartphones.","internet"],
-["2009","Bitcoin","Bitcoin lance une nouvelle ère numérique.","internet"],
-["2010","Instagram","Instagram apparaît.","internet"],
-
-["2011","Siri","Les assistants vocaux deviennent populaires.","ia"],
-["2012","Raspberry Pi","Un mini-ordinateur aide à apprendre l’informatique.","ia"],
-["2013","Impression 3D","L’impression 3D se démocratise.","ia"],
-["2014","Alexa","Amazon lance son assistant vocal.","ia"],
-["2015","Windows 10","Microsoft lance Windows 10.","ia"],
-["2016","AlphaGo","AlphaGo bat Lee Sedol au jeu de go.","ia"],
-["2017","Transformer","Une architecture révolutionne l’IA moderne.","ia"],
-["2018","RGPD","La protection des données devient un enjeu majeur en Europe.","ia"],
-["2019","5G","Les premiers réseaux 5G se développent.","ia"],
-["2020","Télétravail","Les outils numériques deviennent centraux dans le travail à distance.","ia"],
-["2021","Windows 11","Microsoft lance Windows 11.","ia"],
-["2022","ChatGPT","ChatGPT est rendu public.","ia"],
-["2023","IA générative","L’IA générative se diffuse massivement.","ia"],
-["2024","Assistants IA","Les assistants IA deviennent courants.","ia"],
-["2025","Agents IA","Les agents IA commencent à automatiser des tâches complexes.","ia"],
-["2026","IA quotidienne","L’IA s’intègre dans les outils du quotidien.","ia"]
-];
-
-function label(cat){
-  return {
-    pionniers:"Pionniers",
-    machines:"Premiers ordinateurs",
-    micro:"Micro-informatique",
-    internet:"Internet",
-    ia:"IA et futur"
-  }[cat];
+function scrollToSection(id) {
+    document.getElementById(id).scrollIntoView({
+        behavior: "smooth"
+    });
 }
 
-function showEvents(category){
-  const grid=document.getElementById("grid");
-  grid.innerHTML="";
-  events.forEach((e,i)=>{
-    if(category==="all"||e[3]===category){
-      grid.innerHTML+=`
-      <div class="card">
-        <div class="date">${e[0]}</div>
-        <h3>${e[1]}</h3>
-        <p>${e[2]}</p>
-        <span class="tag">${label(e[3])}</span>
-      </div>`;
+
+/* Reveal documents */
+
+function revealDocument(element) {
+
+    const documentBox = element.closest(".document");
+
+    const redacted =
+        documentBox.querySelectorAll(".redacted");
+
+    redacted.forEach(item => {
+        item.classList.remove("redacted");
+    });
+
+    element.innerText =
+        "[ DONNÉES DÉCLASSIFIÉES ]";
+
+    element.style.color =
+        "#9caf68";
+
+}
+
+
+/* Terminal */
+
+const terminalInput =
+    document.getElementById("terminal-input");
+
+const terminalOutput =
+    document.getElementById("terminal-output");
+
+
+terminalInput.addEventListener("keydown", function(event) {
+
+    if (event.key === "Enter") {
+        runCommand();
     }
-  });
+
+});
+
+
+function writeTerminal(text, danger = false) {
+
+    const line =
+        document.createElement("div");
+
+    if (danger) {
+        line.classList.add("danger");
+    }
+
+    line.innerHTML = text;
+
+    terminalOutput.appendChild(line);
+
 }
 
-let found=0;
-function randomEvent(){
-  const e=events[Math.floor(Math.random()*events.length)];
-  if(found<100) found++;
-  document.getElementById("count").textContent=found;
-  document.getElementById("bar").style.width=found+"%";
-  document.getElementById("randomBox").innerHTML=
-  `> Destination verrouillée : <span class="bigdate">${e[0]}</span><br>
-   > Artefact détecté : ${e[1]}<br>
-   > Rapport : ${e[2]}<br>
-   > Dossier : ${label(e[3])}<br>
-   > Statut : artefact restauré`;
+
+function runCommand() {
+
+    const command =
+        terminalInput.value
+        .trim()
+        .toLowerCase();
+
+    if (!command) return;
+
+    writeTerminal(
+        `<span class="prompt">&gt;</span> ${command}`
+    );
+
+    terminalInput.value = "";
+
+
+    switch(command) {
+
+        case "help":
+
+            writeTerminal(`
+                COMMANDES DISPONIBLES :
+                <br>
+                STATUS — état militaire
+                <br>
+                LOSSES — pertes officielles
+                <br>
+                TRUTH — données non censurées
+                <br>
+                HEROES — liste des héros
+                <br>
+                WAR — conflits actifs
+                <br>
+                CLEAR — effacer le terminal
+            `);
+
+            break;
+
+
+        case "status":
+
+            writeTerminal(`
+                ÉTAT FÉDÉRAL : STABLE
+                <br>
+                MORAL : 98.4%
+                <br>
+                VICTOIRES : 96.4%
+                <br>
+                MENACE : SOUS CONTRÔLE
+            `);
+
+            break;
+
+
+        case "losses":
+
+            writeTerminal(`
+                PERTES OFFICIELLES :
+                <br>
+                11,377,174 soldats
+                <br>
+                <br>
+                <span class="danger">
+                NOTE : Les chiffres publiés au public
+                excluent les disparus non confirmés.
+                </span>
+            `, true);
+
+            break;
+
+
+        case "truth":
+
+            writeTerminal(`
+                <span class="danger">
+                █████████████████████████████
+                <br>
+                ACCÈS REFUSÉ
+                <br>
+                <br>
+                Vous n'avez pas besoin de connaître
+                cette information.
+                <br>
+                <br>
+                VOUS AVEZ BESOIN D'Y CROIRE.
+                <br>
+                █████████████████████████████
+                </span>
+            `, true);
+
+            break;
+
+
+        case "heroes":
+
+            writeTerminal(`
+                HÉROS ENREGISTRÉS :
+                <br>
+                Marcus Vale — DÉCÉDÉ
+                <br>
+                Elena Voss — PORTÉE DISPARUE
+                <br>
+                Jonas Kreel — DÉCÉDÉ
+                <br>
+                <br>
+                <span class="danger">
+                98% des dossiers comportent des
+                modifications postérieures au décès.
+                </span>
+            `, true);
+
+            break;
+
+
+        case "war":
+
+            writeTerminal(`
+                CONFLITS ACTIFS :
+                <br>
+                KHARON — ACTIF
+                <br>
+                VELKOR — ACTIF
+                <br>
+                ORPHEUS — ACTIF
+                <br>
+                HELIOS — PERDU
+                <br>
+                NÉMÉSIS — PERDU
+            `);
+
+            break;
+
+
+        case "clear":
+
+            terminalOutput.innerHTML = "";
+
+            break;
+
+
+        default:
+
+            writeTerminal(`
+                COMMANDE INCONNUE.
+                <br>
+                Tapez HELP.
+            `);
+
+    }
+
 }
 
-showEvents("all");
+
+/* Random little signal glitches */
+
+setInterval(() => {
+
+    const elements =
+        document.querySelectorAll(".glitch");
+
+    elements.forEach(el => {
+
+        if (Math.random() > .85) {
+
+            el.style.textShadow =
+                "3px 0 #b84a42, -3px 0 #9caf68";
+
+            setTimeout(() => {
+
+                el.style.textShadow = "";
+
+            }, 100);
+
+        }
+
+    });
+
+}, 1800);
+
 </script>
 
 </body>
 </html>
+```
