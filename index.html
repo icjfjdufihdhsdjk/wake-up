@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -1278,11 +1277,238 @@ body:after{
         padding:0 15px;
     }
 }
+
+/* =========================
+   GESTIONNAIRE D'IMAGES
+========================= */
+
+.image-tools-button{
+    position:fixed;
+    top:84px;
+    right:20px;
+    z-index:10050;
+    padding:11px 15px;
+    border:1px solid rgba(197,213,141,.45);
+    background:rgba(7,9,7,.94);
+    color:var(--green2);
+    font-family:"IBM Plex Mono";
+    font-size:9px;
+    letter-spacing:1px;
+    text-transform:uppercase;
+    cursor:pointer;
+}
+
+.image-tools-button.active{
+    background:var(--green);
+    color:#0b0d09;
+}
+
+.image-tools{
+    position:fixed;
+    right:20px;
+    bottom:20px;
+    z-index:10050;
+    width:320px;
+    display:none;
+    padding:20px;
+    border:1px solid rgba(197,213,141,.45);
+    background:rgba(7,9,7,.98);
+    box-shadow:0 20px 90px #000;
+    font-family:"IBM Plex Mono";
+}
+
+.image-tools.visible{display:block}
+
+.image-tools-header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    color:var(--green2);
+    font-size:10px;
+    letter-spacing:1px;
+}
+
+.image-tools-header button{
+    border:0;
+    background:transparent;
+    color:var(--grey);
+    font-size:18px;
+    cursor:pointer;
+}
+
+.image-tools p{
+    margin:14px 0;
+    color:var(--grey);
+    font-size:9px;
+    line-height:1.6;
+}
+
+.image-tools label{
+    display:block;
+    margin:15px 0 7px;
+    color:#596253;
+    font-size:8px;
+}
+
+.image-tools select,
+.image-tools-action{
+    width:100%;
+    padding:11px;
+    font-family:"IBM Plex Mono";
+    font-size:9px;
+}
+
+.image-tools select{
+    border:1px solid #303a2b;
+    background:#0c100b;
+    color:#aebc9b;
+}
+
+.image-tools-action{
+    margin-top:9px;
+    border:1px solid var(--green);
+    background:var(--green);
+    color:#0c0f0a;
+    cursor:pointer;
+    text-transform:uppercase;
+}
+
+.image-tools-action.delete{
+    border-color:#74342f;
+    background:transparent;
+    color:#b85b53;
+}
+
+.image-tools small{
+    display:block;
+    margin-top:14px;
+    color:#485044;
+    font-size:7px;
+    line-height:1.7;
+}
+
+.image-toast{
+    position:fixed;
+    top:20px;
+    left:50%;
+    z-index:10060;
+    transform:translateX(-50%);
+    display:none;
+    padding:11px 18px;
+    background:var(--green2);
+    color:#10130c;
+    font-family:"IBM Plex Mono";
+    font-size:9px;
+    box-shadow:0 10px 45px #000;
+}
+
+.image-toast.visible{display:block}
+
+.image-edit-mode [data-image-slot]{
+    outline:2px dashed rgba(210,224,151,.72);
+    outline-offset:-5px;
+    cursor:pointer !important;
+}
+
+.image-edit-mode [data-image-slot]:hover{
+    outline-color:#e7f3b2;
+}
+
+.image-edit-mode [data-image-slot]:before{
+    content:"IMAGE · " attr(data-image-label);
+    position:absolute;
+    z-index:20;
+    top:10px;
+    left:10px;
+    padding:6px 8px;
+    background:var(--green);
+    color:#0b0e09;
+    font-family:"IBM Plex Mono";
+    font-size:7px;
+    letter-spacing:.5px;
+    pointer-events:none;
+}
+
+.has-custom-image{
+    background-size:cover !important;
+    background-position:center !important;
+}
+
+.has-custom-image.soldier-image{
+    color:transparent;
+}
+
+.has-custom-image.combat-image{
+    color:transparent;
+}
+
+.user-hero-image{
+    position:absolute;
+    inset:0 0 0 42%;
+    z-index:0;
+    opacity:.62;
+    background-size:cover;
+    background-position:center;
+}
+
+.user-hero-image:after{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:linear-gradient(90deg,#050605 0%,rgba(5,6,5,.78) 22%,transparent 70%),
+               linear-gradient(0deg,#050605,transparent 35%);
+}
+
+.public-hero .hero-content,
+.public-hero .hero-status{
+    z-index:2;
+}
+
+@media(max-width:600px){
+    .image-tools{left:12px;right:12px;bottom:70px;width:auto}
+    .image-tools-button{top:auto;right:12px;bottom:15px}
+    .user-hero-image{inset:0;opacity:.3}
+}
 </style>
 </head>
 
 
 <body>
+
+<button id="imageToolsButton" class="image-tools-button" type="button">
+    ○ GÉRER LES IMAGES
+</button>
+
+<div id="imageToast" class="image-toast"></div>
+
+<aside id="imageTools" class="image-tools">
+    <div class="image-tools-header">
+        <strong>ARCHIVISTE VISUEL</strong>
+        <button id="closeImageTools" type="button">×</button>
+    </div>
+    <p>
+        Clique directement sur une zone encadrée,
+        ou choisis son nom dans la liste.
+    </p>
+    <label for="imageSlotSelect">EMPLACEMENT</label>
+    <select id="imageSlotSelect"></select>
+    <button id="chooseImageButton" class="image-tools-action" type="button">
+        CHOISIR UNE IMAGE
+    </button>
+    <button id="deleteImageButton" class="image-tools-action delete" type="button">
+        RETIRER CETTE IMAGE
+    </button>
+    <small>
+        PNG, JPG, WEBP ou GIF — 12 Mo maximum.<br>
+        Les images restent enregistrées dans ce navigateur.
+    </small>
+</aside>
+
+<input
+    id="imageFileInput"
+    type="file"
+    accept="image/png,image/jpeg,image/webp,image/gif"
+    hidden>
 
 
 <!-- =====================================================
@@ -2588,6 +2814,598 @@ setInterval(()=>{
 
 </script>
 
+<script>
+
+/* =========================================
+   GESTIONNAIRE D'IMAGES LOCAL
+========================================= */
+
+const imageSlots = [
+    {
+        id:"hero",
+        label:"Affiche principale",
+        selector:".public-hero",
+        target:"overlay"
+    },
+    {
+        id:"logo",
+        label:"Logo de la Fédération",
+        selector:".logo-placeholder"
+    },
+    {
+        id:"campaign-1",
+        label:"Campagne — Aube Éternelle",
+        selector:".card:nth-child(1)"
+    },
+    {
+        id:"campaign-2",
+        label:"Campagne — Bouclier d'Orion",
+        selector:".card:nth-child(2)"
+    },
+    {
+        id:"campaign-3",
+        label:"Campagne — Dernier Rempart",
+        selector:".card:nth-child(3)"
+    },
+    {
+        id:"hero-1",
+        label:"Portrait — Marcus Vale",
+        selector:".soldier:nth-child(1) .soldier-image"
+    },
+    {
+        id:"hero-2",
+        label:"Portrait — Elena Voss",
+        selector:".soldier:nth-child(2) .soldier-image"
+    },
+    {
+        id:"hero-3",
+        label:"Portrait — Jonas Kreel",
+        selector:".soldier:nth-child(3) .soldier-image"
+    },
+    {
+        id:"archive-1",
+        label:"Archive de combat 01",
+        selector:".combat-image",
+        index:0
+    },
+    {
+        id:"archive-2",
+        label:"Archive de combat 02",
+        selector:".combat-image",
+        index:1
+    },
+    {
+        id:"archive-3",
+        label:"Archive de combat 03",
+        selector:".combat-image",
+        index:2
+    },
+    {
+        id:"archive-4",
+        label:"Archive de combat 04",
+        selector:".combat-image",
+        index:3
+    },
+    {
+        id:"archive-5",
+        label:"Archive de combat 05",
+        selector:".combat-image",
+        index:4
+    },
+    {
+        id:"archive-6",
+        label:"Archive de combat 06",
+        selector:".combat-image",
+        index:5
+    }
+];
+
+let imageEditMode = false;
+let selectedImageSlot = "hero";
+let imageUrls = {};
+
+const imageToolsButton =
+    document.getElementById("imageToolsButton");
+
+const imageTools =
+    document.getElementById("imageTools");
+
+const imageSlotSelect =
+    document.getElementById("imageSlotSelect");
+
+const imageFileInput =
+    document.getElementById("imageFileInput");
+
+const deleteImageButton =
+    document.getElementById("deleteImageButton");
+
+
+/* DATABASE */
+
+function openImageDatabase(){
+
+    return new Promise((resolve,reject)=>{
+
+        const request =
+            indexedDB.open("orion-visual-archive",1);
+
+        request.onupgradeneeded = ()=>{
+
+            if(
+                !request.result
+                .objectStoreNames
+                .contains("images")
+            ){
+
+                request.result
+                .createObjectStore("images");
+
+            }
+
+        };
+
+        request.onsuccess = ()=>
+            resolve(request.result);
+
+        request.onerror = ()=>
+            reject(request.error);
+
+    });
+
+}
+
+
+async function storeImage(id,file){
+
+    const database =
+        await openImageDatabase();
+
+    return new Promise((resolve,reject)=>{
+
+        const request =
+            database
+            .transaction("images","readwrite")
+            .objectStore("images")
+            .put(file,id);
+
+        request.onsuccess = resolve;
+        request.onerror = ()=>reject(request.error);
+
+    });
+
+}
+
+
+async function removeStoredImage(id){
+
+    const database =
+        await openImageDatabase();
+
+    return new Promise((resolve,reject)=>{
+
+        const request =
+            database
+            .transaction("images","readwrite")
+            .objectStore("images")
+            .delete(id);
+
+        request.onsuccess = resolve;
+        request.onerror = ()=>reject(request.error);
+
+    });
+
+}
+
+
+async function loadStoredImages(){
+
+    const database =
+        await openImageDatabase();
+
+    return new Promise((resolve,reject)=>{
+
+        const results = {};
+
+        const request =
+            database
+            .transaction("images","readonly")
+            .objectStore("images")
+            .openCursor();
+
+        request.onsuccess = ()=>{
+
+            const cursor = request.result;
+
+            if(!cursor){
+
+                resolve(results);
+                return;
+
+            }
+
+            results[cursor.key] = cursor.value;
+            cursor.continue();
+
+        };
+
+        request.onerror = ()=>reject(request.error);
+
+    });
+
+}
+
+
+/* SLOT SETUP */
+
+function getImageElement(slot){
+
+    if(slot.target === "overlay"){
+
+        return document.querySelector(
+            '[data-image-slot="' + slot.id + '"]'
+        );
+
+    }
+
+    if(Number.isInteger(slot.index)){
+
+        return document
+            .querySelectorAll(slot.selector)
+            [slot.index];
+
+    }
+
+    return document.querySelector(slot.selector);
+
+}
+
+
+function setupImageSlots(){
+
+    const hero =
+        document.querySelector(".public-hero");
+
+    if(hero){
+
+        const heroImage =
+            document.createElement("div");
+
+        heroImage.className =
+            "user-hero-image";
+
+        heroImage.dataset.imageSlot =
+            "hero";
+
+        heroImage.dataset.imageLabel =
+            "Affiche principale";
+
+        hero.prepend(heroImage);
+
+    }
+
+    imageSlots.forEach(slot=>{
+
+        const element =
+            getImageElement(slot);
+
+        if(!element) return;
+
+        element.dataset.imageSlot =
+            slot.id;
+
+        element.dataset.imageLabel =
+            slot.label;
+
+        element.addEventListener("click",event=>{
+
+            if(!imageEditMode) return;
+
+            event.preventDefault();
+            event.stopPropagation();
+
+            selectImageSlot(slot.id);
+            imageFileInput.click();
+
+        });
+
+    });
+
+    imageSlots.forEach(slot=>{
+
+        const option =
+            document.createElement("option");
+
+        option.value = slot.id;
+        option.textContent = slot.label;
+
+        imageSlotSelect.appendChild(option);
+
+    });
+
+}
+
+
+function selectImageSlot(id){
+
+    selectedImageSlot = id;
+    imageSlotSelect.value = id;
+
+    deleteImageButton.style.display =
+        imageUrls[id]
+        ? "block"
+        : "none";
+
+}
+
+
+function applyImage(id,blob){
+
+    const slot =
+        imageSlots.find(item=>item.id === id);
+
+    if(!slot) return;
+
+    const element =
+        getImageElement(slot);
+
+    if(!element) return;
+
+    if(imageUrls[id]){
+
+        URL.revokeObjectURL(imageUrls[id]);
+
+    }
+
+    const imageUrl =
+        URL.createObjectURL(blob);
+
+    imageUrls[id] = imageUrl;
+
+    if(id.indexOf("campaign-") === 0){
+
+        element.style.backgroundImage =
+            "linear-gradient(rgba(12,16,11,.83),rgba(5,6,5,.94)),url('" +
+            imageUrl +
+            "')";
+
+    }
+
+    else{
+
+        element.style.backgroundImage =
+            "url('" +
+            imageUrl +
+            "')";
+
+    }
+
+    element.classList.add(
+        "has-custom-image"
+    );
+
+    selectImageSlot(id);
+
+}
+
+
+function clearImage(id){
+
+    const slot =
+        imageSlots.find(item=>item.id === id);
+
+    if(!slot) return;
+
+    const element =
+        getImageElement(slot);
+
+    if(!element) return;
+
+    if(imageUrls[id]){
+
+        URL.revokeObjectURL(imageUrls[id]);
+        delete imageUrls[id];
+
+    }
+
+    element.style.backgroundImage = "";
+
+    element.classList.remove(
+        "has-custom-image"
+    );
+
+    selectImageSlot(id);
+
+}
+
+
+function showImageToast(message){
+
+    const toast =
+        document.getElementById("imageToast");
+
+    toast.textContent = message;
+    toast.classList.add("visible");
+
+    clearTimeout(
+        showImageToast.timeout
+    );
+
+    showImageToast.timeout =
+        setTimeout(()=>{
+
+            toast.classList.remove("visible");
+
+        },2600);
+
+}
+
+
+/* CONTROLS */
+
+function setImageEditMode(active){
+
+    imageEditMode = active;
+
+    document.body.classList.toggle(
+        "image-edit-mode",
+        active
+    );
+
+    imageTools.classList.toggle(
+        "visible",
+        active
+    );
+
+    imageToolsButton.classList.toggle(
+        "active",
+        active
+    );
+
+    imageToolsButton.textContent =
+        active
+        ? "● MODE IMAGES ACTIF"
+        : "○ GÉRER LES IMAGES";
+
+}
+
+
+imageToolsButton.addEventListener(
+    "click",
+    ()=>setImageEditMode(!imageEditMode)
+);
+
+
+document
+    .getElementById("closeImageTools")
+    .addEventListener(
+        "click",
+        ()=>setImageEditMode(false)
+    );
+
+
+document
+    .getElementById("chooseImageButton")
+    .addEventListener(
+        "click",
+        ()=>imageFileInput.click()
+    );
+
+
+imageSlotSelect.addEventListener(
+    "change",
+    ()=>selectImageSlot(
+        imageSlotSelect.value
+    )
+);
+
+
+imageFileInput.addEventListener(
+    "change",
+    async ()=>{
+
+        const file =
+            imageFileInput.files[0];
+
+        imageFileInput.value = "";
+
+        if(!file) return;
+
+        if(
+            !file.type
+            .startsWith("image/")
+        ){
+
+            showImageToast(
+                "LE FICHIER CHOISI N'EST PAS UNE IMAGE"
+            );
+
+            return;
+
+        }
+
+        if(file.size > 12 * 1024 * 1024){
+
+            showImageToast(
+                "IMAGE TROP LOURDE — MAXIMUM 12 MO"
+            );
+
+            return;
+
+        }
+
+        try{
+
+            await storeImage(
+                selectedImageSlot,
+                file
+            );
+
+            applyImage(
+                selectedImageSlot,
+                file
+            );
+
+            showImageToast(
+                "IMAGE ENREGISTRÉE"
+            );
+
+        }
+
+        catch(error){
+
+            showImageToast(
+                "IMPOSSIBLE D'ENREGISTRER L'IMAGE"
+            );
+
+        }
+
+    }
+);
+
+
+deleteImageButton.addEventListener(
+    "click",
+    async ()=>{
+
+        await removeStoredImage(
+            selectedImageSlot
+        );
+
+        clearImage(
+            selectedImageSlot
+        );
+
+        showImageToast(
+            "IMAGE RETIRÉE"
+        );
+
+    }
+);
+
+
+/* START */
+
+setupImageSlots();
+selectImageSlot("hero");
+
+loadStoredImages()
+    .then(images=>{
+
+        Object.keys(images)
+            .forEach(id=>
+                applyImage(id,images[id])
+            );
+
+    })
+    .catch(()=>{
+
+        showImageToast(
+            "STOCKAGE LOCAL INDISPONIBLE"
+        );
+
+    });
+
+</script>
+
 </body>
 </html>
-```
